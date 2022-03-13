@@ -1,3 +1,4 @@
+import difflib
 import shutil
 from argparse import ArgumentParser
 from pathlib import Path
@@ -28,12 +29,24 @@ def make_mod(diff_path, game_kpf_path, temp_dir, output_dir):
         dst_path = temp_dir / Path(item.target.decode("utf-8"))
         dst_path.parent.mkdir(parents = True, exist_ok = True)
 
-        if exists_in_archive(game_kpf_path, src_path):
+        if src_path == "dev/null":
+            print(f"Creating {dst_path}...")
+
+            with open(dst_path, "w") as dst_file:
+                for hunk in item.hunks:
+                    for line in hunk.text:
+                        line = line.decode("utf-8").strip("\n\r")[1:]
+                        dst_file.write(f"{line}\n")
+
+        elif dst_path == "dev/null":
+            print(f"Removing {dst_path}...")
+
+            if dst_path.exists():
+                dst_path.unlink()
+
+        elif exists_in_archive(game_kpf_path, src_path):
             print(f"Extracting {src_path}...")
             extract_file(game_kpf_path, src_path, dst_path)
-
-        else:
-            print(f"{src_path} doesn't exist")
 
     print(f"Applying {diff_path.name}...")
     patch_set.apply(root = temp_dir)
