@@ -1,0 +1,71 @@
+--- scripts/actions.txt	Wed Oct 27 22:54:04 2021
++++ scripts/actions.txt	Wed Oct 27 22:54:04 2021
+@@ -4,6 +4,7 @@
+ A_ThrowAmunBomb         "void A_ThrowAmunBomb(kexSlaveActor@)"
+ A_ChargeBombThrow       "void A_ChargeBombThrow(kexSlaveActor@)"
+ A_UpdateFlame           "void A_UpdateFlame(kexSlaveActor@)"
++A_UpdateFlamePSX        "void A_UpdateFlamePSX(kexSlaveActor@)"
+ A_SetupFlame            "void A_SetupFlame(kexSlaveActor@)"
+ A_RandomVaseItem        "void A_RandomVaseItem(kexSlaveActor@)"
+ A_ThrustZVelocity       "void A_ThrustZVelocity(kexSlaveActor@, const float)"
+--- scripts/main.txt	Sun Jun 27 03:48:34 2021
++++ scripts/main.txt	Sun Jun 27 03:48:34 2021
+@@ -17,6 +17,7 @@
+ 
+ #include "scripts/actorTypes.txt"
+ #include "scripts/p_misc.txt"
++#include "scripts/p_misc_psx.txt"
+ #include "scripts/p_pspr.txt"
+ #include "scripts/p_enemy.txt"
+ 
+--- /dev/null	Thu Jan  1 03:00:00 1970
++++ scripts/p_misc_psx.txt	Sun Mar 13 09:40:38 2022
+@@ -0,0 +1,19 @@
++void A_UpdateFlamePSX(kexSlaveActor@ actor)
++{
++    actor.m_fFizzleTime += 0.5f;
++    const float fT = actor.m_fFizzleTime / PROJECTILE_FLAME_LIFETIME;
++    
++    actor.GetScale() += ((5000 - ((actor.m_fFizzleTime * 65536) / 512)) / 128) / 256;
++    
++    kVec3 vColor = actor.GetColor();
++    vColor.x = 1.0f + (1.0f - 1.0f) * fT;
++    vColor.y = 1.0f + (0.25f - 1.0f) * fT;
++    vColor.z = 1.0f + (0.0625f - 1.0f) * fT;
++    actor.GetColor() = vColor;
++    
++    if(actor.m_fFizzleTime >= PROJECTILE_FLAME_LIFETIME)
++    {
++        actor.Remove();
++        return;
++    }
++}
+--- sprites/projectiles/flame_anim.txt	Thu Sep 16 18:57:56 2021
++++ sprites/projectiles/flame_anim.txt	Thu Sep 16 18:57:56 2021
+@@ -19,7 +19,7 @@
+     frame
+     {
+         // ##000    0    0
+-        action A_UpdateFlame()
++        action A_UpdateFlamePSX()
+         sprites
+         {
+             { "projectiles/flame", 4,    -26,  -27,    0 }
+@@ -30,7 +30,7 @@
+     frame
+     {
+         // ##001    0    0
+-        action A_UpdateFlame()
++        action A_UpdateFlamePSX()
+         sprites
+         {
+             { "projectiles/flame", 4,    -30,  -25,    1 }
+@@ -41,7 +41,7 @@
+     frame
+     {
+         // ##002    0    0
+-        action A_UpdateFlame()
++        action A_UpdateFlamePSX()
+         sprites
+         {
+             { "projectiles/flame", 4,    -30,  -26,    1 }

@@ -1,0 +1,47 @@
+--- defs/weaponInfo.txt	Mon Nov  1 16:06:32 2021
++++ defs/weaponInfo.txt	Mon Nov  1 16:06:32 2021
+@@ -26,7 +26,7 @@
+ 
+ Weapon Wep_M60
+ {
+-    maxAmmo                 38 // was 50 (psx), 25 (saturn)
++    maxAmmo                 50 // was 50 (psx), 25 (saturn)
+     offsetX                 160
+     offsetY                 138
+     disableUnderwater       1
+@@ -47,7 +47,7 @@
+ 
+ Weapon Wep_Bombs
+ {
+-    maxAmmo                 15 // was 20 (psx), 10 (saturn)
++    maxAmmo                 20 // was 20 (psx), 10 (saturn)
+     offsetX                 160
+     offsetY                 196
+     idleAnim                "weapons/bomb_idle_blank"
+@@ -65,7 +65,7 @@
+ 
+ Weapon Wep_FlameThrower
+ {
+-    maxAmmo                 65 // was 60
++    maxAmmo                 60 // was 60
+     offsetX                 160
+     offsetY                 138
+     disableUnderwater       1
+@@ -78,7 +78,7 @@
+ 
+ Weapon Wep_CobraStaff
+ {
+-    maxAmmo                 16 // was 20 (psx), 12 (saturn)
++    maxAmmo                 20 // was 20 (psx), 12 (saturn)
+     offsetX                 160
+     offsetY                 210
+     idleAnim                "weapons/cstaff_idle"
+@@ -100,7 +100,7 @@
+ 
+ Weapon Wep_Manacle
+ {
+-    maxAmmo                 6 // was 15 (psx), 4 (saturn)
++    maxAmmo                 15 // was 15 (psx), 4 (saturn)
+     offsetX                 160
+     offsetY                 214
+     idleAnim                "weapons/manacle_idle"

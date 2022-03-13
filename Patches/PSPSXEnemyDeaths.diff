@@ -1,0 +1,22 @@
+--- defs/actors/monsters/anubis.txt	Tue Dec  7 23:38:46 2021
++++ defs/actors/monsters/anubis.txt	Tue Dec  7 23:38:46 2021
+@@ -15,7 +15,7 @@
+     painAnim                "monsters/anubis_pain"
+     meleeAnim               "monsters/anubis_melee"
+     rangeAttackAnim         "monsters/anubis_attack_range"
+-    deathAnim               "monsters/anubis_death_pc"
++    deathAnim               "monsters/anubis_death"
+     gibAnim                 "monsters/anubis_death"
+     solid                   1
+     shootable               1
+--- defs/actors/monsters/mummy.txt	Tue Dec  7 23:38:46 2021
++++ defs/actors/monsters/mummy.txt	Tue Dec  7 23:38:46 2021
+@@ -15,7 +15,7 @@
+     painAnim                "monsters/mummy_pain"
+     meleeAnim               "monsters/mummy_melee"
+     rangeAttackAnim         "monsters/mummy_range_attack"
+-    deathAnim               "monsters/mummy_death_pc"
++    deathAnim               "monsters/mummy_death"
+     gibAnim                 "monsters/mummy_death"
+     solid                   1
+     shootable               1

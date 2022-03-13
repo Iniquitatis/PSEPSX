@@ -1,0 +1,47 @@
+--- defs/actors/monsters/spider.txt	Tue Dec  7 23:38:46 2021
++++ defs/actors/monsters/spider.txt	Tue Dec  7 23:38:46 2021
+@@ -11,11 +11,11 @@
+     noEnterWater            1
+     moveSpeed               5
+     painSound               "sounds/spidpain.wav"
+-    spawnAnim               "monsters/spider_base"
+-    chaseAnim               "monsters/spider_base"
+-    meleeAnim               "monsters/spider_attack"
+-    rangeAttackAnim         "monsters/spider_leap"
+-    deathAnim               "monsters/spider_death"
++    spawnAnim               "monsters/scorp_base"
++    chaseAnim               "monsters/scorp_base"
++    meleeAnim               "monsters/scorp_attack"
++    rangeAttackAnim         "monsters/scorp_leap"
++    deathAnim               "monsters/scorp_death"
+     solid                   1
+     shootable               1
+     moveable                1
+@@ -26,7 +26,6 @@
+     seekable                1
+     shadow                  1
+     shadowAnim              "misc/shadow"
+-    meleeExtraDist          20.0
+     scaleContacts           1
+     group                   "AI"
+ }
+--- scripts/p_enemy.txt	Sat Oct 30 17:38:24 2021
++++ scripts/p_enemy.txt	Sat Oct 30 17:38:24 2021
+@@ -109,7 +109,7 @@
+         }
+         else
+         {
+-            actor.ChangeAnim("monsters/spider_base");
++            actor.ChangeAnim("monsters/scorp_base");
+         }
+     }
+ }
+@@ -129,7 +129,7 @@
+         }
+         else
+         {
+-            actor.ChangeAnim("monsters/spider_base");
++            actor.ChangeAnim("monsters/scorp_base");
+         }
+     }
+     else if(actor.GetVelocity().z <= 0 && actor.GetType() == AI_Spider)

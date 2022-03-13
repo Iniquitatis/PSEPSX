@@ -1,0 +1,99 @@
+--- sprites/weapons/m60_anim.txt	Wed Nov 24 15:53:52 2021
++++ sprites/weapons/m60_anim.txt	Wed Nov 24 15:53:52 2021
+@@ -540,6 +540,8 @@
+         // ##002   63  128
+         action A_PlayLocalSound("sounds/m90fire.wav")
+         action A_PlayTactile("tactile/m90fire", 0, 2)
++        action A_HitScan(4000, 0.0416, 0.0416, 20, 20, 96, "Fx_BulletPuff")
++        action A_ConsumeAmmo(1)
+         fullbright
+         sprites
+         {
+@@ -558,8 +560,6 @@
+     frame
+     {
+         // ##003    0    0
+-        action A_HitScan(4000, 0.0416, 0.0416, 20, 20, 96, "Fx_BulletPuff")
+-        action A_ConsumeAmmo(1)
+         sprites
+         {
+             { "weapons/m60", 0,     40,  -14,    0 }
+@@ -688,23 +688,8 @@
+     frame
+     {
+         // ##011    0    0
+-        sprites
+-        {
+-            { "weapons/m60", 0,     54,  -11,    1 }
+-            { "weapons/m60", 1,     38,  -11,    1 }
+-            { "weapons/m60", 2,     54,   53,    1 }
+-            { "weapons/m60", 3,     38,   53,    1 }
+-            { "weapons/m60", 14,     55,   -3,    0 }
+-            { "weapons/m60", 9,    119,   -3,    0 }
+-            { "weapons/m60", 10,     55,   61,    0 }
+-            { "weapons/m60", 11,    119,   61,    0 }
+-        }
+-
+-    }
+-    frame
+-    {
+-        // ##011    0    0
+         goto "weapons/m60_idle"
++        refire "weapons/m60_fire"
+         sprites
+         {
+             { "weapons/m60", 0,     54,  -11,    1 }
+@@ -891,20 +876,6 @@
+         }
+ 
+     }
+-
+-    frame
+-    {
+-        // ##011    0    0
+-        sprites
+-        {
+-            { "weapons/m60", 12,     59,   74,    0 }
+-            { "weapons/m60", 12,     63,   67,    0 }
+-            { "weapons/m60", 12,     67,   60,    0 }
+-            { "weapons/m60", 12,     73,   54,    0 }
+-            { "weapons/m60", 12,     82,   50,    0 }
+-        }
+-
+-    }
+ }
+ 
+ m60_rounds_fire_50
+@@ -1065,18 +1036,6 @@
+         }
+ 
+     }
+-
+-    frame
+-    {
+-        // ##011    0    0
+-        sprites
+-        {
+-            { "weapons/m60", 12,     67,   60,    0 }
+-            { "weapons/m60", 12,     73,   54,    0 }
+-            { "weapons/m60", 12,     82,   50,    0 }
+-        }
+-
+-    }
+ }
+ 
+ m60_rounds_fire_0
+@@ -1183,13 +1142,6 @@
+     frame
+     {
+         // ##010    0    0 (no groups)
+-        delay 1
+-
+-    }
+-
+-    frame
+-    {
+-        // ##011    0    0 (no groups)
+         delay 1
+ 
+     }
