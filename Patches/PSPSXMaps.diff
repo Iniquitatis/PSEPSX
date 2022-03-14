@@ -1,3 +1,14 @@
+--- defs/actors/misc.txt	Wed Dec  8 17:00:46 2021
++++ defs/actors/misc.txt	Wed Dec  8 17:00:46 2021
+@@ -90,7 +90,7 @@
+     warpSound_1             "sounds/warp.wav"
+     mapDestination          Map_Tomb1
+     requestSave             1
+-    destinationPosition     "0 2816 -864"
++    destinationPosition     "-1088.0 -2794.7 -864.0"
+     spawnAnim               "misc/warpPryamid_loop"
+     floatBob                1
+     floatBobDivisor         3.0
 --- defs/defines.txt	Wed Dec  8 16:42:12 2021
 +++ defs/defines.txt	Wed Dec  8 16:42:12 2021
 @@ -6,8 +6,7 @@
@@ -215,7 +226,7 @@
      musicTrack      "music/peak.ogg"
      nextmap_north   Map_Magma
  }
-@@ -244,35 +232,23 @@
+@@ -244,35 +232,24 @@
      saveTitle       "$str_040"
      overworld_x     32
      overworld_y     300
@@ -229,6 +240,7 @@
  }
  
 -Map Map_Colony1
++// NOTE: There is no COLONY.MAP in the maps/old directory
 +Map Map_Colony
  {
      title           "$str_019"
@@ -247,8 +259,7 @@
 -    saveTitle       "$str_148"
 -    overworld_x     28
 -    overworld_y     140
--    map             "maps/COLONY_PSX.MAP"
-+    map             "maps/old/COLONY.MAP"
+     map             "maps/COLONY_PSX.MAP"
      musicTrack      "music/arena1.ogg"
      nextmap_north   Map_Entry
 -    nextmap_south   Map_Colony1
@@ -256,7 +267,7 @@
  }
  
  Map Map_Entry      
-@@ -281,17 +257,17 @@
+@@ -281,17 +258,17 @@
      saveTitle       "$str_042"
      overworld_x     54
      overworld_y     70
@@ -277,7 +288,7 @@
      musicTrack      "music/arena2.ogg"
      script          "scripts/map/KILARENA_script.txt"
  }
-@@ -300,7 +276,7 @@
+@@ -300,7 +277,7 @@
  {
      title           "$str_000"
      saveTitle       "$str_022"
@@ -286,3 +297,97 @@
      musicTrack      "music/egypt2.ogg"
      script          "scripts/map/TOMBEND_script.txt"
  }
+--- scripts/map/KILARENA_script.txt	Mon Jul  5 18:55:14 2021
++++ scripts/map/KILARENA_script.txt	Mon Jul  5 18:55:14 2021
+@@ -22,5 +22,5 @@
+ $script 1
+ {
+     Player().GetArtifacts() = PA_ALL;
+-    kexSlaveEvents::ChangeMap("maps/KILENTRY.MAP");
++    kexSlaveEvents::ChangeMap("maps/old/KILENTRY.MAP");
+ }
+--- scripts/map/KILENTRY_script.txt	Mon Jul  5 18:55:14 2021
++++ scripts/map/KILENTRY_script.txt	Mon Jul  5 18:55:14 2021
+@@ -21,5 +21,5 @@
+ 
+ $script 8
+ {
+-    kexSlaveEvents::ChangeMap("maps/KILARENA.MAP");
++    kexSlaveEvents::ChangeMap("maps/old/KILARENA.MAP");
+ }
+--- scripts/map/TOMB_script.txt	Sun Nov 21 17:55:06 2021
++++ scripts/map/TOMB_script.txt	Sun Nov 21 17:55:06 2021
+@@ -71,7 +71,7 @@
+ float bobTime = 0.0f;
+ kexSlaveActor @ramses;
+ 
+-kVec3 ramsesOrigin(-13, 3143, -734);
++kVec3 ramsesOrigin(-1104, -2464, -704);
+ uint ramsesTalkFramePos = 0;
+ uint currentRamsesTalkEvent = 0;
+ 
+@@ -177,7 +177,7 @@
+     
+     kexSlaveEvents::StopMusic();
+     kexSlaveEvents::StopAllSounds();
+-    kexSlaveEvents::PlayMusic("music/egypt1.ogg", true);
++    kexSlaveEvents::PlayMusic("music/egypt2.ogg", true);
+     
+     kexSlaveEvents::FireRemoteEventFromTag(1020);
+     kexSlaveLevelScript::CallDelayed(3, instigator, 4.0f);
+@@ -262,7 +262,7 @@
+ 
+ $script 0
+ {
+-    kexSlaveEvents::MoveScriptedSector(666, -256, -1, true);
++    kexSlaveEvents::MoveScriptedSector(0, -256, -1, true);
+ }
+ 
+ //
+@@ -284,7 +284,7 @@
+     
+     if(bCasketOpened == false)
+     {
+-        kexSlaveEvents::MoveScriptedSector(666, 320, 4, true);
++        kexSlaveEvents::MoveScriptedSector(0, 320, 4, true);
+         bCasketOpened = true;
+     }
+     
+@@ -293,7 +293,7 @@
+     
+     delay(0.5f);
+     
+-    @ramses = ObjectFactory().SpawnActor("Obj_Ramses", ramsesOrigin.x, ramsesOrigin.y, ramsesOrigin.z, 0, 56);
++    @ramses = ObjectFactory().SpawnActor("Obj_Ramses", ramsesOrigin.x, ramsesOrigin.y, ramsesOrigin.z, 0, 14);
+     ramses.m_fScratchParam0 = 0.0f;
+     bobTime = 0.0f;
+     ramsesTalkFramePos = 0;
+@@ -319,7 +319,7 @@
+     instigator.GetRotation().z = (dir.ToYaw() - instigator.GetRotation().z) * 0.0625f + instigator.GetRotation().z;
+     instigator.GetRotation().x = (-dir.ToPitch() - instigator.GetRotation().x) * 0.0625f + instigator.GetRotation().x;
+     
+-    instigator.GetOrigin().Lerp(kVec3(0.0f, 2816.0f, -864.0f), 0.0625f);
++    instigator.GetOrigin().Lerp(kVec3(-1088.0f, -2794.7f, -864.0f), 0.0625f);
+     
+     $restart;
+ }
+--- scripts/map/TOMBEND_script.txt	Sun Nov 21 17:55:06 2021
++++ scripts/map/TOMBEND_script.txt	Sun Nov 21 17:55:06 2021
+@@ -132,7 +132,7 @@
+     @ramsesBody = ObjectFactory().SpawnActor("Obj_Ramses_Body_Rest",
+                                              ramsesOrigin.x,
+                                              ramsesOrigin.y,
+-                                             ramsesOrigin.z + 512.0f, 0, 57);
++                                             ramsesOrigin.z + 512.0f, 0, 68);
+     
+     ramsesTalkFramePos = 0;
+     currentRamsesTalkEvent = 0;
+@@ -205,7 +205,7 @@
+     kexSlaveLevelScript::Halt(6);
+     ramsesBody.Remove();
+     
+-    @ramses = ObjectFactory().SpawnActor("Obj_Ramses", ramsesOrigin.x, ramsesOrigin.y, ramsesOrigin.z + 160.0f, 0, 57);
++    @ramses = ObjectFactory().SpawnActor("Obj_Ramses", ramsesOrigin.x, ramsesOrigin.y, ramsesOrigin.z + 160.0f, 0, 68);
+     ramses.m_fScratchParam0 = 0.0f;
+     bLookAtRamses = true;
+     
