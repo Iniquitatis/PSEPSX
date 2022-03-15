@@ -391,6 +391,15 @@
      
      $restart;
  }
+@@ -374,7 +374,7 @@
+     
+     currentRamsesTalkEvent += (GetLanguageID() * 12);
+     
+-    kexSlaveEvents::PlaySound(g_npRamsesTalkEvents[currentRamsesTalkEvent].m_strSfx);
++    kexSlaveEvents::PlayMusic(g_npRamsesTalkEvents[currentRamsesTalkEvent].m_strSfx, false);
+     kexSlaveLevelScript::CallDelayed(5, instigator, dialogTime);
+ }
+ 
 --- scripts/map/TOMBEND_script.txt	Sun Nov 21 17:55:06 2021
 +++ scripts/map/TOMBEND_script.txt	Sun Nov 21 17:55:06 2021
 @@ -132,7 +132,7 @@
@@ -411,3 +420,12 @@
      ramses.m_fScratchParam0 = 0.0f;
      bLookAtRamses = true;
      
+@@ -273,7 +273,7 @@
+     }
+     
+     currentRamsesTalkEvent += (GetLanguageID() * 2);
+-    kexSlaveEvents::PlaySound(g_npRamsesTalkEvents[currentRamsesTalkEvent].m_strSfx);
++    kexSlaveEvents::PlayMusic(g_npRamsesTalkEvents[currentRamsesTalkEvent].m_strSfx, false);
+     
+     kexSlaveLevelScript::CallDelayed(8, instigator, dialogTime);
+     kexSlaveLevelScript::CallDelayed(10, instigator, 0.0f);
