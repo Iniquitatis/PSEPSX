@@ -1,0 +1,122 @@
+--- sprites/misc/ramses_anim.txt	Wed Oct 27 22:57:54 2021
++++ sprites/misc/ramses_anim.txt	Wed Oct 27 22:57:54 2021
+@@ -949,10 +949,10 @@
+         delay -1
+         sprites
+         {
+-            { "misc/ramses", 199,    -48, -106,    0 }
+-            { "misc/ramses", 200,     16, -106,    0 }
+-            { "misc/ramses", 201,    -48,  -42,    0 }
+-            { "misc/ramses", 202,     16,  -42,    0 }
++            { "misc/ramses", 191,    -48, -106,    0 }
++            { "misc/ramses", 192,     16, -106,    0 }
++            { "misc/ramses", 193,    -48,  -42,    0 }
++            { "misc/ramses", 194,     16,  -42,    0 }
+         }
+ 
+     }
+@@ -963,10 +963,10 @@
+         delay -1
+         sprites
+         {
+-            { "misc/ramses", 138,    -48, -106,    0 }
+-            { "misc/ramses", 139,     16, -106,    0 }
+-            { "misc/ramses", 140,    -48,  -42,    0 }
+-            { "misc/ramses", 141,     16,  -42,    0 }
++            { "misc/ramses", 191,    -48, -106,    0 }
++            { "misc/ramses", 192,     16, -106,    0 }
++            { "misc/ramses", 193,    -48,  -42,    0 }
++            { "misc/ramses", 194,     16,  -42,    0 }
+         }
+ 
+     }
+@@ -991,10 +991,10 @@
+         delay -1
+         sprites
+         {
+-            { "misc/ramses", 112,    -48, -106,    0 }
+-            { "misc/ramses", 113,     16, -106,    0 }
+-            { "misc/ramses", 114,    -48,  -42,    0 }
+-            { "misc/ramses", 115,     16,  -42,    0 }
++            { "misc/ramses", 134,    -48, -106,    0 }
++            { "misc/ramses", 135,     16, -106,    0 }
++            { "misc/ramses", 136,    -48,  -42,    0 }
++            { "misc/ramses", 137,     16,  -42,    0 }
+         }
+ 
+     }
+@@ -1005,10 +1005,10 @@
+         delay -1
+         sprites
+         {
+-            { "misc/ramses", 233,    -48, -106,    0 }
+-            { "misc/ramses", 234,     16, -106,    0 }
+-            { "misc/ramses", 235,    -48,  -42,    0 }
+-            { "misc/ramses", 236,     16,  -42,    0 }
++            { "misc/ramses", 134,    -48, -106,    0 }
++            { "misc/ramses", 135,     16, -106,    0 }
++            { "misc/ramses", 136,    -48,  -42,    0 }
++            { "misc/ramses", 137,     16,  -42,    0 }
+         }
+ 
+     }
+@@ -1033,10 +1033,10 @@
+         delay -1
+         sprites
+         {
+-            { "misc/ramses", 252,    -48, -106,    0 }
+-            { "misc/ramses", 253,     16, -106,    0 }
+-            { "misc/ramses", 254,    -48,  -42,    0 }
+-            { "misc/ramses", 255,     16,  -42,    0 }
++            { "misc/ramses", 215,    -48, -106,    0 }
++            { "misc/ramses", 216,     16, -106,    0 }
++            { "misc/ramses", 217,    -48,  -42,    0 }
++            { "misc/ramses", 218,     16,  -42,    0 }
+         }
+ 
+     }
+@@ -1047,10 +1047,10 @@
+         delay -1
+         sprites
+         {
+-            { "misc/ramses", 156,    -48, -106,    0 }
+-            { "misc/ramses", 157,     16, -106,    0 }
+-            { "misc/ramses", 158,    -48,  -42,    0 }
+-            { "misc/ramses", 159,     16,  -42,    0 }
++            { "misc/ramses", 215,    -48, -106,    0 }
++            { "misc/ramses", 216,     16, -106,    0 }
++            { "misc/ramses", 217,    -48,  -42,    0 }
++            { "misc/ramses", 218,     16,  -42,    0 }
+         }
+ 
+     }
+@@ -1075,10 +1075,10 @@
+         delay -1
+         sprites
+         {
+-            { "misc/ramses", 195,    -48, -106,    0 }
+-            { "misc/ramses", 196,     16, -106,    0 }
+-            { "misc/ramses", 197,    -48,  -42,    0 }
+-            { "misc/ramses", 198,     16,  -42,    0 }
++            { "misc/ramses", 262,    -48, -106,    0 }
++            { "misc/ramses", 263,     16, -106,    0 }
++            { "misc/ramses", 264,    -48,  -42,    0 }
++            { "misc/ramses", 265,     16,  -42,    0 }
+         }
+ 
+     }
+@@ -1089,10 +1089,10 @@
+         delay -1
+         sprites
+         {
+-            { "misc/ramses", 237,    -48, -106,    0 }
+-            { "misc/ramses", 238,     16, -106,    0 }
+-            { "misc/ramses", 239,    -48,  -42,    0 }
+-            { "misc/ramses", 240,     16,  -42,    0 }
++            { "misc/ramses", 262,    -48, -106,    0 }
++            { "misc/ramses", 263,     16, -106,    0 }
++            { "misc/ramses", 264,    -48,  -42,    0 }
++            { "misc/ramses", 265,     16,  -42,    0 }
+         }
+ 
+     }
