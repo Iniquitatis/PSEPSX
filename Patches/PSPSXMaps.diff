@@ -315,6 +315,26 @@
 -    kexSlaveEvents::ChangeMap("maps/KILARENA.MAP");
 +    kexSlaveEvents::ChangeMap("maps/old/KILARENA.MAP");
  }
+--- scripts/map/SETARENA_script.txt	Wed Feb  9 23:27:20 2022
++++ scripts/map/SETARENA_script.txt	Wed Feb  9 23:27:20 2022
+@@ -25,7 +25,7 @@
+     EnumPlayerArtifacts arti = Player().GetArtifacts();
+     if((arti & PA_SHAWL) != 0) // has shawl
+     {
+-        kexSlaveActor@ pActor = kexSlaveEvents::GetActorFromMapActorIdx(67);
++        kexSlaveActor@ pActor = kexSlaveEvents::GetActorFromMapActorIdx(22);
+         if(!(pActor is null))
+         {
+             pActor.Remove();
+@@ -45,7 +45,7 @@
+ 
+ $script 1
+ {
+-    kexSlaveActor@ pActor = kexSlaveEvents::GetActorFromMapActorIdx(67);
++    kexSlaveActor@ pActor = kexSlaveEvents::GetActorFromMapActorIdx(22);
+     if(pActor is null)
+     {
+         // Not here. That means that we already killed it and reloaded a checkpoint or something
 --- scripts/map/TOMB_script.txt	Sun Nov 21 17:55:06 2021
 +++ scripts/map/TOMB_script.txt	Sun Nov 21 17:55:06 2021
 @@ -71,7 +71,7 @@
