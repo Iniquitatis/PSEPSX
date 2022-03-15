@@ -117,8 +117,8 @@
  {
      title           "$str_008"
      saveTitle       "$str_030"
-     overworld_x     336
-     overworld_y     424
+-    overworld_x     336
+-    overworld_y     424
 -    map             "maps/CAVERN_SAT.MAP"
 -    musicTrack      "music/cave.ogg"
 -    nextmap_west    Map_Cavern2
@@ -129,8 +129,8 @@
 -{
 -    title           "$str_145"
 -    saveTitle       "$str_146"
--    overworld_x     258
--    overworld_y     438
+     overworld_x     258
+     overworld_y     438
 -    map             "maps/CAVERN_PSX.MAP"
 +    map             "maps/old/CAVERN.MAP"
      musicTrack      "music/cave.ogg"
