@@ -1,4 +1,3 @@
-import difflib
 import shutil
 from argparse import ArgumentParser
 from pathlib import Path
@@ -6,20 +5,18 @@ from zipfile import ZipFile
 
 import patch
 
-def exists_in_archive(archive_path, src_path):
-    with ZipFile(archive_path) as archive:
-        return src_path in archive.namelist()
+def exists_in_archive(archive, src_path):
+    return src_path in archive.namelist()
 
-def extract_file(archive_path, src_path, dst_path):
-    with ZipFile(archive_path) as archive:
-        with archive.open(src_path) as src_file, open(dst_path, "wb") as dst_file:
-            shutil.copyfileobj(src_file, dst_file)
+def extract_file(archive, src_path, dst_path):
+    with archive.open(src_path) as src_file, open(dst_path, "wb") as dst_file:
+        shutil.copyfileobj(src_file, dst_file)
 
 def make_archive(result_path, root_dir):
     shutil.make_archive(result_path.with_suffix(""), "zip", root_dir)
     result_path.with_suffix(".zip").rename(result_path)
 
-def make_mod(diff_path, game_kpf_path, temp_dir, output_dir):
+def make_mod(diff_path, game_kpf, temp_dir, output_dir):
     temp_dir.mkdir(parents = True, exist_ok = True)
 
     patch_set = patch.fromfile(diff_path)
@@ -44,9 +41,9 @@ def make_mod(diff_path, game_kpf_path, temp_dir, output_dir):
             if dst_path.exists():
                 dst_path.unlink()
 
-        elif exists_in_archive(game_kpf_path, src_path):
+        elif exists_in_archive(game_kpf, src_path):
             print(f"Extracting {src_path}...")
-            extract_file(game_kpf_path, src_path, dst_path)
+            extract_file(game_kpf, src_path, dst_path)
 
     print(f"Applying {diff_path.name}...")
     patch_set.apply(root = temp_dir)
@@ -83,12 +80,16 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    game_kpf = ZipFile(args.game_kpf_path)
+
     if args.output_dir.exists():
         shutil.rmtree(args.output_dir)
 
     args.output_dir.mkdir(parents = True, exist_ok = True)
 
     for diff_path in Path(args.patch_dir).glob("*.diff"):
-        make_mod(diff_path, args.game_kpf_path, args.temp_dir, args.output_dir)
+        make_mod(diff_path, game_kpf, args.temp_dir, args.output_dir)
+
+    game_kpf.close()
 
     print("Done.")
