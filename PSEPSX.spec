@@ -1,3 +1,14 @@
+import os
+
+library_blacklist = [
+    "Qt6OpenGL.dll",
+    "Qt6QmlModels.dll",
+    "Qt6Quick.dll",
+    "Qt6Svg.dll",
+    "Qt6VirtualKeyboard.dll",
+    "opengl32sw.dll",
+]
+
 block_cipher = None
 
 analysis = Analysis(
@@ -18,6 +29,7 @@ analysis = Analysis(
     cipher = block_cipher,
     noarchive = False
 )
+analysis.binaries -= TOC([(os.path.normcase(x), None, None) for x in library_blacklist])
 
 pyz = PYZ(
     analysis.pure,
