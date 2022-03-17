@@ -1,0 +1,1614 @@
+--- defs/actors/monsters/anubis.txt	Tue Dec  7 23:38:46 2021
++++ defs/actors/monsters/anubis.txt	Tue Dec  7 23:38:46 2021
+@@ -15,7 +15,11 @@
+     painAnim                "monsters/anubis_pain"
+     meleeAnim               "monsters/anubis_melee"
+     rangeAttackAnim         "monsters/anubis_attack_range"
++#if PSPSX_ANUBIS_DEATH
++    deathAnim               "monsters/anubis_death"
++#else
+     deathAnim               "monsters/anubis_death_pc"
++#endif
+     gibAnim                 "monsters/anubis_death"
+     solid                   1
+     shootable               1
+--- defs/actors/monsters/mantis.txt	Tue Dec  7 23:38:46 2021
++++ defs/actors/monsters/mantis.txt	Tue Dec  7 23:38:46 2021
+@@ -30,3 +30,21 @@
+     turnSpeed               2.0
+     group                   "AI"
+ }
++
++#if PSPSX_MANTIS_DECAPITATION
++#define Obj_MantisGib01 11000
++
++Actor Obj_MantisGib01
++{
++    classname               "kexSlaveActor"
++    radius                  28
++    height                  56
++    stepHeight              32
++    scale                   3.0
++    health                  40
++    spawnAnim               "monsters/mantis_gib01"
++    moveable                1
++    expires                 1
++    group                   "Effects"
++}
++#endif
+--- defs/actors/monsters/mummy.txt	Tue Dec  7 23:38:46 2021
++++ defs/actors/monsters/mummy.txt	Tue Dec  7 23:38:46 2021
+@@ -15,7 +15,11 @@
+     painAnim                "monsters/mummy_pain"
+     meleeAnim               "monsters/mummy_melee"
+     rangeAttackAnim         "monsters/mummy_range_attack"
++#if PSPSX_MUMMY_DEATH
++    deathAnim               "monsters/mummy_death"
++#else
+     deathAnim               "monsters/mummy_death_pc"
++#endif
+     gibAnim                 "monsters/mummy_death"
+     solid                   1
+     shootable               1
+--- defs/actors/monsters/spider.txt	Tue Dec  7 23:38:46 2021
++++ defs/actors/monsters/spider.txt	Tue Dec  7 23:38:46 2021
+@@ -11,11 +11,19 @@
+     noEnterWater            1
+     moveSpeed               5
+     painSound               "sounds/spidpain.wav"
++#if PSPSX_SCORPIONS
++    spawnAnim               "monsters/scorp_base"
++    chaseAnim               "monsters/scorp_base"
++    meleeAnim               "monsters/scorp_attack"
++    rangeAttackAnim         "monsters/scorp_leap"
++    deathAnim               "monsters/scorp_death"
++#else
+     spawnAnim               "monsters/spider_base"
+     chaseAnim               "monsters/spider_base"
+     meleeAnim               "monsters/spider_attack"
+     rangeAttackAnim         "monsters/spider_leap"
+     deathAnim               "monsters/spider_death"
++#endif
+     solid                   1
+     shootable               1
+     moveable                1
+@@ -26,7 +34,10 @@
+     seekable                1
+     shadow                  1
+     shadowAnim              "misc/shadow"
++#if PSPSX_SCORPIONS
++#else
+     meleeExtraDist          20.0
++#endif
+     scaleContacts           1
+     group                   "AI"
+ }
+--- defs/actors/misc.txt	Wed Dec  8 17:00:46 2021
++++ defs/actors/misc.txt	Wed Dec  8 17:00:46 2021
+@@ -90,7 +90,11 @@
+     warpSound_1             "sounds/warp.wav"
+     mapDestination          Map_Tomb1
+     requestSave             1
++#if PSPSX_MAPS
++    destinationPosition     "-1088.0 -2794.7 -864.0"
++#else
+     destinationPosition     "0 2816 -864"
++#endif
+     spawnAnim               "misc/warpPryamid_loop"
+     floatBob                1
+     floatBobDivisor         3.0
+--- defs/defines.txt	Wed Dec  8 16:42:12 2021
++++ defs/defines.txt	Wed Dec  8 16:42:12 2021
+@@ -6,8 +6,12 @@
+ #define Map_Mines                   5
+ #define Map_Palace                  6
+ #define Map_Arena1                  7
++#if PSPSX_MAPS
++#define Map_Cavern                  8
++#else
+ #define Map_Cavern1                 8
+ #define Map_Cavern2                 9
++#endif
+ #define Map_Gorge                   10
+ #define Map_Thoth                   11
+ #define Map_Marsh                   12
+@@ -18,8 +22,12 @@
+ #define Map_Magma                   17
+ #define Map_Peak                    18
+ #define Map_Chaos                   19
++#if PSPSX_MAPS
++#define Map_Colony                  20
++#else
+ #define Map_Colony1                 20
+ #define Map_Colony2                 21
++#endif
+ #define Map_Entry                   22
+ #define Map_Arena2                  23
+ #define Map_Tomb2                   24
+--- defs/mapInfo.txt	Thu Oct 28 18:04:36 2021
++++ defs/mapInfo.txt	Thu Oct 28 18:04:36 2021
+@@ -6,7 +6,11 @@
+     saveTitle       "$str_022"
+     overworld_x     326
+     overworld_y     208
++#if PSPSX_MAPS
++    map             "maps/old/TOMB.MAP"
++#else
+     map             "maps/TOMB.MAP"
++#endif
+     musicTrack      "music/egypt2.ogg"
+     script          "scripts/map/TOMB_script.txt"
+     nextmap_east    Map_Karnak
+@@ -18,7 +22,11 @@
+     saveTitle       "$str_023"
+     overworld_x     404
+     overworld_y     294
++#if PSPSX_MAPS
++    map             "maps/old/KARNAK.MAP"
++#else
+     map             "maps/KARNAK.MAP"
++#endif
+     musicTrack      "music/egypt1.ogg"
+     nextmap_north   Map_Pass
+     nextmap_east    Map_Sanctuary
+@@ -32,7 +40,11 @@
+     saveTitle       "$str_024"
+     overworld_x     558
+     overworld_y     286
++#if PSPSX_MAPS
++    map             "maps/old/SANCTUAR.MAP"
++#else
+     map             "maps/SANCTUAR.MAP"
++#endif
+     musicTrack      "music/temple2.ogg"
+     nextmap_north   Map_Marsh
+     nextmap_west    Map_Karnak
+@@ -44,7 +56,11 @@
+     saveTitle       "$str_025"
+     overworld_x     366
+     overworld_y     190
++#if PSPSX_MAPS
++    map             "maps/old/PASS.MAP"
++#else
+     map             "maps/PASS.MAP"
++#endif
+     musicTrack      "music/peak.ogg"
+     transmitter     0
+     nextmap_north   Map_Shrine
+@@ -57,7 +73,11 @@
+     saveTitle       "$str_026"
+     overworld_x     376
+     overworld_y     154
++#if PSPSX_MAPS
++    map             "maps/old/SHRINE.MAP"
++#else
+     map             "maps/SHRINE.MAP"
++#endif
+     musicTrack      "music/temple1.ogg"
+     nextmap_west    Map_Magma
+     nextmap_south   Map_Pass
+@@ -69,11 +89,19 @@
+     saveTitle       "$str_027"
+     overworld_x     384
+     overworld_y     402
++#if PSPSX_MAPS
++    map             "maps/old/MINES.MAP"
++#else
+     map             "maps/MINES.MAP"
++#endif
+     musicTrack      "music/cave.ogg"
+     transmitter     1
+     nextmap_north   Map_Karnak
++#if PSPSX_MAPS
++    nextmap_west    Map_Cavern
++#else
+     nextmap_west    Map_Cavern1
++#endif
+     nextmap_east    Map_Palace
+ }
+ 
+@@ -83,7 +111,11 @@
+     saveTitle       "$str_028"
+     overworld_x     482
+     overworld_y     408
++#if PSPSX_MAPS
++    map             "maps/old/SETPALAC.MAP"
++#else
+     map             "maps/SETPALAC.MAP"
++#endif
+     musicTrack      "music/temple2.ogg"
+     transmitter     2
+     nextmap_west    Map_Mines
+@@ -96,24 +128,44 @@
+     saveTitle       "$str_029"
+     overworld_x     558
+     overworld_y     412
++#if PSPSX_MAPS
++    map             "maps/old/SETARENA.MAP"
++#else
+     map             "maps/SETARENA.MAP"
++#endif
+     musicTrack      "music/arena1.ogg"
+     nextmap_west    Map_Palace
+     script          "scripts/map/SETARENA_script.txt"
+ }
+ 
++#if PSPSX_MAPS
++Map Map_Cavern
++#else
+ Map Map_Cavern1   
++#endif
+ {
+     title           "$str_008"
+     saveTitle       "$str_030"
++#if PSPSX_MAPS
++    overworld_x     258
++    overworld_y     438
++    map             "maps/old/CAVERN.MAP"
++#else
+     overworld_x     336
+     overworld_y     424
+     map             "maps/CAVERN_SAT.MAP"
++#endif
+     musicTrack      "music/cave.ogg"
++#if PSPSX_MAPS
++    nextmap_west    Map_Gorge
++#else
+     nextmap_west    Map_Cavern2
++#endif
+     nextmap_east    Map_Mines
+ }
+ 
++#if PSPSX_MAPS
++#else
+ Map Map_Cavern2   
+ {
+     title           "$str_145"
+@@ -125,6 +177,7 @@
+     nextmap_west    Map_Gorge
+     nextmap_east    Map_Cavern1
+ }
++#endif
+ 
+ Map Map_Gorge      
+ {
+@@ -132,11 +185,19 @@
+     saveTitle       "$str_031"
+     overworld_x     156
+     overworld_y     460
++#if PSPSX_MAPS
++    map             "maps/old/GORGE.MAP"
++#else
+     map             "maps/GORGE.MAP"
++#endif
+     musicTrack      "music/peak.ogg"
+     transmitter     3
+     nextmap_west    Map_Thoth
++#if PSPSX_MAPS
++    nextmap_east    Map_Cavern
++#else
+     nextmap_east    Map_Cavern2
++#endif
+ }
+ 
+ Map Map_Thoth      
+@@ -145,7 +206,11 @@
+     saveTitle       "$str_032"
+     overworld_x     64
+     overworld_y     404
++#if PSPSX_MAPS
++    map             "maps/old/THOTH.MAP"
++#else
+     map             "maps/THOTH.MAP"
++#endif
+     musicTrack      "music/temple1.ogg"
+     nextmap_north   Map_Chaos
+     nextmap_east    Map_Gorge
+@@ -157,7 +222,11 @@
+     saveTitle       "$str_033"
+     overworld_x     550
+     overworld_y     164
++#if PSPSX_MAPS
++    map             "maps/old/MARSH.MAP"
++#else
+     map             "maps/MARSH.MAP"
++#endif
+     musicTrack      "music/marsh.ogg"
+     transmitter     4
+     nextmap_north   Map_Sunken
+@@ -170,7 +239,11 @@
+     saveTitle       "$str_034"
+     overworld_x     546
+     overworld_y     60
++#if PSPSX_MAPS
++    map             "maps/old/SUNKEN.MAP"
++#else
+     map             "maps/SUNKEN.MAP"
++#endif
+     musicTrack      "music/cave.ogg"
+     script          "scripts/map/SUNKEN_script.txt"
+     nextmap_west    Map_Camp
+@@ -183,7 +256,11 @@
+     saveTitle       "$str_035"
+     overworld_x     402
+     overworld_y     64
++#if PSPSX_MAPS
++    map             "maps/old/SLAVCAMP.MAP"
++#else
+     map             "maps/SLAVCAMP.MAP"
++#endif
+     musicTrack      "music/temple2.ogg"
+     transmitter     5
+     nextmap_west    Map_Path
+@@ -196,7 +273,11 @@
+     saveTitle       "$str_036"
+     overworld_x     288
+     overworld_y     66
++#if PSPSX_MAPS
++    map             "maps/old/SELPATH.MAP"
++#else
+     map             "maps/SELPATH.MAP"
++#endif
+     musicTrack      "music/magma.ogg"
+     nextmap_west    Map_Burrow
+     nextmap_east    Map_Camp
+@@ -208,7 +289,11 @@
+     saveTitle       "$str_037"
+     overworld_x     226
+     overworld_y     88
++#if PSPSX_MAPS
++    map             "maps/old/SELBUROW.MAP"
++#else
+     map             "maps/SELBUROW.MAP"
++#endif
+     musicTrack      "music/arena1.ogg"
+     nextmap_east    Map_Path
+     script          "scripts/map/SELBUROW_script.txt"
+@@ -220,7 +305,11 @@
+     saveTitle       "$str_038"
+     overworld_x     232
+     overworld_y     188
++#if PSPSX_MAPS
++    map             "maps/old/MAGMA.MAP"
++#else
+     map             "maps/MAGMA.MAP"
++#endif
+     musicTrack      "music/magma.ogg"
+     transmitter     6
+     nextmap_east    Map_Shrine
+@@ -233,7 +322,11 @@
+     saveTitle       "$str_039"
+     overworld_x     226
+     overworld_y     266
++#if PSPSX_MAPS
++    map             "maps/old/PEAK.MAP"
++#else
+     map             "maps/PEAK.MAP"
++#endif
+     musicTrack      "music/peak.ogg"
+     nextmap_north   Map_Magma
+ }
+@@ -244,25 +337,48 @@
+     saveTitle       "$str_040"
+     overworld_x     32
+     overworld_y     300
++#if PSPSX_MAPS
++    map             "maps/old/CHAOS.MAP"
++#else
+     map             "maps/CHAOS.MAP"
++#endif
+     musicTrack      "music/magma.ogg"
+     transmitter     7
++#if PSPSX_MAPS
++    nextmap_north   Map_Colony
++#else
+     nextmap_north   Map_Colony1
++#endif
+     nextmap_south   Map_Thoth
+ }
+ 
++#if PSPSX_MAPS
++Map Map_Colony
++#else
+ Map Map_Colony1
++#endif
+ {
+     title           "$str_019"
+     saveTitle       "$str_041"
+     overworld_x     54
+     overworld_y     166
++#if PSPSX_MAPS
++    // NOTE: There is no COLONY.MAP in the maps/old directory
++    map             "maps/COLONY_PSX.MAP"
++#else
+     map             "maps/COLONY_SAT.MAP"
++#endif
+     musicTrack      "music/arena1.ogg"
++#if PSPSX_MAPS
++    nextmap_north   Map_Entry
++#else
+     nextmap_north   Map_Colony2
++#endif
+     nextmap_south   Map_Chaos
+ }
+ 
++#if PSPSX_MAPS
++#else
+ Map Map_Colony2
+ {
+     title           "$str_147"
+@@ -274,6 +390,7 @@
+     nextmap_north   Map_Entry
+     nextmap_south   Map_Colony1
+ }
++#endif
+ 
+ Map Map_Entry      
+ {
+@@ -281,17 +398,29 @@
+     saveTitle       "$str_042"
+     overworld_x     54
+     overworld_y     70
++#if PSPSX_MAPS
++    map             "maps/old/KILENTRY.MAP"
++#else
+     map             "maps/KILENTRY.MAP"
++#endif
+     musicTrack      "music/egypt2.ogg"
+     script          "scripts/map/KILENTRY_script.txt"
++#if PSPSX_MAPS
++    nextmap_south   Map_Colony
++#else
+     nextmap_south   Map_Colony2
++#endif
+ }
+ 
+ Map Map_Arena2     
+ {
+     title           "$str_021"
+     saveTitle       "$str_043"
++#if PSPSX_MAPS
++    map             "maps/old/KILARENA.MAP"
++#else
+     map             "maps/KILARENA.MAP"
++#endif
+     musicTrack      "music/arena2.ogg"
+     script          "scripts/map/KILARENA_script.txt"
+ }
+@@ -300,7 +429,11 @@
+ {
+     title           "$str_000"
+     saveTitle       "$str_022"
++#if PSPSX_MAPS
++    map             "maps/old/TOMBEND.MAP"
++#else
+     map             "maps/TOMBEND.MAP"
++#endif
+     musicTrack      "music/egypt2.ogg"
+     script          "scripts/map/TOMBEND_script.txt"
+ }
+--- defs/weaponInfo.txt	Mon Nov  1 16:06:32 2021
++++ defs/weaponInfo.txt	Mon Nov  1 16:06:32 2021
+@@ -26,7 +26,11 @@
+ 
+ Weapon Wep_M60
+ {
++#if PSPSX_AMMO_COUNTS
++    maxAmmo                 50
++#else
+     maxAmmo                 38 // was 50 (psx), 25 (saturn)
++#endif
+     offsetX                 160
+     offsetY                 138
+     disableUnderwater       1
+@@ -47,7 +51,11 @@
+ 
+ Weapon Wep_Bombs
+ {
++#if PSPSX_AMMO_COUNTS
++    maxAmmo                 20
++#else
+     maxAmmo                 15 // was 20 (psx), 10 (saturn)
++#endif
+     offsetX                 160
+     offsetY                 196
+     idleAnim                "weapons/bomb_idle_blank"
+@@ -65,7 +73,11 @@
+ 
+ Weapon Wep_FlameThrower
+ {
++#if PSPSX_AMMO_COUNTS
++    maxAmmo                 60
++#else
+     maxAmmo                 65 // was 60
++#endif
+     offsetX                 160
+     offsetY                 138
+     disableUnderwater       1
+@@ -78,7 +90,11 @@
+ 
+ Weapon Wep_CobraStaff
+ {
++#if PSPSX_AMMO_COUNTS
++    maxAmmo                 20
++#else
+     maxAmmo                 16 // was 20 (psx), 12 (saturn)
++#endif
+     offsetX                 160
+     offsetY                 210
+     idleAnim                "weapons/cstaff_idle"
+@@ -100,7 +116,11 @@
+ 
+ Weapon Wep_Manacle
+ {
++#if PSPSX_AMMO_COUNTS
++    maxAmmo                 15
++#else
+     maxAmmo                 6 // was 15 (psx), 4 (saturn)
++#endif
+     offsetX                 160
+     offsetY                 214
+     idleAnim                "weapons/manacle_idle"
+--- scripts/map/KILARENA_script.txt	Mon Jul  5 18:55:14 2021
++++ scripts/map/KILARENA_script.txt	Mon Jul  5 18:55:14 2021
+@@ -22,5 +22,9 @@
+ $script 1
+ {
+     Player().GetArtifacts() = PA_ALL;
++#if PSPSX_MAPS
++    kexSlaveEvents::ChangeMap("maps/old/KILENTRY.MAP");
++#else
+     kexSlaveEvents::ChangeMap("maps/KILENTRY.MAP");
++#endif
+ }
+--- scripts/map/KILENTRY_script.txt	Mon Jul  5 18:55:14 2021
++++ scripts/map/KILENTRY_script.txt	Mon Jul  5 18:55:14 2021
+@@ -21,5 +21,9 @@
+ 
+ $script 8
+ {
++#if PSPSX_MAPS
++    kexSlaveEvents::ChangeMap("maps/old/KILARENA.MAP");
++#else
+     kexSlaveEvents::ChangeMap("maps/KILARENA.MAP");
++#endif
+ }
+--- scripts/map/SETARENA_script.txt	Wed Feb  9 23:27:20 2022
++++ scripts/map/SETARENA_script.txt	Wed Feb  9 23:27:20 2022
+@@ -25,7 +25,11 @@
+     EnumPlayerArtifacts arti = Player().GetArtifacts();
+     if((arti & PA_SHAWL) != 0) // has shawl
+     {
++#if PSPSX_MAPS
++        kexSlaveActor@ pActor = kexSlaveEvents::GetActorFromMapActorIdx(22);
++#else
+         kexSlaveActor@ pActor = kexSlaveEvents::GetActorFromMapActorIdx(67);
++#endif
+         if(!(pActor is null))
+         {
+             pActor.Remove();
+@@ -45,7 +49,11 @@
+ 
+ $script 1
+ {
++#if PSPSX_MAPS
++    kexSlaveActor@ pActor = kexSlaveEvents::GetActorFromMapActorIdx(22);
++#else
+     kexSlaveActor@ pActor = kexSlaveEvents::GetActorFromMapActorIdx(67);
++#endif
+     if(pActor is null)
+     {
+         // Not here. That means that we already killed it and reloaded a checkpoint or something
+--- scripts/map/TOMB_script.txt	Sun Nov 21 17:55:06 2021
++++ scripts/map/TOMB_script.txt	Sun Nov 21 17:55:06 2021
+@@ -71,7 +71,11 @@
+ float bobTime = 0.0f;
+ kexSlaveActor @ramses;
+ 
++#if PSPSX_MAPS
++kVec3 ramsesOrigin(-1104, -2464, -704);
++#else
+ kVec3 ramsesOrigin(-13, 3143, -734);
++#endif
+ uint ramsesTalkFramePos = 0;
+ uint currentRamsesTalkEvent = 0;
+ 
+@@ -177,7 +181,11 @@
+     
+     kexSlaveEvents::StopMusic();
+     kexSlaveEvents::StopAllSounds();
++#if PSPSX_MAPS
++    kexSlaveEvents::PlayMusic("music/egypt2.ogg", true);
++#else
+     kexSlaveEvents::PlayMusic("music/egypt1.ogg", true);
++#endif
+     
+     kexSlaveEvents::FireRemoteEventFromTag(1020);
+     kexSlaveLevelScript::CallDelayed(3, instigator, 4.0f);
+@@ -262,7 +270,11 @@
+ 
+ $script 0
+ {
++#if PSPSX_MAPS
++    kexSlaveEvents::MoveScriptedSector(0, -256, -1, true);
++#else
+     kexSlaveEvents::MoveScriptedSector(666, -256, -1, true);
++#endif
+ }
+ 
+ //
+@@ -284,7 +296,11 @@
+     
+     if(bCasketOpened == false)
+     {
++#if PSPSX_MAPS
++        kexSlaveEvents::MoveScriptedSector(0, 320, 4, true);
++#else
+         kexSlaveEvents::MoveScriptedSector(666, 320, 4, true);
++#endif
+         bCasketOpened = true;
+     }
+     
+@@ -293,7 +309,11 @@
+     
+     delay(0.5f);
+     
++#if PSPSX_MAPS
++    @ramses = ObjectFactory().SpawnActor("Obj_Ramses", ramsesOrigin.x, ramsesOrigin.y, ramsesOrigin.z, 0, 14);
++#else
+     @ramses = ObjectFactory().SpawnActor("Obj_Ramses", ramsesOrigin.x, ramsesOrigin.y, ramsesOrigin.z, 0, 56);
++#endif
+     ramses.m_fScratchParam0 = 0.0f;
+     bobTime = 0.0f;
+     ramsesTalkFramePos = 0;
+@@ -319,7 +339,11 @@
+     instigator.GetRotation().z = (dir.ToYaw() - instigator.GetRotation().z) * 0.0625f + instigator.GetRotation().z;
+     instigator.GetRotation().x = (-dir.ToPitch() - instigator.GetRotation().x) * 0.0625f + instigator.GetRotation().x;
+     
++#if PSPSX_MAPS
++    instigator.GetOrigin().Lerp(kVec3(-1088.0f, -2794.7f, -864.0f), 0.0625f);
++#else
+     instigator.GetOrigin().Lerp(kVec3(0.0f, 2816.0f, -864.0f), 0.0625f);
++#endif
+     
+     $restart;
+ }
+@@ -374,7 +398,11 @@
+     
+     currentRamsesTalkEvent += (GetLanguageID() * 12);
+     
++#if PSPSX_TELEPATHIC_RAMSES
++    kexSlaveEvents::PlayMusic(g_npRamsesTalkEvents[currentRamsesTalkEvent].m_strSfx, false);
++#else
+     kexSlaveEvents::PlaySound(g_npRamsesTalkEvents[currentRamsesTalkEvent].m_strSfx);
++#endif
+     kexSlaveLevelScript::CallDelayed(5, instigator, dialogTime);
+ }
+ 
+--- scripts/map/TOMBEND_script.txt	Sun Nov 21 17:55:06 2021
++++ scripts/map/TOMBEND_script.txt	Sun Nov 21 17:55:06 2021
+@@ -132,7 +132,11 @@
+     @ramsesBody = ObjectFactory().SpawnActor("Obj_Ramses_Body_Rest",
+                                              ramsesOrigin.x,
+                                              ramsesOrigin.y,
++#if PSPSX_MAPS
++                                             ramsesOrigin.z + 512.0f, 0, 68);
++#else
+                                              ramsesOrigin.z + 512.0f, 0, 57);
++#endif
+     
+     ramsesTalkFramePos = 0;
+     currentRamsesTalkEvent = 0;
+@@ -205,7 +209,11 @@
+     kexSlaveLevelScript::Halt(6);
+     ramsesBody.Remove();
+     
++#if PSPSX_MAPS
++    @ramses = ObjectFactory().SpawnActor("Obj_Ramses", ramsesOrigin.x, ramsesOrigin.y, ramsesOrigin.z + 160.0f, 0, 68);
++#else
+     @ramses = ObjectFactory().SpawnActor("Obj_Ramses", ramsesOrigin.x, ramsesOrigin.y, ramsesOrigin.z + 160.0f, 0, 57);
++#endif
+     ramses.m_fScratchParam0 = 0.0f;
+     bLookAtRamses = true;
+     
+@@ -273,7 +281,11 @@
+     }
+     
+     currentRamsesTalkEvent += (GetLanguageID() * 2);
++#if PSPSX_TELEPATHIC_RAMSES
++    kexSlaveEvents::PlayMusic(g_npRamsesTalkEvents[currentRamsesTalkEvent].m_strSfx, false);
++#else
+     kexSlaveEvents::PlaySound(g_npRamsesTalkEvents[currentRamsesTalkEvent].m_strSfx);
++#endif
+     
+     kexSlaveLevelScript::CallDelayed(8, instigator, dialogTime);
+     kexSlaveLevelScript::CallDelayed(10, instigator, 0.0f);
+--- scripts/p_enemy.txt	Sat Oct 30 17:38:24 2021
++++ scripts/p_enemy.txt	Sat Oct 30 17:38:24 2021
+@@ -109,7 +109,11 @@
+         }
+         else
+         {
++#if PSPSX_SCORPIONS
++            actor.ChangeAnim("monsters/scorp_base");
++#else
+             actor.ChangeAnim("monsters/spider_base");
++#endif
+         }
+     }
+ }
+@@ -129,7 +133,11 @@
+         }
+         else
+         {
++#if PSPSX_SCORPIONS
++            actor.ChangeAnim("monsters/scorp_base");
++#else
+             actor.ChangeAnim("monsters/spider_base");
++#endif
+         }
+     }
+     else if(actor.GetVelocity().z <= 0 && actor.GetType() == AI_Spider)
+@@ -656,7 +664,11 @@
+     }
+     
+     actor.m_fScratchParam2 = 1 + kexSlaveRandomizer::Size(3);
++#if PSPSX_MANTIS_ATTACK
++    actor.ChangeAnim("monsters/mantis_attack_psx");
++#else
+     actor.ChangeAnim("monsters/mantis_attack_saturn");
++#endif
+ }
+ 
+ //
+@@ -672,7 +684,11 @@
+     }
+     
+     actor.m_fScratchParam2--;
++#if PSPSX_MANTIS_ATTACK
++    actor.ChangeAnim("monsters/mantis_attack_psx");
++#else
+     actor.ChangeAnim("monsters/mantis_attack_saturn");
++#endif
+ }
+ 
+ //
+--- scripts/p_misc.txt	Mon Dec 13 21:14:28 2021
++++ scripts/p_misc.txt	Mon Dec 13 21:14:28 2021
+@@ -199,7 +199,10 @@
+     vColor.y = 1.0f + (0.25f - 1.0f) * fT;
+     vColor.z = 1.0f + (0.0625f - 1.0f) * fT;
+     actor.GetColor() = vColor;
++#if PSPSX_FLAMETHROWER_FLAME
++#else
+     actor.GetTransparency() = uint8((1.0f - fT) * 255.0f);
++#endif
+     
+     if(actor.m_fFizzleTime >= PROJECTILE_FLAME_LIFETIME)
+     {
+@@ -350,14 +353,22 @@
+         {
+             if((kexSlaveRandomizer::UInt8() & 31) == 0)
+             {
++#if PSPSX_ORB_SPAWN
++                ObjectFactory().SpawnActor("Fx_PowerSpawn", x, y, z, 0, actor.GetSector());
++#else
+                 ObjectFactory().SpawnActor("Item_Power", x, y, z, 0, actor.GetSector());
++#endif
+             }
+         }
+         else
+         {
+             if(g_iAllowPowerSpawnTimer <= 0 && (kexSlaveRandomizer::UInt8() & 31) == 0)
+             {
++#if PSPSX_ORB_SPAWN
++                ObjectFactory().SpawnActor("Fx_PowerSpawn", x, y, z, 0, actor.GetSector());
++#else
+                 ObjectFactory().SpawnActor("Item_Power", x, y, z, 0, actor.GetSector());
++#endif
+                 g_iAllowPowerSpawnTimer = 10 + kexSlaveRandomizer::Max(10);
+                 return;
+             }
+@@ -374,7 +385,11 @@
+     case 0:
+         if((Player().GetArtifacts() & PA_SCEPTER) != 0 && (kexSlaveRandomizer::UInt8() & 7) >= 3)
+         {
++#if PSPSX_ORB_SPAWN
++            @obj = ObjectFactory().SpawnActor("Fx_AmmoSpawn", x, y, z, 0, actor.GetSector());
++#else
+             @obj = ObjectFactory().SpawnActor("Item_Ammo", x, y, z, 0, actor.GetSector());
++#endif
+         }
+         else
+         {
+@@ -400,7 +415,11 @@
+         // fall through
+         
+     case 3:
++#if PSPSX_ORB_SPAWN
++        @obj = ObjectFactory().SpawnActor("Fx_AmmoSpawn", x, y, z, 0, actor.GetSector());
++#else
+         @obj = ObjectFactory().SpawnActor("Item_Ammo", x, y, z, 0, actor.GetSector());
++#endif
+         break;
+         
+     case 4:
+@@ -411,7 +430,11 @@
+         // fall through
+         
+     case 5:
++#if PSPSX_ORB_SPAWN
++        @obj = ObjectFactory().SpawnActor("Fx_HealthSpawn", x, y, z, 0, actor.GetSector());
++#else
+         @obj = ObjectFactory().SpawnActor("Item_Health", x, y, z, 0, actor.GetSector());
++#endif
+         break;
+         
+     case 6:
+--- scripts/p_pspr.txt	Tue Oct 26 19:07:28 2021
++++ scripts/p_pspr.txt	Tue Oct 26 19:07:28 2021
+@@ -361,7 +361,16 @@
+     float r1 = kexSlaveRandomizer::RFloatVal(0.392f * 2.0f);
+     float r2 = kexSlaveRandomizer::RFloatVal(0.392f * 2.0f);
+     
++#if PSPSX_MANACLE_BEHAVIOR
++    auto owner = actor.GetSourceOwner();
++    
++    float rX = owner !is null ? owner.GetRotation().x : actor.GetRotation().x;
++    float rZ = owner !is null ? owner.GetRotation().z : actor.GetRotation().z;
++    
++    kQuat rotation = kQuat(0.125f + rX + r2, -1, 0, 0) * kQuat(0.125f + (rZ + r1), 0, 0, -1);
++#else
+     kQuat rotation = kQuat(0.125f + actor.GetRotation().x + r2, -1, 0, 0) * kQuat(0.125f + (actor.GetRotation().z + r1), 0, 0, -1);
++#endif
+     actor.GetVelocity() = (kVec3(0, 32, 0) * rotation);
+ }
+ 
+--- sprites/effects/effects_anim.txt	Wed Sep 15 19:41:30 2021
++++ sprites/effects/effects_anim.txt	Wed Sep 15 19:41:30 2021
+@@ -919,7 +919,11 @@
+     frame
+     {
+         // ##000   55    0
++#if PSPSX_EXPLOSION_SOUND
++        action A_PlayLocalSound("sounds/explode01.wav")
++#else
+         action A_PlayLocalSound("sounds/explode03.wav")
++#endif
+         action A_SpawnLight(768, 0.75, 0.375, 0.25, 20, 10)
+         sprites
+         {
+--- sprites/misc/ramses_anim.txt	Wed Oct 27 22:57:54 2021
++++ sprites/misc/ramses_anim.txt	Wed Oct 27 22:57:54 2021
+@@ -949,10 +949,17 @@
+         delay -1
+         sprites
+         {
++#if PSPSX_TELEPATHIC_RAMSES
++            { "misc/ramses", 191,    -48, -106,    0 }
++            { "misc/ramses", 192,     16, -106,    0 }
++            { "misc/ramses", 193,    -48,  -42,    0 }
++            { "misc/ramses", 194,     16,  -42,    0 }
++#else
+             { "misc/ramses", 199,    -48, -106,    0 }
+             { "misc/ramses", 200,     16, -106,    0 }
+             { "misc/ramses", 201,    -48,  -42,    0 }
+             { "misc/ramses", 202,     16,  -42,    0 }
++#endif
+         }
+ 
+     }
+@@ -963,10 +970,17 @@
+         delay -1
+         sprites
+         {
++#if PSPSX_TELEPATHIC_RAMSES
++            { "misc/ramses", 191,    -48, -106,    0 }
++            { "misc/ramses", 192,     16, -106,    0 }
++            { "misc/ramses", 193,    -48,  -42,    0 }
++            { "misc/ramses", 194,     16,  -42,    0 }
++#else
+             { "misc/ramses", 138,    -48, -106,    0 }
+             { "misc/ramses", 139,     16, -106,    0 }
+             { "misc/ramses", 140,    -48,  -42,    0 }
+             { "misc/ramses", 141,     16,  -42,    0 }
++#endif
+         }
+ 
+     }
+@@ -991,10 +1005,17 @@
+         delay -1
+         sprites
+         {
++#if PSPSX_TELEPATHIC_RAMSES
++            { "misc/ramses", 134,    -48, -106,    0 }
++            { "misc/ramses", 135,     16, -106,    0 }
++            { "misc/ramses", 136,    -48,  -42,    0 }
++            { "misc/ramses", 137,     16,  -42,    0 }
++#else
+             { "misc/ramses", 112,    -48, -106,    0 }
+             { "misc/ramses", 113,     16, -106,    0 }
+             { "misc/ramses", 114,    -48,  -42,    0 }
+             { "misc/ramses", 115,     16,  -42,    0 }
++#endif
+         }
+ 
+     }
+@@ -1005,10 +1026,17 @@
+         delay -1
+         sprites
+         {
++#if PSPSX_TELEPATHIC_RAMSES
++            { "misc/ramses", 134,    -48, -106,    0 }
++            { "misc/ramses", 135,     16, -106,    0 }
++            { "misc/ramses", 136,    -48,  -42,    0 }
++            { "misc/ramses", 137,     16,  -42,    0 }
++#else
+             { "misc/ramses", 233,    -48, -106,    0 }
+             { "misc/ramses", 234,     16, -106,    0 }
+             { "misc/ramses", 235,    -48,  -42,    0 }
+             { "misc/ramses", 236,     16,  -42,    0 }
++#endif
+         }
+ 
+     }
+@@ -1033,10 +1061,17 @@
+         delay -1
+         sprites
+         {
++#if PSPSX_TELEPATHIC_RAMSES
++            { "misc/ramses", 215,    -48, -106,    0 }
++            { "misc/ramses", 216,     16, -106,    0 }
++            { "misc/ramses", 217,    -48,  -42,    0 }
++            { "misc/ramses", 218,     16,  -42,    0 }
++#else
+             { "misc/ramses", 252,    -48, -106,    0 }
+             { "misc/ramses", 253,     16, -106,    0 }
+             { "misc/ramses", 254,    -48,  -42,    0 }
+             { "misc/ramses", 255,     16,  -42,    0 }
++#endif
+         }
+ 
+     }
+@@ -1047,10 +1082,17 @@
+         delay -1
+         sprites
+         {
++#if PSPSX_TELEPATHIC_RAMSES
++            { "misc/ramses", 215,    -48, -106,    0 }
++            { "misc/ramses", 216,     16, -106,    0 }
++            { "misc/ramses", 217,    -48,  -42,    0 }
++            { "misc/ramses", 218,     16,  -42,    0 }
++#else
+             { "misc/ramses", 156,    -48, -106,    0 }
+             { "misc/ramses", 157,     16, -106,    0 }
+             { "misc/ramses", 158,    -48,  -42,    0 }
+             { "misc/ramses", 159,     16,  -42,    0 }
++#endif
+         }
+ 
+     }
+@@ -1075,10 +1117,17 @@
+         delay -1
+         sprites
+         {
++#if PSPSX_TELEPATHIC_RAMSES
++            { "misc/ramses", 262,    -48, -106,    0 }
++            { "misc/ramses", 263,     16, -106,    0 }
++            { "misc/ramses", 264,    -48,  -42,    0 }
++            { "misc/ramses", 265,     16,  -42,    0 }
++#else
+             { "misc/ramses", 195,    -48, -106,    0 }
+             { "misc/ramses", 196,     16, -106,    0 }
+             { "misc/ramses", 197,    -48,  -42,    0 }
+             { "misc/ramses", 198,     16,  -42,    0 }
++#endif
+         }
+ 
+     }
+@@ -1089,10 +1138,17 @@
+         delay -1
+         sprites
+         {
++#if PSPSX_TELEPATHIC_RAMSES
++            { "misc/ramses", 262,    -48, -106,    0 }
++            { "misc/ramses", 263,     16, -106,    0 }
++            { "misc/ramses", 264,    -48,  -42,    0 }
++            { "misc/ramses", 265,     16,  -42,    0 }
++#else
+             { "misc/ramses", 237,    -48, -106,    0 }
+             { "misc/ramses", 238,     16, -106,    0 }
+             { "misc/ramses", 239,    -48,  -42,    0 }
+             { "misc/ramses", 240,     16,  -42,    0 }
++#endif
+         }
+ 
+     }
+--- sprites/monsters/mantis_anim.txt	Sun Jul  4 01:26:20 2021
++++ sprites/monsters/mantis_anim.txt	Sun Jul  4 01:26:20 2021
+@@ -6,9 +6,15 @@
+         // ##000    0    0
+         sprites
+         {
++#if PSPSX_MANTIS_DECAPITATION
++            { "monsters/mantis",  99, -39, -48, 0 }
++            { "monsters/mantis", 100,  25, -48, 0 }
++            { "monsters/mantis", 101, -39,  16, 0 }
++#else
+             { "monsters/mantis", 99,      0,    0,    0 }
+             { "monsters/mantis", 100,     64,    0,    0 }
+             { "monsters/mantis", 101,      0,   64,    0 }
++#endif
+         }
+ 
+     }
+--- sprites/monsters/mantis_attack_anim.txt	Sat Sep 18 00:14:18 2021
++++ sprites/monsters/mantis_attack_anim.txt	Sat Sep 18 00:14:18 2021
+@@ -828,7 +828,10 @@
+     frame
+     {
+         // ##008    0  132
++#if PSPSX_MANTIS_ATTACK
++#else
+         action A_MantisAttack()
++#endif
+         rotation_N
+         {
+             sprites
+@@ -935,7 +938,10 @@
+     frame
+     {
+         // ##009    0  132
++#if PSPSX_MANTIS_ATTACK
++#else
+         action A_MantisAttack()
++#endif
+         rotation_N
+         {
+             sprites
+--- sprites/monsters/mantis_death_anim.txt	Sat Sep 18 02:35:22 2021
++++ sprites/monsters/mantis_death_anim.txt	Sat Sep 18 02:35:22 2021
+@@ -494,6 +494,10 @@
+     {
+         // ##005    0    0
+         action A_MantisExplode()
++#if PSPSX_MANTIS_DECAPITATION
++        action A_TossActor("Obj_MantisGib01", 0, 0, 32, 8, 8, 4, 12)
++        action A_Hide()
++#endif
+         rotation_N
+         {
+             sprites
+@@ -3482,7 +3486,10 @@
+     frame
+     {
+         // ##020    0    0
++#if PSPSX_MANTIS_DECAPITATION
++#else
+         action A_Hide()
++#endif
+         action A_Destroy()
+         sprites
+         {
+--- sprites/weapons/cobra_staff_anim.txt	Wed Nov 24 15:53:52 2021
++++ sprites/weapons/cobra_staff_anim.txt	Wed Nov 24 15:53:52 2021
+@@ -1,3 +1,5 @@
++// Ported from: https://github.com/svkaiser/PowerslaveEX/blob/master/kex3_anubis/res/sprites/weapons/cobra_staff_anim.txt
++
+ cstaff_raise
+ {
+     frame
+@@ -12,6 +14,185 @@
+         delay 1
+     }
+ 
++#if PSPSX_COBRA_STAFF
++    frame
++    {
++        // ##002   69    0
++        action A_PlayLocalSound("sounds/cstaffup.wav")
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,   -9,    0 }
++            { "weapons/cobra_staff", 3,     33,   -9,    0 }
++            { "weapons/cobra_staff", 4,    -31,   55,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##003    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -15,    0 }
++            { "weapons/cobra_staff", 3,     33,  -15,    0 }
++            { "weapons/cobra_staff", 4,    -31,   49,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##004    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -23,    0 }
++            { "weapons/cobra_staff", 3,     33,  -23,    0 }
++            { "weapons/cobra_staff", 4,    -31,   41,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##005    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -31,    0 }
++            { "weapons/cobra_staff", 3,     33,  -31,    0 }
++            { "weapons/cobra_staff", 4,    -31,   33,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##006    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -38,    0 }
++            { "weapons/cobra_staff", 3,     33,  -38,    0 }
++            { "weapons/cobra_staff", 4,    -31,   26,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##007    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -44,    0 }
++            { "weapons/cobra_staff", 3,     33,  -44,    0 }
++            { "weapons/cobra_staff", 4,    -31,   20,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##008    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -50,    0 }
++            { "weapons/cobra_staff", 3,     33,  -50,    0 }
++            { "weapons/cobra_staff", 4,    -31,   14,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##009    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -54,    0 }
++            { "weapons/cobra_staff", 3,     33,  -54,    0 }
++            { "weapons/cobra_staff", 4,    -31,   10,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##010    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -59,    0 }
++            { "weapons/cobra_staff", 3,     33,  -59,    0 }
++            { "weapons/cobra_staff", 4,    -31,    5,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##011    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -65,    0 }
++            { "weapons/cobra_staff", 3,     33,  -65,    0 }
++            { "weapons/cobra_staff", 4,    -31,   -1,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##012    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -72,    0 }
++            { "weapons/cobra_staff", 3,     33,  -72,    0 }
++            { "weapons/cobra_staff", 4,    -31,   -8,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##013    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -78,    0 }
++            { "weapons/cobra_staff", 3,     33,  -78,    0 }
++            { "weapons/cobra_staff", 4,    -31,  -14,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##014    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -79,    0 }
++            { "weapons/cobra_staff", 3,     33,  -79,    0 }
++            { "weapons/cobra_staff", 4,    -31,  -15,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##015    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -77,    0 }
++            { "weapons/cobra_staff", 3,     33,  -77,    0 }
++            { "weapons/cobra_staff", 4,    -31,  -13,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##016    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -74,    0 }
++            { "weapons/cobra_staff", 3,     33,  -74,    0 }
++            { "weapons/cobra_staff", 4,    -31,  -10,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##017    0    0
++        goto "weapons/cstaff_idle"
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -72,    0 }
++            { "weapons/cobra_staff", 3,     33,  -72,    0 }
++            { "weapons/cobra_staff", 4,    -31,   -8,    0 }
++        }
++    }
++#else
+     frame { sprites { { "weapons/cobra_staff_pc", 0,    -40,  0,    0 } } }
+     frame { sprites { { "weapons/cobra_staff_pc", 0,    -40,  -40,    0 } } }
+     frame { sprites { { "weapons/cobra_staff_pc", 0,    -40,  -60,    0 } } }
+@@ -35,17 +216,141 @@
+     frame { sprites { { "weapons/cobra_staff_pc", 3,    12,  -100,    0 } } }
+     frame { sprites { { "weapons/cobra_staff_pc", 3,    18,  -100,    0 } } }
+     frame { goto "weapons/cstaff_idle" sprites { { "weapons/cobra_staff_pc", 3,    25,  -100,    0 } } }
++#endif
+ }
+ 
+ cstaff_idle
+ {
+     // frames:    1
+     
++#if PSPSX_COBRA_STAFF
++    frame
++    {
++        // ##000    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -71,    0 }
++            { "weapons/cobra_staff", 3,     33,  -71,    0 }
++            { "weapons/cobra_staff", 4,    -31,   -7,    0 }
++        }
++    }
++#else
+     frame { sprites { { "weapons/cobra_staff_pc", 4,    20,  -90,    0 } } }
++#endif
+ }
+ 
+ cstaff_lower
+ {
++#if PSPSX_COBRA_STAFF
++    frame
++    {
++        // ##000    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -68,    0 }
++            { "weapons/cobra_staff", 3,     33,  -68,    0 }
++            { "weapons/cobra_staff", 4,    -31,   -4,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##001   69    0
++        action A_PlayLocalSound("sounds/cstaffup.wav")
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -31,  -67,    0 }
++            { "weapons/cobra_staff", 3,     33,  -67,    0 }
++            { "weapons/cobra_staff", 4,    -31,   -3,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##002    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -30,  -59,    0 }
++            { "weapons/cobra_staff", 3,     34,  -59,    0 }
++            { "weapons/cobra_staff", 4,    -30,    5,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##003    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -28,  -48,    0 }
++            { "weapons/cobra_staff", 3,     36,  -48,    0 }
++            { "weapons/cobra_staff", 4,    -28,   16,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##004    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -27,  -35,    0 }
++            { "weapons/cobra_staff", 3,     37,  -35,    0 }
++            { "weapons/cobra_staff", 4,    -27,   29,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##005    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -27,  -23,    0 }
++            { "weapons/cobra_staff", 3,     37,  -23,    0 }
++            { "weapons/cobra_staff", 4,    -27,   41,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##006    0    0
++        sprites
++        {
++            { "weapons/cobra_staff", 2,    -26,  -10,    0 }
++            { "weapons/cobra_staff", 3,     38,  -10,    0 }
++            { "weapons/cobra_staff", 4,    -26,   54,    0 }
++        }
++    }
++
++    frame
++    {
++        // ##007    0    0 (no groups)
++        delay 1
++
++    }
++
++    frame
++    {
++        // ##008    0    0 (no groups)
++        delay 1
++    }
++
++    frame
++    {
++        // ##009    0    0 (no groups)
++        delay 1
++    }
++
++    frame
++    {
++        // ##010    0    0 (no groups)
++        delay 1
++    }
++
++    frame
++    {
++        // ##011    0    0 (no groups)
++        delay 1
++    }
++#else
+     frame { sprites { { "weapons/cobra_staff_pc", 4,    21,  -89,    0 } } }
+     frame { action A_PlayLocalSound("sounds/cstaffup.wav") sprites { { "weapons/cobra_staff_pc", 4,    24,  -85,    0 } } }
+     frame { sprites { { "weapons/cobra_staff_pc", 4,    28,  -82,    0 } } }
+@@ -58,6 +363,7 @@
+     frame { sprites { { "weapons/cobra_staff_pc", 5,    30,  0,    0 } } }
+     frame { sprites { { "weapons/cobra_staff_pc", 5,    30,  0,    0 } } }
+     frame { sprites { { "weapons/cobra_staff_pc", 5,    30,  0,    0 } } }
++#endif
+ 
+     frame
+     {
+@@ -70,6 +376,8 @@
+ cstaff_fire
+ {
+     // frames:   11
++#if PSPSX_COBRA_STAFF
++#else
+     frame { sprites { { "weapons/cobra_staff_pc", 4,    15,  -90,    0 } } }
+     frame { sprites { { "weapons/cobra_staff_pc", 5,    -10,  -90,    0 } } }
+     frame { goto "weapons/cstaff_fire_loop" sprites { { "weapons/cobra_staff_pc", 5,    -20,  -90,    0 } } }
+@@ -77,6 +385,7 @@
+ 
+ cstaff_fire_loop
+ {
++#endif
+     frame
+     {
+         // ##000    0    0
+@@ -204,8 +513,12 @@
+     frame
+     {
+         // ##010    0    0
++#if PSPSX_COBRA_STAFF
++        goto "weapons/cstaff_idle"
++#else
+         delay 1
+         refire "weapons/cstaff_fire_loop"
++#endif
+         sprites
+         {
+             { "weapons/cobra_staff", 2,    -32,  -58,    0 }
+@@ -214,7 +527,10 @@
+         }
+     }
+     
++#if PSPSX_COBRA_STAFF
++#else
+     frame { sprites { { "weapons/cobra_staff_pc", 5,    -20,  -90,    0 } } }
+     frame { sprites { { "weapons/cobra_staff_pc", 5,    -10,  -90,    0 } } }
+     frame { goto "weapons/cstaff_idle" sprites { { "weapons/cobra_staff_pc", 5,    0,  -90,    0 } } }
++#endif
+ }
+\ No newline at end of file
+--- sprites/weapons/m60_anim.txt	Wed Nov 24 15:53:52 2021
++++ sprites/weapons/m60_anim.txt	Wed Nov 24 15:53:52 2021
+@@ -540,6 +540,10 @@
+         // ##002   63  128
+         action A_PlayLocalSound("sounds/m90fire.wav")
+         action A_PlayTactile("tactile/m90fire", 0, 2)
++#if PSPSX_M60_FIRE_TIMINGS
++        action A_HitScan(4000, 0.0416, 0.0416, 20, 20, 96, "Fx_BulletPuff")
++        action A_ConsumeAmmo(1)
++#endif
+         fullbright
+         sprites
+         {
+@@ -558,8 +562,11 @@
+     frame
+     {
+         // ##003    0    0
++#if PSPSX_M60_FIRE_TIMINGS
++#else
+         action A_HitScan(4000, 0.0416, 0.0416, 20, 20, 96, "Fx_BulletPuff")
+         action A_ConsumeAmmo(1)
++#endif
+         sprites
+         {
+             { "weapons/m60", 0,     40,  -14,    0 }
+@@ -685,6 +692,8 @@
+ 
+     }
+ 
++#if PSPSX_M60_FIRE_TIMINGS
++#else
+     frame
+     {
+         // ##011    0    0
+@@ -701,10 +710,14 @@
+         }
+ 
+     }
++#endif
+     frame
+     {
+         // ##011    0    0
+         goto "weapons/m60_idle"
++#if PSPSX_M60_FIRE_TIMINGS
++        refire "weapons/m60_fire"
++#endif
+         sprites
+         {
+             { "weapons/m60", 0,     54,  -11,    1 }
+@@ -878,6 +891,8 @@
+ 
+     }
+ 
++#if PSPSX_M60_FIRE_TIMINGS
++#else
+     frame
+     {
+         // ##011    0    0
+@@ -891,6 +906,7 @@
+         }
+ 
+     }
++#endif
+ 
+     frame
+     {
+@@ -1054,6 +1070,8 @@
+ 
+     }
+ 
++#if PSPSX_M60_FIRE_TIMINGS
++#else
+     frame
+     {
+         // ##011    0    0
+@@ -1065,6 +1083,7 @@
+         }
+ 
+     }
++#endif
+ 
+     frame
+     {
+@@ -1187,12 +1206,15 @@
+ 
+     }
+ 
++#if PSPSX_M60_FIRE_TIMINGS
++#else
+     frame
+     {
+         // ##011    0    0 (no groups)
+         delay 1
+ 
+     }
++#endif
+ 
+     frame
+     {
+--- sprites/weapons/manacle_anim.txt	Wed Nov 24 15:53:52 2021
++++ sprites/weapons/manacle_anim.txt	Wed Nov 24 15:53:52 2021
+@@ -469,8 +469,12 @@
+     frame
+     {
+         // ##000   74    0
++#if PSPSX_MANACLE_SOUND
++        action A_PlayLocalSound("sounds/braceletcharge.wav")
++#else
+         action A_PlayLoopingLocalSound("sounds/shockold.wav")
+         action A_PlayLoopingTactile("tactile/shockold", 0, 2)
++#endif
+         sprites
+         {
+             { "weapons/manacle", 0,     -9,  -59,    0 }
+@@ -483,6 +487,10 @@
+     frame
+     {
+         // ##001    0    0
++#if PSPSX_MANACLE_SOUND
++        action A_PlayLoopingLocalSound("sounds/silence.wav")
++        action A_PlayLoopingTactile("tactile/shockold", 0, 2)
++#endif
+         sprites
+         {
+             { "weapons/manacle", 0,      6,  -49,    0 }
+@@ -678,7 +686,10 @@
+         action A_StopLoopingSounds()
+         action A_StopLoopingTactile()
+         action A_PlayLocalSound("sounds/braceletfire.wav")
++#if PSPSX_MANACLE_SOUND
++#else
+         action A_PlayLocalSound("sounds/blasted2.wav")
++#endif
+         action A_PlayTactile("tactile/braceletfire", 0, 2)
+         action A_ConsumeAmmo(1)
+         action A_FireBolts()
