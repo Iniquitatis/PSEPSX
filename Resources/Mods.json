@@ -1,0 +1,100 @@
+[
+    {
+        "id": "PSPSX_MAPS",
+        "name": "Maps",
+        "description": [
+            "Replace vanilla maps by the PSX ones.",
+            "<ul>",
+            "<li>These maps do not support new difficulties (<i>Hard</i> and <i>Pharaoh</i>), so please don't play them on any difficulty level other than <i>Normal</i>.</li>",
+            "<li>Checkpoints are unavailable on these maps (just like in the original PSX version).</li>",
+            "<li>Kilmaat Colony is not replaced as the PSX map wasn't shipped with PSE.</li>",
+            "<li>There are fewer team dolls, and some of them are unobtainable because PSE requires a bit more dolls to unlock the special abilities that are required to get the rest.</li>",
+            "</ul>"
+        ]
+    },
+    {
+        "id": "PSPSX_AMMO_COUNTS",
+        "name": "Ammo Counts",
+        "description": [
+            "Change the ammo count for some weapons.",
+            "<ul>",
+            "<li>M-60: 38 -> 50</li>",
+            "<li>Amun Bombs: 15 -> 20</li>",
+            "<li>Flamethrower: 65 -> 60</li>",
+            "<li>Cobra Staff: 16 -> 20</li>",
+            "<li>Sacred Manacle: 6 -> 15</li>",
+            "</ul>",
+            "<br>",
+            "<b>WARNING: Affects balance heavily.</b>"
+        ]
+    },
+    {
+        "id": "PSPSX_M60_FIRE_TIMINGS",
+        "name": "M-60 Fire Timings",
+        "description": [
+            "Remove the delay after every third shot when firing the M-60.<br>",
+            "<br>",
+            "<i>NOTE: Makes this weapon stronger by approx. 8%.</i>"
+        ]
+    },
+    {
+        "id": "PSPSX_EXPLOSION_SOUND",
+        "name": "Explosion Sound",
+        "description": "Restore a beefier explosion sound."
+    },
+    {
+        "id": "PSPSX_FLAMETHROWER_FLAME",
+        "name": "Flamethrower Flame",
+        "description": "Disable fading of the flamethrower flame."
+    },
+    {
+        "id": "PSPSX_COBRA_STAFF",
+        "name": "Cobra Staff Animation",
+        "description": "Replace Cobra Staff animation by the PSX one."
+    },
+    {
+        "id": "PSPSX_MANACLE_BEHAVIOR",
+        "name": "Sacred Manacle Behavior",
+        "description": "Restore the Sacred Manacle lightning bolt behavior."
+    },
+    {
+        "id": "PSPSX_MANACLE_SOUND",
+        "name": "Sacred Manacle Sound",
+        "description": "Change the Sacred Manacle charging sound."
+    },
+    {
+        "id": "PSPSX_TELEPATHIC_RAMSES",
+        "name": "Telepathic Ramses",
+        "description": "Disable any mouth movement while Ramses speaks."
+    },
+    {
+        "id": "PSPSX_SCORPIONS",
+        "name": "Remove Spiders",
+        "description": "Replace red spiders by the blue scorpions."
+    },
+    {
+        "id": "PSPSX_ANUBIS_DEATH",
+        "name": "Extreme Anubis Death",
+        "description": "Replace Anubis death animation by the gibbing animation."
+    },
+    {
+        "id": "PSPSX_MUMMY_DEATH",
+        "name": "Extreme Mummy Death",
+        "description": "Replace Mummy death animation by the gibbing animation."
+    },
+    {
+        "id": "PSPSX_MANTIS_ATTACK",
+        "name": "Mantis Attack",
+        "description": "Change Mantis' attack so that it shoots three fireballs simultaneously instead of sequentially."
+    },
+    {
+        "id": "PSPSX_MANTIS_DECAPITATION",
+        "name": "Mantis Decapitation",
+        "description": "Replace Mantis' death by a decapitation."
+    },
+    {
+        "id": "PSPSX_ORB_SPAWN",
+        "name": "Delayed Orb Spawning",
+        "description": "Delay the orb spawning from the destroyed vases."
+    }
+]

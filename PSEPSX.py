@@ -1,3 +1,4 @@
+import json
 import re
 import shutil
 import sys
@@ -26,6 +27,7 @@ from PySide6.QtWidgets import (
     QSizePolicy,
     QTableWidget,
     QTableWidgetItem,
+    QTextEdit,
     QVBoxLayout,
     QWidget
 )
@@ -74,26 +76,6 @@ def extract_file(archive, src_path, dst_path):
 
 #===============================================================================
 
-MODS = (
-    ("PSPSX_MAPS"               , "Maps"                   , "Replace vanilla maps by the PSX ones."),
-    ("PSPSX_AMMO_COUNTS"        , "Ammo Counts"            , "Change the ammo count for some weapons."),
-    ("PSPSX_M60_FIRE_TIMINGS"   , "M-60 Fire Timings"      , "Remove the delay after every third shot when firing the M-60."),
-    ("PSPSX_EXPLOSION_SOUND"    , "Explosion Sound"        , "Restore a beefier explosion sound."),
-    ("PSPSX_FLAMETHROWER_FLAME" , "Flamethrower Flame"     , "Disable fading of the flamethrower flame."),
-    ("PSPSX_COBRA_STAFF"        , "Cobra Staff Animation"  , "Replace Cobra Staff animation by the PSX one."),
-    ("PSPSX_MANACLE_BEHAVIOR"   , "Sacred Manacle Behavior", "Restore the Sacred Manacle lightning bolt behavior."),
-    ("PSPSX_MANACLE_SOUND"      , "Sacred Manacle Sound"   , "Change the Sacred Manacle charging sound."),
-    ("PSPSX_TELEPATHIC_RAMSES"  , "Telepathic Ramses"      , "Disable any mouth movement while Ramses speaks."),
-    ("PSPSX_SCORPIONS"          , "Remove Spiders"         , "Replace red spiders by the blue scorpions."),
-    ("PSPSX_ANUBIS_DEATH"       , "Extreme Anubis Death"   , "Replace Anubis death animation by the gibbing animation."),
-    ("PSPSX_MUMMY_DEATH"        , "Extreme Mummy Death"    , "Replace Mummy death animation by the gibbing animation."),
-    ("PSPSX_MANTIS_ATTACK"      , "Mantis Attack"          , "Change Mantis' attack so that it shoots three fireballs simultaneously instead of sequentially."),
-    ("PSPSX_MANTIS_DECAPITATION", "Mantis Decapitation"    , "Replace Mantis' death by a decapitation."),
-    ("PSPSX_ORB_SPAWN"          , "Delayed Orb Spawning"   , "Delay the orb spawning from the destroyed vases."),
-)
-
-#===============================================================================
-
 class Application(QApplication):
     def __init__(self, args):
         super().__init__(args)
@@ -113,21 +95,33 @@ class MainWindow(QMainWindow):
         self._game_dir_editor, self._game_dir_layout = self._create_path_editor("Game Directory", QFileDialog.Directory, str(find_game_dir()))
         self._output_dir_editor, self._output_dir_layout = self._create_path_editor("Output Directory", QFileDialog.Directory, str(find_mods_dir()))
 
-        self._mod_table = QTableWidget(len(MODS), 2)
+        with open(frozen_path("Resources/Mods.json"), "r") as json_file:
+            mods = json.load(json_file)
+
+            for mod in mods:
+                mod["description"] = "".join(mod["description"])
+
+        self._mod_table = QTableWidget(len(mods), 2)
         self._mod_table.set_column_hidden(0, True)
         self._mod_table.set_show_grid(False)
         self._mod_table.horizontal_header().hide()
         self._mod_table.horizontal_header().set_stretch_last_section(True)
         self._mod_table.vertical_header().hide()
+        self._mod_table.currentItemChanged.connect(self._on_mod_table_item_changed)
 
-        for i, (id, name, description) in enumerate(MODS):
-            self._mod_table.set_item(i, 0, QTableWidgetItem(id))
+        for i, mod in enumerate(mods):
+            self._mod_table.set_item(i, 0, QTableWidgetItem(mod["id"]))
 
-            item = QTableWidgetItem(name)
+            item = QTableWidgetItem(mod["name"])
             item.set_check_state(Qt.Checked)
             item.set_flags(item.flags() & ~(Qt.ItemIsEditable | Qt.ItemIsSelectable))
-            item.set_tool_tip(description)
+            item.set_tool_tip(mod["description"])
             self._mod_table.set_item(i, 1, item)
+
+        self._description_box = QTextEdit()
+        self._description_box.set_maximum_size(self._description_box.maximum_width(), 120)
+        self._description_box.set_read_only(True)
+        self._description_box.set_text("<i>Description will be shown here.</i>")
 
         self._build_button = QPushButton("Build")
         self._build_button.clicked.connect(self._on_build_button_clicked)
@@ -137,6 +131,7 @@ class MainWindow(QMainWindow):
         self._layout.add_layout(self._game_dir_layout)
         self._layout.add_layout(self._output_dir_layout)
         self._layout.add_widget(self._mod_table)
+        self._layout.add_widget(self._description_box)
         self._layout.add_widget(self._build_button)
 
         self._central = QWidget()
@@ -181,6 +176,9 @@ class MainWindow(QMainWindow):
 
         if dialog.exec():
             self._path_editor.set_text(str(Path(dialog.selected_files()[0])))
+
+    def _on_mod_table_item_changed(self, item):
+        self._description_box.set_text(item.tool_tip())
 
     def _on_build_button_clicked(self):
         self._build_button.set_enabled(False)
