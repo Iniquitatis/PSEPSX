@@ -5,7 +5,7 @@
         "description": [
             "Replace vanilla maps by the PSX ones.",
             "<ul>",
-            "<li>These maps do not support new difficulties (<i>Hard</i> and <i>Pharaoh</i>), so please don't play them on any difficulty level other than <i>Normal</i>.</li>",
+            "<li>These maps do not support new difficulties (<i>Hard</i> and <i>Pharaoh</i>), so they should <i>not</i> be played on any difficulty level besides <i>Normal</i>.</li>",
             "<li>Checkpoints are unavailable on these maps (just like in the original PSX version).</li>",
             "<li>Kilmaat Colony is not replaced as the PSX map wasn't shipped with PSE.</li>",
             "<li>There are fewer team dolls, and some of them are unobtainable because PSE requires a bit more dolls to unlock the special abilities that are required to get the rest.</li>",
