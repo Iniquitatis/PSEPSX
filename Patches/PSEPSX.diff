@@ -139,60 +139,65 @@
      musicTrack      "music/egypt2.ogg"
      script          "scripts/map/TOMB_script.txt"
      nextmap_east    Map_Karnak
-@@ -18,7 +22,11 @@
+@@ -18,7 +22,12 @@
      saveTitle       "$str_023"
      overworld_x     404
      overworld_y     294
 +#if PSPSX_MAPS
 +    map             "maps/old/KARNAK.MAP"
++    script          "scripts/map/generic_psx_script.txt"
 +#else
      map             "maps/KARNAK.MAP"
 +#endif
      musicTrack      "music/egypt1.ogg"
      nextmap_north   Map_Pass
      nextmap_east    Map_Sanctuary
-@@ -32,7 +40,11 @@
+@@ -32,7 +41,12 @@
      saveTitle       "$str_024"
      overworld_x     558
      overworld_y     286
 +#if PSPSX_MAPS
 +    map             "maps/old/SANCTUAR.MAP"
++    script          "scripts/map/generic_psx_script.txt"
 +#else
      map             "maps/SANCTUAR.MAP"
 +#endif
      musicTrack      "music/temple2.ogg"
      nextmap_north   Map_Marsh
      nextmap_west    Map_Karnak
-@@ -44,7 +56,11 @@
+@@ -44,7 +58,12 @@
      saveTitle       "$str_025"
      overworld_x     366
      overworld_y     190
 +#if PSPSX_MAPS
 +    map             "maps/old/PASS.MAP"
++    script          "scripts/map/generic_psx_script.txt"
 +#else
      map             "maps/PASS.MAP"
 +#endif
      musicTrack      "music/peak.ogg"
      transmitter     0
      nextmap_north   Map_Shrine
-@@ -57,7 +73,11 @@
+@@ -57,7 +76,12 @@
      saveTitle       "$str_026"
      overworld_x     376
      overworld_y     154
 +#if PSPSX_MAPS
 +    map             "maps/old/SHRINE.MAP"
++    script          "scripts/map/generic_psx_script.txt"
 +#else
      map             "maps/SHRINE.MAP"
 +#endif
      musicTrack      "music/temple1.ogg"
      nextmap_west    Map_Magma
      nextmap_south   Map_Pass
-@@ -69,11 +89,19 @@
+@@ -69,11 +93,20 @@
      saveTitle       "$str_027"
      overworld_x     384
      overworld_y     402
 +#if PSPSX_MAPS
 +    map             "maps/old/MINES.MAP"
++    script          "scripts/map/generic_psx_script.txt"
 +#else
      map             "maps/MINES.MAP"
 +#endif
@@ -207,19 +212,20 @@
      nextmap_east    Map_Palace
  }
  
-@@ -83,7 +111,11 @@
+@@ -83,7 +116,12 @@
      saveTitle       "$str_028"
      overworld_x     482
      overworld_y     408
 +#if PSPSX_MAPS
 +    map             "maps/old/SETPALAC.MAP"
++    script          "scripts/map/generic_psx_script.txt"
 +#else
      map             "maps/SETPALAC.MAP"
 +#endif
      musicTrack      "music/temple2.ogg"
      transmitter     2
      nextmap_west    Map_Mines
-@@ -96,24 +128,44 @@
+@@ -96,24 +134,45 @@
      saveTitle       "$str_029"
      overworld_x     558
      overworld_y     412
@@ -245,6 +251,7 @@
 +    overworld_x     258
 +    overworld_y     438
 +    map             "maps/old/CAVERN.MAP"
++    script          "scripts/map/generic_psx_script.txt"
 +#else
      overworld_x     336
      overworld_y     424
@@ -264,7 +271,7 @@
  Map Map_Cavern2   
  {
      title           "$str_145"
-@@ -125,6 +177,7 @@
+@@ -125,6 +184,7 @@
      nextmap_west    Map_Gorge
      nextmap_east    Map_Cavern1
  }
@@ -272,12 +279,13 @@
  
  Map Map_Gorge      
  {
-@@ -132,11 +185,19 @@
+@@ -132,11 +192,20 @@
      saveTitle       "$str_031"
      overworld_x     156
      overworld_y     460
 +#if PSPSX_MAPS
 +    map             "maps/old/GORGE.MAP"
++    script          "scripts/map/generic_psx_script.txt"
 +#else
      map             "maps/GORGE.MAP"
 +#endif
@@ -292,31 +300,33 @@
  }
  
  Map Map_Thoth      
-@@ -145,7 +206,11 @@
+@@ -145,7 +214,12 @@
      saveTitle       "$str_032"
      overworld_x     64
      overworld_y     404
 +#if PSPSX_MAPS
 +    map             "maps/old/THOTH.MAP"
++    script          "scripts/map/generic_psx_script.txt"
 +#else
      map             "maps/THOTH.MAP"
 +#endif
      musicTrack      "music/temple1.ogg"
      nextmap_north   Map_Chaos
      nextmap_east    Map_Gorge
-@@ -157,7 +222,11 @@
+@@ -157,7 +231,12 @@
      saveTitle       "$str_033"
      overworld_x     550
      overworld_y     164
 +#if PSPSX_MAPS
 +    map             "maps/old/MARSH.MAP"
++    script          "scripts/map/generic_psx_script.txt"
 +#else
      map             "maps/MARSH.MAP"
 +#endif
      musicTrack      "music/marsh.ogg"
      transmitter     4
      nextmap_north   Map_Sunken
-@@ -170,7 +239,11 @@
+@@ -170,7 +249,11 @@
      saveTitle       "$str_034"
      overworld_x     546
      overworld_y     60
@@ -328,31 +338,33 @@
      musicTrack      "music/cave.ogg"
      script          "scripts/map/SUNKEN_script.txt"
      nextmap_west    Map_Camp
-@@ -183,7 +256,11 @@
+@@ -183,7 +266,12 @@
      saveTitle       "$str_035"
      overworld_x     402
      overworld_y     64
 +#if PSPSX_MAPS
 +    map             "maps/old/SLAVCAMP.MAP"
++    script          "scripts/map/generic_psx_script.txt"
 +#else
      map             "maps/SLAVCAMP.MAP"
 +#endif
      musicTrack      "music/temple2.ogg"
      transmitter     5
      nextmap_west    Map_Path
-@@ -196,7 +273,11 @@
+@@ -196,7 +284,12 @@
      saveTitle       "$str_036"
      overworld_x     288
      overworld_y     66
 +#if PSPSX_MAPS
 +    map             "maps/old/SELPATH.MAP"
++    script          "scripts/map/generic_psx_script.txt"
 +#else
      map             "maps/SELPATH.MAP"
 +#endif
      musicTrack      "music/magma.ogg"
      nextmap_west    Map_Burrow
      nextmap_east    Map_Camp
-@@ -208,7 +289,11 @@
+@@ -208,7 +301,11 @@
      saveTitle       "$str_037"
      overworld_x     226
      overworld_y     88
@@ -364,36 +376,39 @@
      musicTrack      "music/arena1.ogg"
      nextmap_east    Map_Path
      script          "scripts/map/SELBUROW_script.txt"
-@@ -220,7 +305,11 @@
+@@ -220,7 +317,12 @@
      saveTitle       "$str_038"
      overworld_x     232
      overworld_y     188
 +#if PSPSX_MAPS
 +    map             "maps/old/MAGMA.MAP"
++    script          "scripts/map/generic_psx_script.txt"
 +#else
      map             "maps/MAGMA.MAP"
 +#endif
      musicTrack      "music/magma.ogg"
      transmitter     6
      nextmap_east    Map_Shrine
-@@ -233,7 +322,11 @@
+@@ -233,7 +335,12 @@
      saveTitle       "$str_039"
      overworld_x     226
      overworld_y     266
 +#if PSPSX_MAPS
 +    map             "maps/old/PEAK.MAP"
++    script          "scripts/map/generic_psx_script.txt"
 +#else
      map             "maps/PEAK.MAP"
 +#endif
      musicTrack      "music/peak.ogg"
      nextmap_north   Map_Magma
  }
-@@ -244,25 +337,48 @@
+@@ -244,25 +351,50 @@
      saveTitle       "$str_040"
      overworld_x     32
      overworld_y     300
 +#if PSPSX_MAPS
 +    map             "maps/old/CHAOS.MAP"
++    script          "scripts/map/generic_psx_script.txt"
 +#else
      map             "maps/CHAOS.MAP"
 +#endif
@@ -420,6 +435,7 @@
 +#if PSPSX_MAPS
 +    // NOTE: There is no COLONY.MAP in the maps/old directory
 +    map             "maps/COLONY_PSX.MAP"
++    script          "scripts/map/generic_psx_script.txt"
 +#else
      map             "maps/COLONY_SAT.MAP"
 +#endif
@@ -437,7 +453,7 @@
  Map Map_Colony2
  {
      title           "$str_147"
-@@ -274,6 +390,7 @@
+@@ -274,6 +406,7 @@
      nextmap_north   Map_Entry
      nextmap_south   Map_Colony1
  }
@@ -445,7 +461,7 @@
  
  Map Map_Entry      
  {
-@@ -281,17 +398,29 @@
+@@ -281,17 +414,29 @@
      saveTitle       "$str_042"
      overworld_x     54
      overworld_y     70
@@ -475,7 +491,7 @@
      musicTrack      "music/arena2.ogg"
      script          "scripts/map/KILARENA_script.txt"
  }
-@@ -300,7 +429,11 @@
+@@ -300,7 +445,11 @@
  {
      title           "$str_000"
      saveTitle       "$str_022"
@@ -551,7 +567,23 @@
      idleAnim                "weapons/manacle_idle"
 --- scripts/map/KILARENA_script.txt	Mon Jul  5 18:55:14 2021
 +++ scripts/map/KILARENA_script.txt	Mon Jul  5 18:55:14 2021
-@@ -22,5 +22,9 @@
+@@ -15,6 +15,15 @@
+ //      Level Script For KILARENA.MAP
+ //
+ 
++#if PSPSX_MAPS
++#include "scripts/map/psx_post_processing.txt"
++
++$script 0
++{
++    PSXPostProcess();
++}
++#endif
++
+ //
+ // script 1
+ //
+@@ -22,5 +31,9 @@
  $script 1
  {
      Player().GetArtifacts() = PA_ALL;
@@ -563,7 +595,22 @@
  }
 --- scripts/map/KILENTRY_script.txt	Mon Jul  5 18:55:14 2021
 +++ scripts/map/KILENTRY_script.txt	Mon Jul  5 18:55:14 2021
-@@ -21,5 +21,9 @@
+@@ -15,11 +15,24 @@
+ //      Level Script For KILENTRY.MAP
+ //
+ 
++#if PSPSX_MAPS
++#include "scripts/map/psx_post_processing.txt"
++
++$script 0
++{
++    PSXPostProcess();
++}
++#endif
++
+ //
+ // script 8
+ //
  
  $script 8
  {
@@ -573,9 +620,44 @@
      kexSlaveEvents::ChangeMap("maps/KILARENA.MAP");
 +#endif
  }
+--- scripts/map/SELBUROW_script.txt	Fri Oct 29 23:32:16 2021
++++ scripts/map/SELBUROW_script.txt	Fri Oct 29 23:32:16 2021
+@@ -15,6 +15,10 @@
+ //      Level Script For SELBUROW.MAP
+ //
+ 
++#if PSPSX_MAPS
++#include "scripts/map/psx_post_processing.txt"
++#endif
++
+ //
+ // script 0
+ //
+@@ -37,6 +41,10 @@
+     {
+         kexSlaveLevelScript::CallDelayed(1, instigator, 2.0f);
+     }
++
++#if PSPSX_MAPS
++    PSXPostProcess();
++#endif
+ }
+ 
+ //
 --- scripts/map/SETARENA_script.txt	Wed Feb  9 23:27:20 2022
 +++ scripts/map/SETARENA_script.txt	Wed Feb  9 23:27:20 2022
-@@ -25,7 +25,11 @@
+@@ -15,6 +15,10 @@
+ //      Level Script For SETARENA.MAP
+ //
+ 
++#if PSPSX_MAPS
++#include "scripts/map/psx_post_processing.txt"
++#endif
++
+ //
+ // script 0
+ //
+@@ -25,7 +29,11 @@
      EnumPlayerArtifacts arti = Player().GetArtifacts();
      if((arti & PA_SHAWL) != 0) // has shawl
      {
@@ -587,7 +669,18 @@
          if(!(pActor is null))
          {
              pActor.Remove();
-@@ -45,7 +49,11 @@
+@@ -37,6 +45,10 @@
+     {
+         kexSlaveLevelScript::CallDelayed(1, instigator, 2.0f);
+     }
++
++#if PSPSX_MAPS
++    PSXPostProcess();
++#endif
+ }
+ 
+ //
+@@ -45,7 +57,11 @@
  
  $script 1
  {
@@ -599,9 +692,43 @@
      if(pActor is null)
      {
          // Not here. That means that we already killed it and reloaded a checkpoint or something
+--- scripts/map/SUNKEN_script.txt	Sun Feb 20 22:16:56 2022
++++ scripts/map/SUNKEN_script.txt	Sun Feb 20 22:16:56 2022
+@@ -15,6 +15,10 @@
+ //      Level Script For SUNKEN.MAP
+ //
+ 
++#if PSPSX_MAPS
++#include "scripts/map/psx_post_processing.txt"
++#endif
++
+ //
+ // script 0
+ //
+@@ -23,6 +27,10 @@
+ {
+     kexSlaveEvents::FireRemoteEventFromTag(1001);
+     kexSlaveEvents::FireRemoteEventFromTag(1002);
++
++#if PSPSX_MAPS
++    PSXPostProcess();
++#endif
+ }
+ 
+ // Continuously restarts itself until player has collected the key
 --- scripts/map/TOMB_script.txt	Sun Nov 21 17:55:06 2021
 +++ scripts/map/TOMB_script.txt	Sun Nov 21 17:55:06 2021
-@@ -71,7 +71,11 @@
+@@ -65,13 +65,21 @@
+ #include "scripts/ramses/SP_SPA11.txt"
+ #include "scripts/ramses/SP_SPA12.txt"
+ 
++#if PSPSX_MAPS
++#include "scripts/map/psx_post_processing.txt"
++#endif
++
+ bool bScript1Triggered = false;
+ bool bPlayAlternateDialog = false;
+ bool bCasketOpened = false;
  float bobTime = 0.0f;
  kexSlaveActor @ramses;
  
@@ -613,7 +740,7 @@
  uint ramsesTalkFramePos = 0;
  uint currentRamsesTalkEvent = 0;
  
-@@ -177,7 +181,11 @@
+@@ -177,7 +185,11 @@
      
      kexSlaveEvents::StopMusic();
      kexSlaveEvents::StopAllSounds();
@@ -625,19 +752,21 @@
      
      kexSlaveEvents::FireRemoteEventFromTag(1020);
      kexSlaveLevelScript::CallDelayed(3, instigator, 4.0f);
-@@ -262,7 +270,11 @@
+@@ -262,7 +274,13 @@
  
  $script 0
  {
 +#if PSPSX_MAPS
 +    kexSlaveEvents::MoveScriptedSector(0, -256, -1, true);
++
++    PSXPostProcess();
 +#else
      kexSlaveEvents::MoveScriptedSector(666, -256, -1, true);
 +#endif
  }
  
  //
-@@ -284,7 +296,11 @@
+@@ -284,7 +302,11 @@
      
      if(bCasketOpened == false)
      {
@@ -649,7 +778,7 @@
          bCasketOpened = true;
      }
      
-@@ -293,7 +309,11 @@
+@@ -293,7 +315,11 @@
      
      delay(0.5f);
      
@@ -661,7 +790,7 @@
      ramses.m_fScratchParam0 = 0.0f;
      bobTime = 0.0f;
      ramsesTalkFramePos = 0;
-@@ -319,7 +339,11 @@
+@@ -319,7 +345,11 @@
      instigator.GetRotation().z = (dir.ToYaw() - instigator.GetRotation().z) * 0.0625f + instigator.GetRotation().z;
      instigator.GetRotation().x = (-dir.ToPitch() - instigator.GetRotation().x) * 0.0625f + instigator.GetRotation().x;
      
@@ -673,7 +802,7 @@
      
      $restart;
  }
-@@ -374,7 +398,11 @@
+@@ -374,7 +404,11 @@
      
      currentRamsesTalkEvent += (GetLanguageID() * 12);
      
@@ -687,7 +816,29 @@
  
 --- scripts/map/TOMBEND_script.txt	Sun Nov 21 17:55:06 2021
 +++ scripts/map/TOMBEND_script.txt	Sun Nov 21 17:55:06 2021
-@@ -132,7 +132,11 @@
+@@ -24,6 +24,10 @@
+ #include "scripts/ramses/SP_SPA13.txt"
+ #include "scripts/ramses/SP_SPA14.txt"
+ 
++#if PSPSX_MAPS
++#include "scripts/map/psx_post_processing.txt"
++#endif
++
+ bool bScript1Triggered = false;
+ bool bLookAtRamses = false;
+ float bobTime = 0.0f;
+@@ -110,6 +114,10 @@
+ $script 0
+ {
+     kexSlaveEvents::MoveScriptedSector(0, 64, -1, true);
++
++#if PSPSX_MAPS
++    PSXPostProcess();
++#endif
+ }
+ 
+ //
+@@ -132,7 +140,11 @@
      @ramsesBody = ObjectFactory().SpawnActor("Obj_Ramses_Body_Rest",
                                               ramsesOrigin.x,
                                               ramsesOrigin.y,
@@ -699,7 +850,7 @@
      
      ramsesTalkFramePos = 0;
      currentRamsesTalkEvent = 0;
-@@ -205,7 +209,11 @@
+@@ -205,7 +217,11 @@
      kexSlaveLevelScript::Halt(6);
      ramsesBody.Remove();
      
@@ -711,7 +862,7 @@
      ramses.m_fScratchParam0 = 0.0f;
      bLookAtRamses = true;
      
-@@ -273,7 +281,11 @@
+@@ -273,7 +289,11 @@
      }
      
      currentRamsesTalkEvent += (GetLanguageID() * 2);
@@ -723,6 +874,85 @@
      
      kexSlaveLevelScript::CallDelayed(8, instigator, dialogTime);
      kexSlaveLevelScript::CallDelayed(10, instigator, 0.0f);
+--- /dev/null	Thu Jan  1 03:00:00 1970
++++ scripts/map/generic_psx_script.txt	Sat Mar 19 01:13:57 2022
+@@ -0,0 +1,6 @@
++#include "scripts/map/psx_post_processing.txt"
++
++$script 0
++{
++    PSXPostProcess();
++}
+--- /dev/null	Thu Jan  1 03:00:00 1970
++++ scripts/map/psx_post_processing.txt	Sat Mar 19 02:28:57 2022
+@@ -0,0 +1,67 @@
++final class DollReplacer
++{
++    int m_index;
++    int m_type;
++    int m_sector;
++    kVec3 m_offset;
++    int m_newType;
++    int m_newSector;
++    kVec3 m_newOffset;
++
++    DollReplacer()
++    {
++    }
++
++    DollReplacer(int index, int type, int sector, const kVec3 &in offset, int newType, int newSector, const kVec3 &in newOffset)
++    {
++        m_index = index;
++        m_type = type;
++        m_sector = sector;
++        m_offset = offset;
++        m_newType = newType;
++        m_newSector = newSector;
++        m_newOffset = newOffset;
++    }
++};
++
++const array<DollReplacer> g_replacers =
++{
++    DollReplacer(253, 169, 325, kVec3(  0,  48, 0), 177, 325, kVec3(  0, -48, 0)),  // Heket Marsh
++    DollReplacer(153, 159, 353, kVec3(-48,   0, 0), 171, 353, kVec3( 48,   0, 0)),  // Sunken Palace of Khnum
++    DollReplacer( 35, 156, 132, kVec3(  0,  48, 0), 172, 132, kVec3(  0, -48, 0)),  // Magma Fields
++    DollReplacer( 38, 162, 236, kVec3( 48,   0, 0), 173, 236, kVec3(-48,   0, 0)),  // Horus Peak
++    DollReplacer( 25, 164, 208, kVec3(-32,   0, 0), 174, 208, kVec3( 32,   0, 0)),  // Canyons of Chaos
++    DollReplacer(155, 150, 419, kVec3(  0, -48, 0), 178, 419, kVec3(  0,  48, 0)),  // Kilmaat Colony (PSE)
++    DollReplacer( 36, 165, 183, kVec3(-48,   0, 0), 175, 183, kVec3( 48,   0, 0)),  // Kilmaat Haunt
++    DollReplacer(  9, 154, 128, kVec3(  0,  48, 0), 176, 128, kVec3(  0, -48, 0))   // Tomb of Ramses (End)
++};
++
++void ProcessDolls()
++{
++    for (uint i = 0; i < g_replacers.length(); i++)
++    {
++        const DollReplacer@ replacer = @g_replacers[i];
++
++        kexSlaveActor@ actor = kexSlaveEvents::GetActorFromMapActorIdx(replacer.m_index);
++        if (actor is null || actor.GetType() != replacer.m_type) continue;
++
++        kVec3 origin = actor.GetOrigin();
++
++        actor.GetOrigin() = origin + replacer.m_offset;
++        actor.GetSector() = replacer.m_sector;
++
++        ObjectFactory().SpawnActor(
++            replacer.m_newType,
++            origin + replacer.m_newOffset,
++            actor.GetRotation().z,
++            replacer.m_newSector
++        );
++
++        break;
++    }
++}
++
++void PSXPostProcess()
++{
++    ProcessDolls();
++}
 --- scripts/p_enemy.txt	Sat Oct 30 17:38:24 2021
 +++ scripts/p_enemy.txt	Sat Oct 30 17:38:24 2021
 @@ -109,7 +109,11 @@
