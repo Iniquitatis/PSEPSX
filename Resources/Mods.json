@@ -42,6 +42,11 @@
         "description": "Restore a beefier explosion sound."
     },
     {
+        "id": "PSPSX_INCENDIARY_BOMBS",
+        "name": "Incendiary Bombs",
+        "description": "Adds an ignition effect to the Amun Bombs."
+    },
+    {
         "id": "PSPSX_FLAMETHROWER_FLAME",
         "name": "Flamethrower Flame",
         "description": "Disable fading of the flamethrower flame."
