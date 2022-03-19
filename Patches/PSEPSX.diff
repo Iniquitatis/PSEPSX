@@ -97,6 +97,17 @@
      spawnAnim               "misc/warpPryamid_loop"
      floatBob                1
      floatBobDivisor         3.0
+@@ -178,6 +182,10 @@
+     scale                   2.0
+     spawnAnim               "misc/ramses_spawn"
+     fullbright              1
++#if PSPSX_TRANSPARENT_RAMSES
++    transparency            128
++#else
+     transparency            224
++#endif
+     group                   "Misc"
+ }
 --- defs/defines.txt	Wed Dec  8 16:42:12 2021
 +++ defs/defines.txt	Wed Dec  8 16:42:12 2021
 @@ -6,8 +6,12 @@

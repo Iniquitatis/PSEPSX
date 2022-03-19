@@ -67,6 +67,11 @@
         "description": "Disable any mouth movement while Ramses speaks."
     },
     {
+        "id": "PSPSX_TRANSPARENT_RAMSES",
+        "name": "Transparent Ramses",
+        "description": "Make Ramses look more like a spirit."
+    },
+    {
         "id": "PSPSX_SCORPIONS",
         "name": "Remove Spiders",
         "description": "Replace red spiders by the blue scorpions."
