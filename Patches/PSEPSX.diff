@@ -1184,8 +1184,38 @@
      case 6:
 --- scripts/p_pspr.txt	Tue Oct 26 19:07:28 2021
 +++ scripts/p_pspr.txt	Tue Oct 26 19:07:28 2021
-@@ -71,6 +71,27 @@
+@@ -31,7 +31,11 @@
+     const float fR = actor.GetRadius();
+     float x = 0;
+     float y = 0;
++#if PSPSX_BOMB_THROWING
++    float z = 64.0f;
++#else
+     float z = 80.0f;
++#endif
+     kVec3 dir;
+     kexSlaveActor @bomb;
+     
+@@ -63,14 +67,45 @@
+ 
+ void A_ChargeBombThrow(kexSlaveActor @actor)
+ {
++#if PSPSX_BOMB_THROWING
++    bombChargeThrow += 0.2f;
++    
++    if(bombChargeThrow > 40.0f)
++    {
++        bombChargeThrow = 40.0f;
++    }
++
++#else
+     bombChargeThrow += 1.0f;
+     
+     if(bombChargeThrow > 48.0f)
+     {
+         bombChargeThrow = 48.0f;
      }
++#endif
  }
  
 +#if PSPSX_INCENDIARY_BOMBS
@@ -1212,7 +1242,7 @@
  //
  // A_CStaffExplode
  //
-@@ -174,7 +195,11 @@
+@@ -174,7 +209,11 @@
  void A_CobraSlither(kexSlaveActor @actor)
  {
      float t = actor.GetGameTicks();
@@ -1224,7 +1254,7 @@
      kexSlaveActor @owner;
      
      kQuat rotation = kQuat(actor.GetRotation().x, -1, 0, 0) * kQuat(actor.GetRotation().z, 0, 0, -1);
-@@ -189,9 +214,12 @@
+@@ -189,9 +228,12 @@
              speed = 16.0f;
              break;
              
@@ -1237,7 +1267,7 @@
              
          default:
              break;
-@@ -319,9 +347,15 @@
+@@ -319,9 +361,15 @@
          bolt.GetRotation().z = actor.GetRotation().z;
          bolt.GetRotation().x = actor.GetRotation().x;
          
@@ -1253,7 +1283,7 @@
          
          bolt.GetVelocity() = dir;
          bolt.SetTarget(actor);
-@@ -361,8 +395,18 @@
+@@ -361,8 +409,18 @@
      float r1 = kexSlaveRandomizer::RFloatVal(0.392f * 2.0f);
      float r2 = kexSlaveRandomizer::RFloatVal(0.392f * 2.0f);
      

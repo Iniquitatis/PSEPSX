@@ -42,6 +42,11 @@
         "description": "Restore a beefier explosion sound."
     },
     {
+        "id": "PSPSX_BOMB_THROWING",
+        "name": "Amun Bomb Throwing",
+        "description": "Decrease the maximum Amun Bomb throw distance and charging rate."
+    },
+    {
         "id": "PSPSX_INCENDIARY_BOMBS",
         "name": "Incendiary Bombs",
         "description": "Adds an ignition effect to the Amun Bombs."
