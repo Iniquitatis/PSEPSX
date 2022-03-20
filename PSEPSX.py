@@ -1,7 +1,9 @@
+import importlib
 import json
 import re
 import shutil
 import sys
+from collections import namedtuple
 from pathlib import Path
 from zipfile import ZipFile
 
@@ -95,28 +97,43 @@ class MainWindow(QMainWindow):
         self._game_dir_editor, self._game_dir_layout = self._create_path_editor("Game Directory", QFileDialog.Directory, str(find_game_dir()))
         self._output_dir_editor, self._output_dir_layout = self._create_path_editor("Output Directory", QFileDialog.Directory, str(find_mods_dir()))
 
-        with open(frozen_path("Resources/Mods.json"), "r") as json_file:
-            mods = json.load(json_file)
-
-            for mod in mods:
-                mod["description"] = "".join(mod["description"])
-
-        self._mod_table = QTableWidget(len(mods), 2)
+        self._mod_table = QTableWidget()
+        self._mod_table.set_column_count(4)
         self._mod_table.set_column_hidden(0, True)
+        self._mod_table.set_column_hidden(2, True)
+        self._mod_table.set_column_hidden(3, True)
         self._mod_table.set_show_grid(False)
         self._mod_table.horizontal_header().hide()
         self._mod_table.horizontal_header().set_stretch_last_section(True)
         self._mod_table.vertical_header().hide()
-        self._mod_table.currentItemChanged.connect(self._on_mod_table_item_changed)
+        self._mod_table.currentCellChanged.connect(self._on_mod_table_cell_changed)
 
-        for i, mod in enumerate(mods):
-            self._mod_table.set_item(i, 0, QTableWidgetItem(mod["id"]))
+        with open(frozen_path("Resources/Mods.json"), "r") as json_file:
+            mods = json.load(json_file)
 
-            item = QTableWidgetItem(mod["name"])
-            item.set_check_state(Qt.Checked)
-            item.set_flags(item.flags() & ~(Qt.ItemIsEditable | Qt.ItemIsSelectable))
-            item.set_tool_tip(mod["description"])
-            self._mod_table.set_item(i, 1, item)
+            self._mod_table.set_row_count(len(mods))
+
+            for i, mod in enumerate(mods):
+                description = mod.get("description", "")
+
+                if isinstance(description, list):
+                    short_description = description[0].removesuffix("<br>")
+                    long_description = "".join(description)
+                else:
+                    short_description = description
+                    long_description = description
+
+                self._mod_table.set_item(i, 0, QTableWidgetItem(mod.get("id", "")))
+
+                item = QTableWidgetItem(mod.get("name", ""))
+                item.set_check_state(Qt.Checked)
+                item.set_flags(item.flags() & ~(Qt.ItemIsEditable | Qt.ItemIsSelectable))
+                item.set_tool_tip(short_description)
+                self._mod_table.set_item(i, 1, item)
+
+                self._mod_table.set_item(i, 2, QTableWidgetItem(long_description))
+
+                self._mod_table.set_item(i, 3, QTableWidgetItem(mod.get("module", "")))
 
         self._description_box = QTextEdit()
         self._description_box.set_maximum_size(self._description_box.maximum_width(), 120)
@@ -177,19 +194,29 @@ class MainWindow(QMainWindow):
         if dialog.exec():
             self._path_editor.set_text(str(Path(dialog.selected_files()[0])))
 
-    def _on_mod_table_item_changed(self, item):
-        self._description_box.set_text(item.tool_tip())
+    def _on_mod_table_cell_changed(self, row, column):
+        self._description_box.set_text(self._mod_table.item(row, 2).text())
 
     def _on_build_button_clicked(self):
+        Definition = namedtuple("Definition", "id module_name enabled")
+
         self._build_button.set_enabled(False)
 
         mod_table = self._mod_table
         get_cell = mod_table.item
-        definitions = [(get_cell(i, 0).text(), get_cell(i, 1).check_state() == Qt.Checked) for i in range(mod_table.row_count())]
+        definitions = [
+            Definition(
+                get_cell(i, 0).text(),
+                get_cell(i, 3).text(),
+                get_cell(i, 1).check_state() == Qt.Checked
+            )
+            for i in range(mod_table.row_count())
+        ]
 
         self._builder = BuilderThread(
             game_kpf_path = Path(self._game_dir_editor.text()) / "PowerslaveEX.kpf",
             patch_dir = frozen_path("Patches"),
+            data_dir = frozen_path("Data"),
             temp_dir = frozen_path("Temp"),
             output_dir = Path(self._output_dir_editor.text()),
             definitions = definitions
@@ -212,10 +239,11 @@ class MainWindow(QMainWindow):
 class BuilderThread(QThread):
     statusUpdate = Signal(Path)
 
-    def __init__(self, game_kpf_path, patch_dir, temp_dir, output_dir, definitions):
+    def __init__(self, game_kpf_path, patch_dir, data_dir, temp_dir, output_dir, definitions):
         super().__init__()
         self._game_kpf_path = game_kpf_path
         self._patch_dir = patch_dir
+        self._data_dir = data_dir
         self._temp_dir = temp_dir
         self._output_dir = output_dir
         self._definitions = definitions
@@ -224,16 +252,58 @@ class BuilderThread(QThread):
         self._game_kpf = ZipFile(self._game_kpf_path)
 
         self._output_dir.mkdir(parents = True, exist_ok = True)
+        self._temp_dir.mkdir(parents = True, exist_ok = True)
 
-        for diff_path in self._patch_dir.glob("*.diff"):
-            self.statusUpdate.emit(f"Building {diff_path.with_suffix('.kpf')}...")
-            self._make_mod(diff_path)
+        self._make_mod()
+
+        shutil.rmtree(self._temp_dir)
 
         self._game_kpf.close()
 
-    def _make_mod(self, diff_path):
-        self._temp_dir.mkdir(parents = True, exist_ok = True)
+    def _make_mod(self):
+        self._patch_files()
+        self._copy_files()
+        self._preprocess_files()
+        self._apply_modules()
 
+        output_path = self._output_dir / f"PSEPSX.kpf"
+        output_path.unlink(missing_ok = True)
+
+        self.statusUpdate.emit(f"Packing {output_path}...")
+        make_archive(output_path, self._temp_dir)
+
+    def _patch_files(self):
+        for diff_path in self._patch_dir.glob("*.diff"):
+            self.statusUpdate.emit(f"Applying {diff_path}...")
+            self._apply_patch(diff_path)
+
+    def _copy_files(self):
+        for file_path in self._data_dir.rglob("*"):
+            self.statusUpdate.emit(f"Copying {file_path}...")
+            rel_path = file_path.relative_to(self._data_dir)
+            result_path = self._temp_dir / rel_path
+            result_path.parent.mkdir(parents = True, exist_ok = True)
+            shutil.copy2(file_path, result_path)
+
+    def _preprocess_files(self):
+        for text_file_path in self._temp_dir.rglob("*.txt"):
+            self.statusUpdate.emit(f"Preprocessing {text_file_path}...")
+            self._preprocess(text_file_path)
+
+    def _apply_modules(self):
+        def kpf_loader(src_path, dst_path):
+            dst_path.parent.mkdir(parents = True, exist_ok = True)
+            extract_file(self._game_kpf, src_path, dst_path)
+
+        for id, module_name, enabled in self._definitions:
+            if module_name == "" or not enabled:
+                continue
+
+            self.statusUpdate.emit(f"Applying module {module_name}...")
+            module = importlib.import_module(f"Modules.{module_name}")
+            module.apply(kpf_loader, self._temp_dir)
+
+    def _apply_patch(self, diff_path):
         patch_set = patch.fromfile(diff_path)
 
         for item in patch_set.items:
@@ -260,26 +330,13 @@ class BuilderThread(QThread):
                 self.statusUpdate.emit(f"Extracting {src_path}...")
                 extract_file(self._game_kpf, src_path, dst_path)
 
-        self.statusUpdate.emit(f"Applying {diff_path.name}...")
         patch_set.apply(root = self._temp_dir)
-
-        for text_file_path in self._temp_dir.rglob("*.txt"):
-            self.statusUpdate.emit(f"Preprocessing {text_file_path}...")
-            self._preprocess(text_file_path)
-
-        output_path = self._output_dir / f"{diff_path.stem}.kpf"
-        output_path.unlink(missing_ok = True)
-
-        self.statusUpdate.emit(f"Packing {output_path}...")
-        make_archive(output_path, self._temp_dir)
-
-        shutil.rmtree(self._temp_dir)
 
     def _preprocess(self, path):
         with open(path, "rt") as file:
             text = file.read()
 
-            for id, enabled in self._definitions:
+            for id, _, enabled in self._definitions:
                 text = re.sub(id, str(1 if enabled else 0), text)
 
         with open(path, "wt") as file:

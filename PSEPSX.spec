@@ -16,10 +16,11 @@ analysis = Analysis(
     pathex = ["."],
     binaries = [],
     datas = [
+        ("Modules/*.*", "Modules"),
         ("Patches/*.*", "Patches"),
         ("Resources/*.*", "Resources"),
     ],
-    hiddenimports = [],
+    hiddenimports = [f"Modules.{os.path.splitext(x)[0]}" for x in os.listdir("Modules")],
     hookspath = [],
     hooksconfig = {},
     runtime_hooks = [],

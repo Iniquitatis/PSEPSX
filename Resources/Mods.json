@@ -115,5 +115,11 @@
         "id": "PSPSX_ORB_SPAWN",
         "name": "Delayed Orb Spawning",
         "description": "Delay the orb spawning from the destroyed vases."
+    },
+    {
+        "id": "PSPSX_HUD_HEADS",
+        "name": "Vanilla HUD Heads",
+        "description": "Replace HUD heads by the original ones.",
+        "module": "HUDHeads"
     }
 ]
