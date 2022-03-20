@@ -64,7 +64,7 @@
     {
         "id": "PSPSX_MANACLE_BEHAVIOR",
         "name": "Sacred Manacle Behavior",
-        "description": "Restore the Sacred Manacle lightning bolt behavior."
+        "description": "Slow down the Sacred Manacle lightning bolt and add its guiding."
     },
     {
         "id": "PSPSX_MANACLE_SOUND",

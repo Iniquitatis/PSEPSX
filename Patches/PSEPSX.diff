@@ -1237,7 +1237,23 @@
              
          default:
              break;
-@@ -361,7 +389,16 @@
+@@ -319,9 +347,15 @@
+         bolt.GetRotation().z = actor.GetRotation().z;
+         bolt.GetRotation().x = actor.GetRotation().x;
+         
++#if PSPSX_MANACLE_BEHAVIOR
++        dir.x = (Math::Sin(actor.GetRotation().z) * cp) * 16.0f;
++        dir.y = (Math::Cos(actor.GetRotation().z) * cp) * 16.0f;
++        dir.z = 16.0f * -sp;
++#else
+         dir.x = (Math::Sin(actor.GetRotation().z) * cp) * 64.0f;
+         dir.y = (Math::Cos(actor.GetRotation().z) * cp) * 64.0f;
+         dir.z = 64.0f * -sp;
++#endif
+         
+         bolt.GetVelocity() = dir;
+         bolt.SetTarget(actor);
+@@ -361,8 +395,18 @@
      float r1 = kexSlaveRandomizer::RFloatVal(0.392f * 2.0f);
      float r2 = kexSlaveRandomizer::RFloatVal(0.392f * 2.0f);
      
@@ -1248,12 +1264,14 @@
 +    float rZ = owner !is null ? owner.GetRotation().z : actor.GetRotation().z;
 +    
 +    kQuat rotation = kQuat(0.125f + rX + r2, -1, 0, 0) * kQuat(0.125f + (rZ + r1), 0, 0, -1);
++    actor.GetVelocity() = (kVec3(0, 16, 0) * rotation);
 +#else
      kQuat rotation = kQuat(0.125f + actor.GetRotation().x + r2, -1, 0, 0) * kQuat(0.125f + (actor.GetRotation().z + r1), 0, 0, -1);
-+#endif
      actor.GetVelocity() = (kVec3(0, 32, 0) * rotation);
++#endif
  }
  
+ //
 --- sprites/effects/effects_anim.txt	Wed Sep 15 19:41:30 2021
 +++ sprites/effects/effects_anim.txt	Wed Sep 15 19:41:30 2021
 @@ -919,7 +919,11 @@
