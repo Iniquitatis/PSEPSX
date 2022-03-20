@@ -1163,7 +1163,32 @@
  //
  // A_CStaffExplode
  //
-@@ -361,7 +382,16 @@
+@@ -174,7 +195,11 @@
+ void A_CobraSlither(kexSlaveActor @actor)
+ {
+     float t = actor.GetGameTicks();
++#if PSPSX_COBRA_SPEED
++    float speed = 8.0f;
++#else
+     float speed = 17.5f;
++#endif
+     kexSlaveActor @owner;
+     
+     kQuat rotation = kQuat(actor.GetRotation().x, -1, 0, 0) * kQuat(actor.GetRotation().z, 0, 0, -1);
+@@ -189,9 +214,12 @@
+             speed = 16.0f;
+             break;
+             
++#if PSPSX_MUMMY_COBRA_SPEED
++#else
+         case AI_Mummy:
+             speed = 14.0f;
+             break;
++#endif
+             
+         default:
+             break;
+@@ -361,7 +389,16 @@
      float r1 = kexSlaveRandomizer::RFloatVal(0.392f * 2.0f);
      float r2 = kexSlaveRandomizer::RFloatVal(0.392f * 2.0f);
      

@@ -57,6 +57,11 @@
         "description": "Replace Cobra Staff animation by the PSX one."
     },
     {
+        "id": "PSPSX_COBRA_SPEED",
+        "name": "Slower Cobra Staff Projectile",
+        "description": "Slow down the Cobra Staff projectile."
+    },
+    {
         "id": "PSPSX_MANACLE_BEHAVIOR",
         "name": "Sacred Manacle Behavior",
         "description": "Restore the Sacred Manacle lightning bolt behavior."
@@ -85,6 +90,11 @@
         "id": "PSPSX_ANUBIS_DEATH",
         "name": "Extreme Anubis Death",
         "description": "Replace Anubis death animation by the gibbing animation."
+    },
+    {
+        "id": "PSPSX_MUMMY_COBRA_SPEED",
+        "name": "Slower Mummy Projectile",
+        "description": "Slow down the Mummy projectile."
     },
     {
         "id": "PSPSX_MUMMY_DEATH",
