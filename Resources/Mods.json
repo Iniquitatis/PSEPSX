@@ -122,6 +122,11 @@
         "description": "Delay the orb spawning from the destroyed vases."
     },
     {
+        "id": "PSPSX_NO_WEAPON_BOOST",
+        "name": "No Weapon Boost",
+        "description": "Disable the weapon boost orb spawning."
+    },
+    {
         "id": "PSPSX_HUD_HEADS",
         "name": "Vanilla HUD Heads",
         "description": "Replace HUD heads by the original ones.",
