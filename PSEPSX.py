@@ -278,7 +278,7 @@ class BuilderThread(QThread):
             self._apply_patch(diff_path)
 
     def _copy_files(self):
-        for file_path in self._data_dir.rglob("*"):
+        for file_path in filter(Path.is_file, self._data_dir.rglob("*")):
             self.statusUpdate.emit(f"Copying {file_path}...")
             rel_path = file_path.relative_to(self._data_dir)
             result_path = self._temp_dir / rel_path
