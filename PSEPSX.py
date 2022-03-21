@@ -95,8 +95,8 @@ class MainWindow(QMainWindow):
         self.set_window_title("PSEPSX Builder")
         self.resize(640, 480)
 
-        self._game_dir_editor, self._game_dir_layout = self._create_path_editor("Game Directory", QFileDialog.Directory, str(find_game_dir()))
-        self._output_dir_editor, self._output_dir_layout = self._create_path_editor("Output Directory", QFileDialog.Directory, str(find_mods_dir()))
+        self._game_dir_editor = PathEdit("Game Directory", QFileDialog.Directory, str(find_game_dir()))
+        self._output_dir_editor = PathEdit("Output Directory", QFileDialog.Directory, str(find_mods_dir()))
 
         self._mod_table = ModTableWidget()
         self._mod_table.modSelected.connect(self._on_mod_table_mod_selected)
@@ -112,8 +112,8 @@ class MainWindow(QMainWindow):
 
         self._layout = QVBoxLayout()
         self._layout.set_contents_margins(10, 10, 10, 10)
-        self._layout.add_layout(self._game_dir_layout)
-        self._layout.add_layout(self._output_dir_layout)
+        self._layout.add_widget(self._game_dir_editor)
+        self._layout.add_widget(self._output_dir_editor)
         self._layout.add_widget(self._mod_table)
         self._layout.add_widget(self._description_box)
         self._layout.add_widget(self._build_button)
@@ -124,35 +124,6 @@ class MainWindow(QMainWindow):
 
         self._progress_label = QLabel("Ready")
         self.status_bar().add_widget(self._progress_label, 1)
-
-    def _create_path_editor(self, name, mode, default = ""):
-        editor = QLineEdit()
-        editor.set_text(default)
-
-        def on_open_button_clicked():
-            path = Path(editor.text())
-            start_dir = path.parent if path.is_file() else path if path.is_dir() else ""
-
-            dialog = QFileDialog(self)
-            dialog.set_directory(str(start_dir))
-            dialog.set_file_mode(mode)
-
-            if dialog.exec():
-                editor.set_text(str(Path(dialog.selected_files()[0])))
-
-        label = QLabel(name)
-        label.set_minimum_size(120, 0)
-
-        open_button = QPushButton("...")
-        open_button.set_maximum_size(25, open_button.maximum_height())
-        open_button.clicked.connect(on_open_button_clicked)
-
-        layout = QHBoxLayout()
-        layout.add_widget(label)
-        layout.add_widget(editor)
-        layout.add_widget(open_button)
-
-        return editor, layout
 
     def _on_open_button_clicked(self):
         dialog = QFileDialog(self)
@@ -168,11 +139,11 @@ class MainWindow(QMainWindow):
         self._build_button.set_enabled(False)
 
         self._builder = BuilderThread(
-            game_kpf_path = Path(self._game_dir_editor.text()) / "PowerslaveEX.kpf",
+            game_kpf_path = self._game_dir_editor.path() / "PowerslaveEX.kpf",
             patch_dir = frozen_path("Patches"),
             data_dir = frozen_path("Data"),
             temp_dir = frozen_path("Temp"),
-            output_dir = Path(self._output_dir_editor.text()),
+            output_dir = self._output_dir_editor.path(),
             definitions = self._mod_table.definitions()
         )
         self._builder.statusUpdate.connect(self._on_status_update)
@@ -187,6 +158,44 @@ class MainWindow(QMainWindow):
         self._build_button.set_enabled(True)
 
         self._progress_label.set_text("Ready")
+
+#===============================================================================
+
+class PathEdit(QWidget):
+    def __init__(self, name, mode, default = "", parent = None):
+        super().__init__(parent)
+        self._mode = mode
+
+        self._editor = QLineEdit()
+        self._editor.set_text(default)
+
+        self._label = QLabel(name)
+        self._label.set_minimum_size(120, 0)
+
+        self._open_button = QPushButton("...")
+        self._open_button.set_maximum_size(25, self._open_button.maximum_height())
+        self._open_button.clicked.connect(self._on_open_button_clicked)
+
+        self._layout = QHBoxLayout()
+        self._layout.set_contents_margins(0, 0, 0, 0)
+        self._layout.add_widget(self._label)
+        self._layout.add_widget(self._editor)
+        self._layout.add_widget(self._open_button)
+        self.set_layout(self._layout)
+
+    def path(self):
+        return Path(self._editor.text())
+
+    def _on_open_button_clicked(self):
+        path = Path(self._editor.text())
+        start_dir = path.parent if path.is_file() else path if path.is_dir() else ""
+
+        dialog = QFileDialog(self)
+        dialog.set_directory(str(start_dir))
+        dialog.set_file_mode(self._mode)
+
+        if dialog.exec():
+            self._editor.set_text(str(Path(dialog.selected_files()[0])))
 
 #===============================================================================
 
