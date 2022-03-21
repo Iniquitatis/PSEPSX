@@ -2,6 +2,7 @@
     {
         "id": "PSPSX_MAPS",
         "name": "Maps",
+        "category": "General",
         "description": [
             "Replace vanilla maps by the PSX ones.",
             "<ul>",
@@ -14,6 +15,7 @@
     {
         "id": "PSPSX_AMMO_COUNTS",
         "name": "Ammo Counts",
+        "category": "Weapons",
         "description": [
             "Change the ammo count for some weapons.",
             "<ul>",
@@ -30,6 +32,7 @@
     {
         "id": "PSPSX_M60_FIRE_TIMINGS",
         "name": "M-60 Fire Timings",
+        "category": "Weapons",
         "description": [
             "Remove the delay after every third shot when firing the M-60.<br>",
             "<br>",
@@ -39,102 +42,122 @@
     {
         "id": "PSPSX_EXPLOSION_SOUND",
         "name": "Explosion Sound",
+        "category": "General",
         "description": "Restore a beefier explosion sound."
     },
     {
         "id": "PSPSX_BOMB_THROWING",
         "name": "Amun Bomb Throwing",
+        "category": "Weapons",
         "description": "Decrease the maximum Amun Bomb throw distance and charging rate."
     },
     {
         "id": "PSPSX_INCENDIARY_BOMBS",
         "name": "Incendiary Bombs",
+        "category": "Weapons",
         "description": "Add an ignition effect to the Amun Bombs."
     },
     {
         "id": "PSPSX_FLAMETHROWER_FLAME",
         "name": "Flamethrower Flame",
+        "category": "Weapons",
         "description": "Disable fading of the flamethrower flame."
     },
     {
         "id": "PSPSX_COBRA_STAFF",
         "name": "Cobra Staff Animation",
+        "category": "Weapons",
         "description": "Replace Cobra Staff animation by the PSX one."
     },
     {
         "id": "PSPSX_COBRA_BEHAVIOR",
         "name": "Cobra Staff Projectile Behavior",
+        "category": "Weapons",
         "description": "Slow down the Cobra Staff projectile and decrease its turn rate."
     },
     {
         "id": "PSPSX_MANACLE_BEHAVIOR",
         "name": "Sacred Manacle Behavior",
+        "category": "Weapons",
         "description": "Slow down the Sacred Manacle lightning bolt and add its guiding."
     },
     {
         "id": "PSPSX_MANACLE_SOUND",
         "name": "Sacred Manacle Sound",
+        "category": "Weapons",
         "description": "Change the Sacred Manacle charging sound."
     },
     {
         "id": "PSPSX_TELEPATHIC_RAMSES",
         "name": "Telepathic Ramses",
+        "category": "General",
         "description": "Disable any mouth movement while Ramses speaks."
     },
     {
         "id": "PSPSX_TRANSPARENT_RAMSES",
         "name": "Transparent Ramses",
+        "category": "General",
         "description": "Make Ramses look more like a spirit."
     },
     {
         "id": "PSPSX_SCORPIONS",
         "name": "Remove Spiders",
+        "category": "Enemies",
         "description": "Replace red spiders by the blue scorpions."
     },
     {
         "id": "PSPSX_ANUBIS_DEATH",
         "name": "Extreme Anubis Death",
+        "category": "Enemies",
         "description": "Replace Anubis death animation by the gibbing animation."
     },
     {
         "id": "PSPSX_MUMMY_COBRA_BEHAVIOR",
         "name": "Mummy Projectile Behavior",
+        "category": "Enemies",
         "description": "Slow down the Mummy projectile and increase its turn rate."
     },
     {
         "id": "PSPSX_MUMMY_DEATH",
         "name": "Extreme Mummy Death",
+        "category": "Enemies",
         "description": "Replace Mummy death animation by the gibbing animation."
     },
     {
         "id": "PSPSX_MANTIS_ATTACK",
         "name": "Mantis Attack",
+        "category": "Enemies",
         "description": "Change Mantis' attack so that it shoots three fireballs simultaneously instead of sequentially."
     },
     {
         "id": "PSPSX_MANTIS_DECAPITATION",
         "name": "Mantis Decapitation",
+        "category": "Enemies",
         "description": "Replace Mantis' death by a decapitation."
     },
     {
         "id": "PSPSX_ORB_SPAWN",
         "name": "Delayed Orb Spawning",
+        "category": "General",
         "description": "Delay the orb spawning from the destroyed vases."
     },
     {
         "id": "PSPSX_NO_WEAPON_BOOST",
         "name": "No Weapon Boost",
+        "category": "General",
         "description": "Disable the weapon boost orb spawning."
     },
     {
         "id": "PSPSX_HUD_HEADS",
         "name": "Vanilla HUD Heads",
+        "category": "HUD",
         "description": "Replace HUD heads by the original ones.",
         "module": "HUDHeads"
     },
     {
         "id": "PSPSX_NO_HUD_SCARABS",
         "name": "Remove HUD Scarabs",
+        "category": "HUD",
         "description": "Remove scarabs from HUD.",
         "module": "NoHUDScarabs"
     }

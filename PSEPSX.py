@@ -3,7 +3,7 @@ import json
 import re
 import shutil
 import sys
-from collections import namedtuple
+from collections import defaultdict, namedtuple
 from pathlib import Path
 from zipfile import ZipFile
 
@@ -15,6 +15,7 @@ from PySide6.QtCore import (
     QThread
 )
 from PySide6.QtGui import (
+    QFont,
     QIcon
 )
 from PySide6.QtWidgets import (
@@ -97,43 +98,9 @@ class MainWindow(QMainWindow):
         self._game_dir_editor, self._game_dir_layout = self._create_path_editor("Game Directory", QFileDialog.Directory, str(find_game_dir()))
         self._output_dir_editor, self._output_dir_layout = self._create_path_editor("Output Directory", QFileDialog.Directory, str(find_mods_dir()))
 
-        self._mod_table = QTableWidget()
-        self._mod_table.set_column_count(4)
-        self._mod_table.set_column_hidden(0, True)
-        self._mod_table.set_column_hidden(2, True)
-        self._mod_table.set_column_hidden(3, True)
-        self._mod_table.set_show_grid(False)
-        self._mod_table.horizontal_header().hide()
-        self._mod_table.horizontal_header().set_stretch_last_section(True)
-        self._mod_table.vertical_header().hide()
-        self._mod_table.currentCellChanged.connect(self._on_mod_table_cell_changed)
-
-        with open(frozen_path("Resources/Mods.json"), "r") as json_file:
-            mods = json.load(json_file)
-
-            self._mod_table.set_row_count(len(mods))
-
-            for i, mod in enumerate(mods):
-                description = mod.get("description", "")
-
-                if isinstance(description, list):
-                    short_description = description[0].removesuffix("<br>")
-                    long_description = "".join(description)
-                else:
-                    short_description = description
-                    long_description = description
-
-                self._mod_table.set_item(i, 0, QTableWidgetItem(mod.get("id", "")))
-
-                item = QTableWidgetItem(mod.get("name", ""))
-                item.set_check_state(Qt.Checked)
-                item.set_flags(item.flags() & ~(Qt.ItemIsEditable | Qt.ItemIsSelectable))
-                item.set_tool_tip(short_description)
-                self._mod_table.set_item(i, 1, item)
-
-                self._mod_table.set_item(i, 2, QTableWidgetItem(long_description))
-
-                self._mod_table.set_item(i, 3, QTableWidgetItem(mod.get("module", "")))
+        self._mod_table = ModTableWidget()
+        self._mod_table.modSelected.connect(self._on_mod_table_mod_selected)
+        self._mod_table.load()
 
         self._description_box = QTextEdit()
         self._description_box.set_maximum_size(self._description_box.maximum_width(), 120)
@@ -194,24 +161,11 @@ class MainWindow(QMainWindow):
         if dialog.exec():
             self._path_editor.set_text(str(Path(dialog.selected_files()[0])))
 
-    def _on_mod_table_cell_changed(self, row, column):
-        self._description_box.set_text(self._mod_table.item(row, 2).text())
+    def _on_mod_table_mod_selected(self, mod):
+        self._description_box.set_text(mod.long_description)
 
     def _on_build_button_clicked(self):
-        Definition = namedtuple("Definition", "id module_name enabled")
-
         self._build_button.set_enabled(False)
-
-        mod_table = self._mod_table
-        get_cell = mod_table.item
-        definitions = [
-            Definition(
-                get_cell(i, 0).text(),
-                get_cell(i, 3).text(),
-                get_cell(i, 1).check_state() == Qt.Checked
-            )
-            for i in range(mod_table.row_count())
-        ]
 
         self._builder = BuilderThread(
             game_kpf_path = Path(self._game_dir_editor.text()) / "PowerslaveEX.kpf",
@@ -219,7 +173,7 @@ class MainWindow(QMainWindow):
             data_dir = frozen_path("Data"),
             temp_dir = frozen_path("Temp"),
             output_dir = Path(self._output_dir_editor.text()),
-            definitions = definitions
+            definitions = self._mod_table.definitions()
         )
         self._builder.statusUpdate.connect(self._on_status_update)
         self._builder.finished.connect(self._on_build_finished)
@@ -233,6 +187,83 @@ class MainWindow(QMainWindow):
         self._build_button.set_enabled(True)
 
         self._progress_label.set_text("Ready")
+
+#===============================================================================
+
+class ModTableWidget(QTableWidget):
+    Mod = namedtuple("Mod", "id name category short_description long_description module", defaults = [""] * 6)
+    Definition = namedtuple("Definition", "id module_name enabled")
+
+    modSelected = Signal(Mod)
+
+    def __init__(self, parent = None):
+        super().__init__(parent)
+        self.set_column_count(1)
+        self.set_show_grid(False)
+        self.horizontal_header().hide()
+        self.horizontal_header().set_stretch_last_section(True)
+        self.vertical_header().hide()
+        self.currentCellChanged.connect(self._on_cell_changed)
+
+    def load(self):
+        with open(frozen_path("Resources/Mods.json"), "r") as json_file:
+            categories = defaultdict(list)
+
+            for mod_data in json.load(json_file):
+                description = mod_data.pop("description", "")
+
+                if isinstance(description, list):
+                    mod_data["short_description"] = description[0].removesuffix("<br>")
+                    mod_data["long_description"] = "".join(description)
+                else:
+                    mod_data["short_description"] = description
+                    mod_data["long_description"] = description
+
+                mod = self.Mod(**mod_data)
+                categories[mod.category].append(mod)
+
+            category_font = QFont()
+            category_font.set_bold(True)
+
+            for category_name, category in categories.items():
+                row = self._append_row()
+
+                item = QTableWidgetItem(category_name)
+                item.set_data(Qt.UserRole, "CATEGORY")
+                item.set_flags(item.flags() & ~(Qt.ItemIsEditable | Qt.ItemIsSelectable))
+                item.set_font(category_font)
+                self.set_item(row, 0, item)
+
+                for mod in category:
+                    row = self._append_row()
+
+                    item = QTableWidgetItem(mod.name)
+                    item.set_check_state(Qt.Checked)
+                    item.set_data(Qt.UserRole, mod)
+                    item.set_flags(item.flags() & ~(Qt.ItemIsEditable | Qt.ItemIsSelectable))
+                    item.set_tool_tip(mod.short_description)
+                    self.set_item(row, 0, item)
+
+    def definitions(self):
+        return [
+            self.Definition(
+                user_data.id,
+                user_data.module,
+                self.item(i, 0).check_state() == Qt.Checked
+            )
+            for i in range(self.row_count())
+            if (user_data := self.item(i, 0).data(Qt.UserRole)) != "CATEGORY"
+        ]
+
+    def _append_row(self):
+        self.insert_row(self.row_count())
+        return self.row_count() - 1
+
+    def _on_cell_changed(self, row, column):
+        user_data = self.item(row, 0).data(Qt.UserRole)
+
+        if user_data != "CATEGORY":
+            self.modSelected.emit(user_data)
 
 #===============================================================================
 
