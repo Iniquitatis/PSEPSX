@@ -1,0 +1,67 @@
+final class DollReplacer
+{
+    int m_index;
+    int m_type;
+    int m_sector;
+    kVec3 m_offset;
+    int m_newType;
+    int m_newSector;
+    kVec3 m_newOffset;
+
+    DollReplacer()
+    {
+    }
+
+    DollReplacer(int index, int type, int sector, const kVec3 &in offset, int newType, int newSector, const kVec3 &in newOffset)
+    {
+        m_index = index;
+        m_type = type;
+        m_sector = sector;
+        m_offset = offset;
+        m_newType = newType;
+        m_newSector = newSector;
+        m_newOffset = newOffset;
+    }
+};
+
+const array<DollReplacer> g_replacers =
+{
+    DollReplacer(253, 169, 325, kVec3(  0,  48, 0), 177, 325, kVec3(  0, -48, 0)),  // Heket Marsh
+    DollReplacer(153, 159, 353, kVec3(-48,   0, 0), 171, 353, kVec3( 48,   0, 0)),  // Sunken Palace of Khnum
+    DollReplacer( 35, 156, 132, kVec3(  0,  48, 0), 172, 132, kVec3(  0, -48, 0)),  // Magma Fields
+    DollReplacer( 38, 162, 236, kVec3( 48,   0, 0), 173, 236, kVec3(-48,   0, 0)),  // Horus Peak
+    DollReplacer( 25, 164, 208, kVec3(-32,   0, 0), 174, 208, kVec3( 32,   0, 0)),  // Canyons of Chaos
+    DollReplacer(155, 150, 419, kVec3(  0, -48, 0), 178, 419, kVec3(  0,  48, 0)),  // Kilmaat Colony (PSE)
+    DollReplacer( 36, 165, 183, kVec3(-48,   0, 0), 175, 183, kVec3( 48,   0, 0)),  // Kilmaat Haunt
+    DollReplacer(  9, 154, 128, kVec3(  0,  48, 0), 176, 128, kVec3(  0, -48, 0))   // Tomb of Ramses (End)
+};
+
+void ProcessDolls()
+{
+    for (uint i = 0; i < g_replacers.length(); i++)
+    {
+        const DollReplacer@ replacer = @g_replacers[i];
+
+        kexSlaveActor@ actor = kexSlaveEvents::GetActorFromMapActorIdx(replacer.m_index);
+        if (actor is null || actor.GetType() != replacer.m_type) continue;
+
+        kVec3 origin = actor.GetOrigin();
+
+        actor.GetOrigin() = origin + replacer.m_offset;
+        actor.GetSector() = replacer.m_sector;
+
+        ObjectFactory().SpawnActor(
+            replacer.m_newType,
+            origin + replacer.m_newOffset,
+            actor.GetRotation().z,
+            replacer.m_newSector
+        );
+
+        break;
+    }
+}
+
+void PSXPostProcess()
+{
+    ProcessDolls();
+}

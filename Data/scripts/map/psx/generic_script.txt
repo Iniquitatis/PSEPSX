@@ -1,0 +1,6 @@
+#include "scripts/map/psx/post_processing.txt"
+
+$script 0
+{
+    PSXPostProcess();
+}
