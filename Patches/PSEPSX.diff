@@ -14,14 +14,12 @@
      shootable               1
 --- defs/actors/monsters/mantis.txt	Tue Dec  7 23:38:46 2021
 +++ defs/actors/monsters/mantis.txt	Tue Dec  7 23:38:46 2021
-@@ -30,3 +30,21 @@
+@@ -30,3 +30,19 @@
      turnSpeed               2.0
      group                   "AI"
  }
 +
 +#if PSPSX_MANTIS_DECAPITATION
-+#define Obj_MantisGib01 11000
-+
 +Actor Obj_MantisGib01
 +{
 +    classname               "kexSlaveActor"
@@ -202,6 +200,16 @@
  #define Proj_Seedling               1010
  #define Proj_Cobra_Red              1011
  #define Proj_Cobra_Red_Selkis       1012
+@@ -285,6 +296,9 @@
+ #define Obj_Fish_Gibs03             1102
+ 
+ #define AI_Mantis                   5
++#if PSPSX_MANTIS_DECAPITATION
++#define Obj_MantisGib01             11000
++#endif
+ 
+ #define AI_Mummy                    6
+ #define Obj_Mummy_Gib01             1103
 --- defs/mapInfo.txt	Thu Oct 28 18:04:36 2021
 +++ defs/mapInfo.txt	Thu Oct 28 18:04:36 2021
 @@ -6,7 +6,11 @@
