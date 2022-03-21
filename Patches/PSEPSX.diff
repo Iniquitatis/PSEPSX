@@ -20,7 +20,7 @@
  }
 +
 +#if PSPSX_MANTIS_DECAPITATION
-+Actor Obj_MantisGib01
++Actor Obj_Mantis_Gib01
 +{
 +    classname               "kexSlaveActor"
 +    radius                  28
@@ -205,7 +205,7 @@
  
  #define AI_Mantis                   5
 +#if PSPSX_MANTIS_DECAPITATION
-+#define Obj_MantisGib01             11000
++#define Obj_Mantis_Gib01             11000
 +#endif
  
  #define AI_Mummy                    6
@@ -1456,7 +1456,7 @@
          // ##005    0    0
          action A_MantisExplode()
 +#if PSPSX_MANTIS_DECAPITATION
-+        action A_TossActor("Obj_MantisGib01", 0, 0, 32, 8, 8, 4, 12)
++        action A_TossActor("Obj_Mantis_Gib01", 0, 0, 32, 8, 8, 4, 12)
 +        action A_Hide()
 +#endif
          rotation_N
