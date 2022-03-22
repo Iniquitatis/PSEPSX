@@ -24,6 +24,7 @@ analysis = Analysis(
     pathex = ["."],
     binaries = [],
     datas = [
+        ("Data/*.*", "Data"),
         ("Modules/*.*", "Modules"),
         ("Patches/*.*", "Patches"),
         ("Resources/*.*", "Resources"),
