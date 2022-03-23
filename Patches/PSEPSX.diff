@@ -991,7 +991,7 @@
          }
      }
  }
-@@ -129,7 +133,11 @@
+@@ -129,13 +133,20 @@
          }
          else
          {
@@ -1002,8 +1002,17 @@
 +#endif
          }
      }
++#if PSPSX_SCORPIONS
++#else
      else if(actor.GetVelocity().z <= 0 && actor.GetType() == AI_Spider)
-@@ -350,10 +358,17 @@
+     {
+         actor.ChangeAnim("monsters/spider_falling_check_ground");
+     }
++#endif
+     else
+     {
+         actor.GetVelocity().x = actor.m_fScratchParam1;
+@@ -350,10 +361,17 @@
      j4.SetTarget(j3);
      j5.SetTarget(j4);
      
@@ -1021,7 +1030,7 @@
      
      actor.SetTaggedActor(j5);
  }
-@@ -656,7 +671,11 @@
+@@ -656,7 +674,11 @@
      }
      
      actor.m_fScratchParam2 = 1 + kexSlaveRandomizer::Size(3);
@@ -1033,7 +1042,7 @@
  }
  
  //
-@@ -672,7 +691,11 @@
+@@ -672,7 +694,11 @@
      }
      
      actor.m_fScratchParam2--;
