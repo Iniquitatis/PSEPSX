@@ -83,7 +83,7 @@
  }
 --- defs/actors/misc.txt	Wed Dec  8 17:00:46 2021
 +++ defs/actors/misc.txt	Wed Dec  8 17:00:46 2021
-@@ -90,7 +90,11 @@
+@@ -90,10 +90,17 @@
      warpSound_1             "sounds/warp.wav"
      mapDestination          Map_Tomb1
      requestSave             1
@@ -93,9 +93,15 @@
      destinationPosition     "0 2816 -864"
 +#endif
      spawnAnim               "misc/warpPryamid_loop"
++#if PSPSX_WARP_PYRAMID
++#else
      floatBob                1
      floatBobDivisor         3.0
-@@ -178,6 +182,10 @@
++#endif
+     group                   "Misc"
+ }
+ 
+@@ -178,6 +185,10 @@
      scale                   2.0
      spawnAnim               "misc/ramses_spawn"
      fullbright              1

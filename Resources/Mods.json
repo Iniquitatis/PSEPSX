@@ -100,6 +100,12 @@
         "description": "Make Ramses look more like a spirit."
     },
     {
+        "id": "PSPSX_WARP_PYRAMID",
+        "name": "Steady Warp Pyramid",
+        "category": "General",
+        "description": "Disable warp pyramid bobbing."
+    },
+    {
         "id": "PSPSX_SCORPIONS",
         "name": "Remove Spiders",
         "category": "Enemies",
