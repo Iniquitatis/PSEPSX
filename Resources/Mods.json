@@ -112,6 +112,12 @@
         "description": "Disable item bobbing."
     },
     {
+        "id": "PSPSX_KEYS",
+        "name": "Steady Keys",
+        "category": "General",
+        "description": "Disable key bobbing."
+    },
+    {
         "id": "PSPSX_SCORPIONS",
         "name": "Remove Spiders",
         "category": "Enemies",
