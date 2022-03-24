@@ -81,6 +81,42 @@
      scaleContacts           1
      group                   "AI"
  }
+--- defs/actors/items.txt	Tue Dec  7 23:38:46 2021
++++ defs/actors/items.txt	Tue Dec  7 23:38:46 2021
+@@ -286,8 +286,11 @@
+     fullAmmo                1
+     friction                0.0
+     pickupMessage           "$str_110"
++#if PSPSX_ITEMS
++#else
+     floatBob                1
+     floatBobDivisor         3.0
++#endif
+     group                   "Items"
+ }
+ 
+@@ -309,8 +312,11 @@
+     multiplier              1.0
+     friction                0.0
+     pickupMessage           "$str_107"
++#if PSPSX_ITEMS
++#else
+     floatBob                1
+     floatBobDivisor         3.0
++#endif
+     group                   "Items"
+ }
+ 
+@@ -434,6 +440,9 @@
+     touchable               1
+     friction                0.0
+     pickupMessage           "$str_111"
++#if PSPSX_ITEMS
++#else
+     floatBob                1
++#endif
+     group                   "Items"
+ }
 --- defs/actors/misc.txt	Wed Dec  8 17:00:46 2021
 +++ defs/actors/misc.txt	Wed Dec  8 17:00:46 2021
 @@ -90,10 +90,17 @@

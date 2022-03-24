@@ -106,6 +106,12 @@
         "description": "Disable warp pyramid bobbing."
     },
     {
+        "id": "PSPSX_ITEMS",
+        "name": "Steady Items",
+        "category": "General",
+        "description": "Disable item bobbing."
+    },
+    {
         "id": "PSPSX_SCORPIONS",
         "name": "Remove Spiders",
         "category": "Enemies",
