@@ -124,6 +124,12 @@
         "description": "Disable ankh bobbing."
     },
     {
+        "id": "PSPSX_ARTIFACTS",
+        "name": "Steady Artifacts",
+        "category": "General",
+        "description": "Disable artifact bobbing."
+    },
+    {
         "id": "PSPSX_SCORPIONS",
         "name": "Remove Spiders",
         "category": "Enemies",

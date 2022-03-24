@@ -81,6 +81,79 @@
      scaleContacts           1
      group                   "AI"
  }
+--- defs/actors/artifacts.txt	Tue Dec  7 23:38:46 2021
++++ defs/actors/artifacts.txt	Tue Dec  7 23:38:46 2021
+@@ -12,8 +12,11 @@
+     touchable               1
+     bits                    0
+     pickupMessage           "$str_100"
++#if PSPSX_ARTIFACTS
++#else
+     floatBob                1
+     floatBobDivisor         3.0
++#endif
+     group                   "Artifacts"
+ }
+ 
+@@ -29,8 +32,11 @@
+     touchable               1
+     bits                    1
+     pickupMessage           "$str_101"
++#if PSPSX_ARTIFACTS
++#else
+     floatBob                1
+     floatBobDivisor         3.0
++#endif
+     group                   "Artifacts"
+ }
+ 
+@@ -46,8 +52,11 @@
+     touchable               1
+     bits                    2
+     pickupMessage           "$str_102"
++#if PSPSX_ARTIFACTS
++#else
+     floatBob                1
+     floatBobDivisor         3.0
++#endif
+     group                   "Artifacts"
+ }
+ 
+@@ -63,8 +72,11 @@
+     touchable               1
+     bits                    3
+     pickupMessage           "$str_103"
++#if PSPSX_ARTIFACTS
++#else
+     floatBob                1
+     floatBobDivisor         3.0
++#endif
+     group                   "Artifacts"
+ }
+ 
+@@ -80,8 +92,11 @@
+     touchable               1
+     bits                    4
+     pickupMessage           "$str_104"
++#if PSPSX_ARTIFACTS
++#else
+     floatBob                1
+     floatBobDivisor         3.0
++#endif
+     group                   "Artifacts"
+ }
+ 
+@@ -97,7 +112,10 @@
+     touchable               1
+     bits                    5
+     pickupMessage           "$str_105"
++#if PSPSX_ARTIFACTS
++#else
+     floatBob                1
+     floatBobDivisor         3.0
++#endif
+     group                   "Artifacts"
+ }
 --- defs/actors/items.txt	Tue Dec  7 23:38:46 2021
 +++ defs/actors/items.txt	Tue Dec  7 23:38:46 2021
 @@ -14,8 +14,11 @@
