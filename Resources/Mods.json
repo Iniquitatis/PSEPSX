@@ -118,6 +118,12 @@
         "description": "Disable key bobbing."
     },
     {
+        "id": "PSPSX_ANKHS",
+        "name": "Steady Ankhs",
+        "category": "General",
+        "description": "Disable ankh bobbing."
+    },
+    {
         "id": "PSPSX_SCORPIONS",
         "name": "Remove Spiders",
         "category": "Enemies",

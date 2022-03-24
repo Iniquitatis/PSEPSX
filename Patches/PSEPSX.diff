@@ -155,7 +155,62 @@
      group                   "Items"
  }
  
-@@ -434,6 +452,9 @@
+@@ -331,7 +349,10 @@
+     bits                    0
+     friction                0.0
+     pickupMessage           "$str_108"
++#if PSPSX_ANKHS
++#else
+     floatBob                1
++#endif
+     group                   "Items"
+ }
+ 
+@@ -352,7 +373,10 @@
+     bits                    1
+     friction                0.0
+     pickupMessage           "$str_108"
++#if PSPSX_ANKHS
++#else
+     floatBob                1
++#endif
+     group                   "Items"
+ }
+ 
+@@ -373,7 +397,10 @@
+     bits                    2
+     friction                0.0
+     pickupMessage           "$str_108"
++#if PSPSX_ANKHS
++#else
+     floatBob                1
++#endif
+     group                   "Items"
+ }
+ 
+@@ -394,7 +421,10 @@
+     bits                    3
+     friction                0.0
+     pickupMessage           "$str_108"
++#if PSPSX_ANKHS
++#else
+     floatBob                1
++#endif
+     group                   "Items"
+ }
+ 
+@@ -415,7 +445,10 @@
+     bits                    4
+     friction                0.0
+     pickupMessage           "$str_108"
++#if PSPSX_ANKHS
++#else
+     floatBob                1
++#endif
+     group                   "Items"
+ }
+ 
+@@ -434,6 +467,9 @@
      touchable               1
      friction                0.0
      pickupMessage           "$str_111"
