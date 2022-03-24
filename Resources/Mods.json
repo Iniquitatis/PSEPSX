@@ -130,6 +130,12 @@
         "description": "Disable artifact bobbing."
     },
     {
+        "id": "PSPSX_TEAM_DOLLS",
+        "name": "Steady Team Dolls",
+        "category": "General",
+        "description": "Disable team doll bobbing."
+    },
+    {
         "id": "PSPSX_SCORPIONS",
         "name": "Remove Spiders",
         "category": "Enemies",

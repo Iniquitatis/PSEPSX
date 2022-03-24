@@ -380,6 +380,348 @@
      lightRadius             512
      lightIntensity          2
      group                   "Projectiles"
+--- defs/actors/teamdolls.txt	Tue Dec  7 23:38:46 2021
++++ defs/actors/teamdolls.txt	Thu Mar 24 02:57:43 2022
+@@ -12,7 +12,10 @@
+     touchable               1
+     bits                    0
+     pickupMessage           "Brian McNeely"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -28,7 +31,10 @@
+     touchable               1
+     bits                    1
+     pickupMessage           "Kevin Chung"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -44,7 +50,10 @@
+     touchable               1
+     bits                    2
+     pickupMessage           "Ezra Dreisbach"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -60,7 +69,10 @@
+     touchable               1
+     bits                    3
+     pickupMessage           "Mark Coates"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -76,7 +88,10 @@
+     touchable               1
+     bits                    4
+     pickupMessage           "Paul Lange"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -92,7 +107,10 @@
+     touchable               1
+     bits                    5
+     pickupMessage           "Pat Schreiber"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -108,7 +126,10 @@
+     touchable               1
+     bits                    6
+     pickupMessage           "Tom Kristensen"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -124,7 +145,10 @@
+     touchable               1
+     bits                    7
+     pickupMessage           "Jeffrey S. Blazier"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -140,7 +164,10 @@
+     touchable               1
+     bits                    8
+     pickupMessage           "William Vallieres"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -156,7 +183,10 @@
+     touchable               1
+     bits                    9
+     pickupMessage           "Dominick Meissner"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -172,7 +202,10 @@
+     touchable               1
+     bits                    10
+     pickupMessage           "Paul Schreiber"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -188,7 +221,10 @@
+     touchable               1
+     bits                    11
+     pickupMessage           "David Lawson"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -204,7 +240,10 @@
+     touchable               1
+     bits                    12
+     pickupMessage           "Paul Haugerud"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -220,7 +259,10 @@
+     touchable               1
+     bits                    13
+     pickupMessage           "Kurt Pfeifer"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -236,7 +278,10 @@
+     touchable               1
+     bits                    14
+     pickupMessage           "Troy Jacobson"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -252,7 +297,10 @@
+     touchable               1
+     bits                    15
+     pickupMessage           "Eric Klokstad"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -268,7 +316,10 @@
+     touchable               1
+     bits                    16
+     pickupMessage           "Paul Knutzen"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -284,7 +335,10 @@
+     touchable               1
+     bits                    17
+     pickupMessage           "John Van Deusen"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -300,7 +354,10 @@
+     touchable               1
+     bits                    18
+     pickupMessage           "John Yuill"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -316,7 +373,10 @@
+     touchable               1
+     bits                    19
+     pickupMessage           "Joe Kresoja M.I.A."
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -332,7 +392,10 @@
+     touchable               1
+     bits                    20
+     pickupMessage           "Scott Branston"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -348,7 +411,10 @@
+     touchable               1
+     bits                    21
+     pickupMessage           "Richard Nichols M.I.A."
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -364,7 +430,10 @@
+     touchable               1
+     bits                    22
+     pickupMessage           "John Schwab M.I.A."
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -381,7 +450,10 @@
+     bits                    23
+     pickupMessage           "Stephen Kick - Nightdive"
+     pickupSound             "sounds/lobo02.wav"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -398,7 +470,10 @@
+     bits                    24
+     pickupMessage           "Samuel Villarreal - Nightdive"
+     pickupSound             "sounds/lobo01.wav"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -414,7 +489,10 @@
+     touchable               1
+     bits                    25
+     pickupMessage           "Sebastian Reddi - Nightdive"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -430,7 +508,10 @@
+     touchable               1
+     bits                    26
+     pickupMessage           "Max Waine - Nightdive"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -446,7 +527,10 @@
+     touchable               1
+     bits                    27
+     pickupMessage           "James Haley - Nightdive"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -462,7 +546,10 @@
+     touchable               1
+     bits                    28
+     pickupMessage           "Eric Serio - Nightdive"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -478,7 +565,10 @@
+     touchable               1
+     bits                    29
+     pickupMessage           "Daniel Grayshon - Nightdive"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
+ 
+@@ -494,6 +584,9 @@
+     touchable               1
+     bits                    30
+     pickupMessage           "Larry Kuperman - Nightdive"
++#if PSPSX_TEAM_DOLLS
++#else
+     floatBob                1
++#endif
+     group                   "Team Dolls"
+ }
 --- defs/defines.txt	Wed Dec  8 16:42:12 2021
 +++ defs/defines.txt	Wed Dec  8 16:42:12 2021
 @@ -6,8 +6,12 @@
