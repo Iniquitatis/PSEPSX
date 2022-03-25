@@ -144,7 +144,7 @@ class MainWindow(QMainWindow):
             data_dir = frozen_path("Data"),
             temp_dir = frozen_path("Temp"),
             output_dir = self._output_dir_editor.path(),
-            definitions = self._mod_table.definitions()
+            build_params = self._mod_table.build_params()
         )
         self._builder.statusUpdate.connect(self._on_status_update)
         self._builder.finished.connect(self._on_build_finished)
@@ -200,8 +200,8 @@ class PathEdit(QWidget):
 #===============================================================================
 
 class ModTableWidget(QTableWidget):
-    Mod = namedtuple("Mod", "id name category short_description long_description script", defaults = [""] * 6)
-    Definition = namedtuple("Definition", "id script_name enabled")
+    Mod = namedtuple("Mod", "id name category short_description long_description definition script", defaults = [""] * 7)
+    BuildParam = namedtuple("BuildParam", "enabled definition script_name")
 
     modSelected = Signal(Mod)
 
@@ -253,12 +253,12 @@ class ModTableWidget(QTableWidget):
                     item.set_tool_tip(mod.short_description)
                     self.set_item(row, 0, item)
 
-    def definitions(self):
+    def build_params(self):
         return [
-            self.Definition(
-                user_data.id,
-                user_data.script,
-                self.item(i, 0).check_state() == Qt.Checked
+            self.BuildParam(
+                self.item(i, 0).check_state() == Qt.Checked,
+                user_data.definition,
+                user_data.script
             )
             for i in range(self.row_count())
             if (user_data := self.item(i, 0).data(Qt.UserRole)) != "CATEGORY"
@@ -279,14 +279,14 @@ class ModTableWidget(QTableWidget):
 class BuilderThread(QThread):
     statusUpdate = Signal(Path)
 
-    def __init__(self, game_kpf_path, patch_dir, data_dir, temp_dir, output_dir, definitions):
+    def __init__(self, game_kpf_path, patch_dir, data_dir, temp_dir, output_dir, build_params):
         super().__init__()
         self._game_kpf_path = game_kpf_path
         self._patch_dir = patch_dir
         self._data_dir = data_dir
         self._temp_dir = temp_dir
         self._output_dir = output_dir
-        self._definitions = definitions
+        self._build_params = build_params
 
     def run(self):
         self._game_kpf = ZipFile(self._game_kpf_path)
@@ -335,12 +335,12 @@ class BuilderThread(QThread):
             dst_path.parent.mkdir(parents = True, exist_ok = True)
             extract_file(self._game_kpf, src_path, dst_path)
 
-        for id, script_name, enabled in self._definitions:
-            if script_name == "" or not enabled:
+        for bp in self._build_params:
+            if not bp.enabled or bp.script_name == "":
                 continue
 
-            self.statusUpdate.emit(f"Applying script {script_name}...")
-            script = importlib.import_module(f"Scripts.{script_name}")
+            self.statusUpdate.emit(f"Applying script {bp.script_name}...")
+            script = importlib.import_module(f"Scripts.{bp.script_name}")
             script.apply(kpf_loader, self._temp_dir)
 
     def _apply_patch(self, diff_path):
@@ -376,8 +376,11 @@ class BuilderThread(QThread):
         with open(path, "rt") as file:
             text = file.read()
 
-            for id, _, enabled in self._definitions:
-                text = re.sub(id, str(1 if enabled else 0), text)
+            for bp in self._build_params:
+                if bp.definition == "":
+                    continue
+
+                text = re.sub(bp.definition, str(1 if bp.enabled else 0), text)
 
         with open(path, "wt") as file:
             file.write(text)

@@ -1,6 +1,6 @@
 [
     {
-        "id": "PSPSX_MAPS",
+        "id": "maps",
         "name": "Maps",
         "category": "General",
         "description": [
@@ -10,10 +10,11 @@
             "<li>Checkpoints are unavailable on these maps (just like in the original PSX version).</li>",
             "<li>Kilmaat Colony is not replaced as the PSX map wasn't shipped with PSE.</li>",
             "</ul>"
-        ]
+        ],
+        "definition": "PSPSX_MAPS"
     },
     {
-        "id": "PSPSX_AMMO_COUNTS",
+        "id": "ammo_counts",
         "name": "Ammo Counts",
         "category": "Weapons",
         "description": [
@@ -27,171 +28,197 @@
             "</ul>",
             "<br>",
             "<b>WARNING: Affects balance heavily.</b>"
-        ]
+        ],
+        "definition": "PSPSX_AMMO_COUNTS"
     },
     {
-        "id": "PSPSX_M60_FIRE_TIMINGS",
+        "id": "m60_fire_timings",
         "name": "M-60 Fire Timings",
         "category": "Weapons",
         "description": [
             "Remove the delay after every third shot when firing the M-60.<br>",
             "<br>",
             "<i>NOTE: Makes this weapon stronger by approx. 8%.</i>"
-        ]
+        ],
+        "definition": "PSPSX_M60_FIRE_TIMINGS"
     },
     {
-        "id": "PSPSX_EXPLOSION_SOUND",
+        "id": "explosion_sound",
         "name": "Explosion Sound",
         "category": "General",
-        "description": "Restore a beefier explosion sound."
+        "description": "Restore a beefier explosion sound.",
+        "definition": "PSPSX_EXPLOSION_SOUND"
     },
     {
-        "id": "PSPSX_BOMB_THROWING",
+        "id": "bomb_throwing",
         "name": "Amun Bomb Throwing",
         "category": "Weapons",
-        "description": "Decrease the maximum Amun Bomb throw distance and charging rate."
+        "description": "Decrease the maximum Amun Bomb throw distance and charging rate.",
+        "definition": "PSPSX_BOMB_THROWING"
     },
     {
-        "id": "PSPSX_INCENDIARY_BOMBS",
+        "id": "incendiary_bombs",
         "name": "Incendiary Bombs",
         "category": "Weapons",
-        "description": "Add an ignition effect to the Amun Bombs."
+        "description": "Add an ignition effect to the Amun Bombs.",
+        "definition": "PSPSX_INCENDIARY_BOMBS"
     },
     {
-        "id": "PSPSX_FLAMETHROWER_FLAME",
+        "id": "flamethrower_flame",
         "name": "Flamethrower Flame",
         "category": "Weapons",
-        "description": "Disable fading of the flamethrower flame."
+        "description": "Disable fading of the flamethrower flame.",
+        "definition": "PSPSX_FLAMETHROWER_FLAME"
     },
     {
-        "id": "PSPSX_COBRA_STAFF",
+        "id": "cobra_staff",
         "name": "Cobra Staff Animation",
         "category": "Weapons",
-        "description": "Replace Cobra Staff animation by the PSX one."
+        "description": "Replace Cobra Staff animation by the PSX one.",
+        "definition": "PSPSX_COBRA_STAFF"
     },
     {
-        "id": "PSPSX_COBRA_BEHAVIOR",
+        "id": "cobra_behavior",
         "name": "Cobra Staff Projectile Behavior",
         "category": "Weapons",
-        "description": "Slow down the Cobra Staff projectile and decrease its turn rate."
+        "description": "Slow down the Cobra Staff projectile and decrease its turn rate.",
+        "definition": "PSPSX_COBRA_BEHAVIOR"
     },
     {
-        "id": "PSPSX_MANACLE_BEHAVIOR",
+        "id": "manacle_behavior",
         "name": "Sacred Manacle Behavior",
         "category": "Weapons",
-        "description": "Slow down the Sacred Manacle lightning bolt and add its guiding."
+        "description": "Slow down the Sacred Manacle lightning bolt and add its guiding.",
+        "definition": "PSPSX_MANACLE_BEHAVIOR"
     },
     {
-        "id": "PSPSX_MANACLE_SOUND",
+        "id": "manacle_sound",
         "name": "Sacred Manacle Sound",
         "category": "Weapons",
-        "description": "Change the Sacred Manacle charging sound."
+        "description": "Change the Sacred Manacle charging sound.",
+        "definition": "PSPSX_MANACLE_SOUND"
     },
     {
-        "id": "PSPSX_TELEPATHIC_RAMSES",
+        "id": "telepathic_ramses",
         "name": "Telepathic Ramses",
         "category": "General",
-        "description": "Disable any mouth movement while Ramses speaks."
+        "description": "Disable any mouth movement while Ramses speaks.",
+        "definition": "PSPSX_TELEPATHIC_RAMSES"
     },
     {
-        "id": "PSPSX_TRANSPARENT_RAMSES",
+        "id": "transparent_ramses",
         "name": "Transparent Ramses",
         "category": "General",
-        "description": "Make Ramses look more like a spirit."
+        "description": "Make Ramses look more like a spirit.",
+        "definition": "PSPSX_TRANSPARENT_RAMSES"
     },
     {
-        "id": "PSPSX_WARP_PYRAMID",
+        "id": "warp_pyramid",
         "name": "Steady Warp Pyramid",
         "category": "General",
-        "description": "Disable warp pyramid bobbing."
+        "description": "Disable warp pyramid bobbing.",
+        "definition": "PSPSX_WARP_PYRAMID"
     },
     {
-        "id": "PSPSX_ITEMS",
+        "id": "items",
         "name": "Steady Items",
         "category": "General",
-        "description": "Disable item bobbing."
+        "description": "Disable item bobbing.",
+        "definition": "PSPSX_ITEMS"
     },
     {
-        "id": "PSPSX_KEYS",
+        "id": "keys",
         "name": "Steady Keys",
         "category": "General",
-        "description": "Disable key bobbing."
+        "description": "Disable key bobbing.",
+        "definition": "PSPSX_KEYS"
     },
     {
-        "id": "PSPSX_ANKHS",
+        "id": "ankhs",
         "name": "Steady Ankhs",
         "category": "General",
-        "description": "Disable ankh bobbing."
+        "description": "Disable ankh bobbing.",
+        "definition": "PSPSX_ANKHS"
     },
     {
-        "id": "PSPSX_ARTIFACTS",
+        "id": "artifacts",
         "name": "Steady Artifacts",
         "category": "General",
-        "description": "Disable artifact bobbing."
+        "description": "Disable artifact bobbing.",
+        "definition": "PSPSX_ARTIFACTS"
     },
     {
-        "id": "PSPSX_TEAM_DOLLS",
+        "id": "team_dolls",
         "name": "Steady Team Dolls",
         "category": "General",
-        "description": "Disable team doll bobbing."
+        "description": "Disable team doll bobbing.",
+        "definition": "PSPSX_TEAM_DOLLS"
     },
     {
-        "id": "PSPSX_SCORPIONS",
+        "id": "scorpions",
         "name": "Remove Spiders",
         "category": "Enemies",
-        "description": "Replace red spiders by the blue scorpions."
+        "description": "Replace red spiders by the blue scorpions.",
+        "definition": "PSPSX_SCORPIONS"
     },
     {
-        "id": "PSPSX_ANUBIS_DEATH",
+        "id": "anubis_death",
         "name": "Extreme Anubis Death",
         "category": "Enemies",
-        "description": "Replace Anubis death animation by the gibbing animation."
+        "description": "Replace Anubis death animation by the gibbing animation.",
+        "definition": "PSPSX_ANUBIS_DEATH"
     },
     {
-        "id": "PSPSX_MUMMY_COBRA_BEHAVIOR",
+        "id": "mummy_cobra_behavior",
         "name": "Mummy Projectile Behavior",
         "category": "Enemies",
-        "description": "Slow down the Mummy projectile and increase its turn rate."
+        "description": "Slow down the Mummy projectile and increase its turn rate.",
+        "definition": "PSPSX_MUMMY_COBRA_BEHAVIOR"
     },
     {
-        "id": "PSPSX_MUMMY_DEATH",
+        "id": "mummy_death",
         "name": "Extreme Mummy Death",
         "category": "Enemies",
-        "description": "Replace Mummy death animation by the gibbing animation."
+        "description": "Replace Mummy death animation by the gibbing animation.",
+        "definition": "PSPSX_MUMMY_DEATH"
     },
     {
-        "id": "PSPSX_MANTIS_ATTACK",
+        "id": "mantis_attack",
         "name": "Mantis Attack",
         "category": "Enemies",
-        "description": "Change Mantis' attack so that it shoots three fireballs simultaneously instead of sequentially."
+        "description": "Change Mantis' attack so that it shoots three fireballs simultaneously instead of sequentially.",
+        "definition": "PSPSX_MANTIS_ATTACK"
     },
     {
-        "id": "PSPSX_MANTIS_DECAPITATION",
+        "id": "mantis_decapitation",
         "name": "Mantis Decapitation",
         "category": "Enemies",
-        "description": "Replace Mantis' death by a decapitation."
+        "description": "Replace Mantis' death by a decapitation.",
+        "definition": "PSPSX_MANTIS_DECAPITATION"
     },
     {
-        "id": "PSPSX_ORB_SPAWN",
+        "id": "orb_spawn",
         "name": "Delayed Orb Spawning",
         "category": "General",
-        "description": "Delay the orb spawning from the destroyed vases."
+        "description": "Delay the orb spawning from the destroyed vases.",
+        "definition": "PSPSX_ORB_SPAWN"
     },
     {
-        "id": "PSPSX_NO_WEAPON_BOOST",
+        "id": "no_weapon_boost",
         "name": "No Weapon Boost",
         "category": "General",
-        "description": "Disable the weapon boost orb spawning."
+        "description": "Disable the weapon boost orb spawning.",
+        "definition": "PSPSX_NO_WEAPON_BOOST"
     },
     {
-        "id": "PSPSX_HUD_HEADS",
+        "id": "hud_heads",
         "name": "Vanilla HUD Heads",
         "category": "HUD",
         "description": "Replace HUD heads by the original ones.",
         "script": "HUDHeads"
     },
     {
-        "id": "PSPSX_NO_HUD_SCARABS",
+        "id": "no_hud_scarabs",
         "name": "Remove HUD Scarabs",
         "category": "HUD",
         "description": "Remove scarabs from HUD.",
