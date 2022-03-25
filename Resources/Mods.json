@@ -113,46 +113,46 @@
         "definition": "PSPSX_TRANSPARENT_RAMSES"
     },
     {
-        "id": "warp_pyramid",
+        "id": "steady_warp_pyramid",
         "name": "Steady Warp Pyramid",
         "category": "General",
         "description": "Disable warp pyramid bobbing.",
-        "definition": "PSPSX_WARP_PYRAMID"
+        "definition": "PSPSX_STEADY_WARP_PYRAMID"
     },
     {
-        "id": "items",
+        "id": "steady_items",
         "name": "Steady Items",
         "category": "General",
         "description": "Disable item bobbing.",
-        "definition": "PSPSX_ITEMS"
+        "definition": "PSPSX_STEADY_ITEMS"
     },
     {
-        "id": "keys",
+        "id": "steady_keys",
         "name": "Steady Keys",
         "category": "General",
         "description": "Disable key bobbing.",
-        "definition": "PSPSX_KEYS"
+        "definition": "PSPSX_STEADY_KEYS"
     },
     {
-        "id": "ankhs",
+        "id": "steady_ankhs",
         "name": "Steady Ankhs",
         "category": "General",
         "description": "Disable ankh bobbing.",
-        "definition": "PSPSX_ANKHS"
+        "definition": "PSPSX_STEADY_ANKHS"
     },
     {
-        "id": "artifacts",
+        "id": "steady_artifacts",
         "name": "Steady Artifacts",
         "category": "General",
         "description": "Disable artifact bobbing.",
-        "definition": "PSPSX_ARTIFACTS"
+        "definition": "PSPSX_STEADY_ARTIFACTS"
     },
     {
-        "id": "team_dolls",
+        "id": "steady_team_dolls",
         "name": "Steady Team Dolls",
         "category": "General",
         "description": "Disable team doll bobbing.",
-        "definition": "PSPSX_TEAM_DOLLS"
+        "definition": "PSPSX_STEADY_TEAM_DOLLS"
     },
     {
         "id": "scorpions",
