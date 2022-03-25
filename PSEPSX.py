@@ -406,13 +406,13 @@ class FileValidatorThread(QThread):
         crc, pos, size = 0, 0, self._path.stat().st_size
 
         with open(self._path, "rb") as file:
-            for chunk in iter(lambda: file.read(65536), b""):
+            while chunk := file.read(65536):
                 crc = zlib.crc32(chunk, crc)
                 pos += len(chunk)
 
                 self.progressed.emit(pos, size)
 
-        if (crc_str := f"{crc:X}") == self._expected_crc:
+        if (crc_str := f"{crc:08X}") == self._expected_crc:
             self.succeed.emit(crc_str)
         else:
             self.failed.emit(crc_str)
