@@ -4,6 +4,7 @@ import re
 import shutil
 import sys
 from collections import defaultdict, namedtuple
+from configparser import ConfigParser
 from pathlib import Path
 from zipfile import ZipFile
 
@@ -125,6 +126,10 @@ class MainWindow(QMainWindow):
         self._progress_label = QLabel("Ready")
         self.status_bar().add_widget(self._progress_label, 1)
 
+    def close_event(self, event):
+        self._mod_table.save()
+        event.accept()
+
     def _on_open_button_clicked(self):
         dialog = QFileDialog(self)
         dialog.set_file_mode(QFileDialog.Directory)
@@ -215,6 +220,8 @@ class ModTableWidget(QTableWidget):
         self.currentCellChanged.connect(self._on_cell_changed)
 
     def load(self):
+        config = self._load_config()
+
         with open(frozen_path("Resources/Mods.json"), "r") as json_file:
             categories = defaultdict(list)
 
@@ -247,11 +254,14 @@ class ModTableWidget(QTableWidget):
                     row = self._append_row()
 
                     item = QTableWidgetItem(mod.name)
-                    item.set_check_state(Qt.Checked)
+                    item.set_check_state(Qt.Checked if config.get(mod.id, True) else Qt.Unchecked)
                     item.set_data(Qt.UserRole, mod)
                     item.set_flags(item.flags() & ~(Qt.ItemIsEditable | Qt.ItemIsSelectable))
                     item.set_tool_tip(mod.short_description)
                     self.set_item(row, 0, item)
+
+    def save(self):
+        self._save_config()
 
     def build_params(self):
         return [
@@ -267,6 +277,34 @@ class ModTableWidget(QTableWidget):
     def _append_row(self):
         self.insert_row(self.row_count())
         return self.row_count() - 1
+
+    def _load_config(self):
+        if not Path("Settings.ini").exists():
+            return dict()
+
+        with open("Settings.ini", "r") as config_file:
+            config = ConfigParser()
+            config.read_file(config_file)
+
+            if not config.has_section("mods"):
+                return dict()
+
+            return {key: config.getboolean("mods", key) for key in config.options("mods")}
+
+    def _save_config(self):
+        with open("Settings.ini", "w") as config_file:
+            config = ConfigParser()
+            config.add_section("mods")
+
+            for i in range(self.row_count()):
+                item = self.item(i, 0)
+                user_data = item.data(Qt.UserRole)
+                enabled = item.check_state() == Qt.Checked
+
+                if user_data != "CATEGORY":
+                    config.set("mods", user_data.id, str(enabled).lower())
+
+            config.write(config_file)
 
     def _on_cell_changed(self, row, column):
         user_data = self.item(row, 0).data(Qt.UserRole)
