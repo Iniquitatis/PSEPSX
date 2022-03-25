@@ -200,8 +200,8 @@ class PathEdit(QWidget):
 #===============================================================================
 
 class ModTableWidget(QTableWidget):
-    Mod = namedtuple("Mod", "id name category short_description long_description module", defaults = [""] * 6)
-    Definition = namedtuple("Definition", "id module_name enabled")
+    Mod = namedtuple("Mod", "id name category short_description long_description script", defaults = [""] * 6)
+    Definition = namedtuple("Definition", "id script_name enabled")
 
     modSelected = Signal(Mod)
 
@@ -257,7 +257,7 @@ class ModTableWidget(QTableWidget):
         return [
             self.Definition(
                 user_data.id,
-                user_data.module,
+                user_data.script,
                 self.item(i, 0).check_state() == Qt.Checked
             )
             for i in range(self.row_count())
@@ -304,7 +304,7 @@ class BuilderThread(QThread):
         self._patch_files()
         self._copy_files()
         self._preprocess_files()
-        self._apply_modules()
+        self._apply_scripts()
 
         output_path = self._output_dir / f"PSEPSX.kpf"
         output_path.unlink(missing_ok = True)
@@ -330,18 +330,18 @@ class BuilderThread(QThread):
             self.statusUpdate.emit(f"Preprocessing {text_file_path}...")
             self._preprocess(text_file_path)
 
-    def _apply_modules(self):
+    def _apply_scripts(self):
         def kpf_loader(src_path, dst_path):
             dst_path.parent.mkdir(parents = True, exist_ok = True)
             extract_file(self._game_kpf, src_path, dst_path)
 
-        for id, module_name, enabled in self._definitions:
-            if module_name == "" or not enabled:
+        for id, script_name, enabled in self._definitions:
+            if script_name == "" or not enabled:
                 continue
 
-            self.statusUpdate.emit(f"Applying module {module_name}...")
-            module = importlib.import_module(f"Modules.{module_name}")
-            module.apply(kpf_loader, self._temp_dir)
+            self.statusUpdate.emit(f"Applying script {script_name}...")
+            script = importlib.import_module(f"Scripts.{script_name}")
+            script.apply(kpf_loader, self._temp_dir)
 
     def _apply_patch(self, diff_path):
         patch_set = patch.fromfile(diff_path)

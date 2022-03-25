@@ -188,13 +188,13 @@
         "name": "Vanilla HUD Heads",
         "category": "HUD",
         "description": "Replace HUD heads by the original ones.",
-        "module": "HUDHeads"
+        "script": "HUDHeads"
     },
     {
         "id": "PSPSX_NO_HUD_SCARABS",
         "name": "Remove HUD Scarabs",
         "category": "HUD",
         "description": "Remove scarabs from HUD.",
-        "module": "NoHUDScarabs"
+        "script": "NoHUDScarabs"
     }
 ]
