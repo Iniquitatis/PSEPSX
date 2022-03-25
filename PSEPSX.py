@@ -3,8 +3,9 @@ import json
 import re
 import shutil
 import sys
-from collections import defaultdict, namedtuple
+from collections import defaultdict
 from configparser import ConfigParser
+from dataclasses import dataclass
 from pathlib import Path
 from zipfile import ZipFile
 
@@ -80,6 +81,24 @@ def extract_file(archive, src_path, dst_path):
 
 #===============================================================================
 
+@dataclass
+class Mod:
+    id: str = ""
+    name: str = ""
+    category: str = ""
+    short_description: str = ""
+    long_description: str = ""
+    definition: str = ""
+    script: str = ""
+
+@dataclass
+class BuildParam:
+    enabled: bool = False
+    definition: str = ""
+    script_name: str = ""
+
+#===============================================================================
+
 class Application(QApplication):
     def __init__(self, args):
         super().__init__(args)
@@ -147,8 +166,8 @@ class MainWindow(QMainWindow):
             game_kpf_path = self._game_dir_editor.path() / "PowerslaveEX.kpf",
             patch_dir = frozen_path("Patches"),
             data_dir = frozen_path("Data"),
-            temp_dir = frozen_path("Temp"),
-            output_dir = self._output_dir_editor.path(),
+            build_dir = frozen_path("Build"),
+            output_path = self._output_dir_editor.path() / "PSEPSX.kpf",
             build_params = self._mod_table.build_params()
         )
         self._builder.statusUpdate.connect(self._on_status_update)
@@ -205,9 +224,6 @@ class PathEdit(QWidget):
 #===============================================================================
 
 class ModTableWidget(QTableWidget):
-    Mod = namedtuple("Mod", "id name category short_description long_description definition script", defaults = [""] * 7)
-    BuildParam = namedtuple("BuildParam", "enabled definition script_name")
-
     modSelected = Signal(Mod)
 
     def __init__(self, parent = None):
@@ -235,7 +251,7 @@ class ModTableWidget(QTableWidget):
                     mod_data["short_description"] = description
                     mod_data["long_description"] = description
 
-                mod = self.Mod(**mod_data)
+                mod = Mod(**mod_data)
                 categories[mod.category].append(mod)
 
             category_font = QFont()
@@ -264,15 +280,7 @@ class ModTableWidget(QTableWidget):
         self._save_config()
 
     def build_params(self):
-        return [
-            self.BuildParam(
-                self.item(i, 0).check_state() == Qt.Checked,
-                user_data.definition,
-                user_data.script
-            )
-            for i in range(self.row_count())
-            if (user_data := self.item(i, 0).data(Qt.UserRole)) != "CATEGORY"
-        ]
+        return [BuildParam(enabled, mod.definition, mod.script) for enabled, mod in self._mods()]
 
     def _append_row(self):
         self.insert_row(self.row_count())
@@ -296,15 +304,17 @@ class ModTableWidget(QTableWidget):
             config = ConfigParser()
             config.add_section("mods")
 
-            for i in range(self.row_count()):
-                item = self.item(i, 0)
-                user_data = item.data(Qt.UserRole)
-                enabled = item.check_state() == Qt.Checked
-
-                if user_data != "CATEGORY":
-                    config.set("mods", user_data.id, str(enabled).lower())
+            for enabled, mod in self._mods():
+                config.set("mods", mod.id, str(enabled).lower())
 
             config.write(config_file)
+
+    def _mods(self):
+        return (
+            (item.check_state() == Qt.Checked, item.data(Qt.UserRole))
+            for i in range(self.row_count())
+            if (item := self.item(i, 0)).data(Qt.UserRole) != "CATEGORY"
+        )
 
     def _on_cell_changed(self, row, column):
         user_data = self.item(row, 0).data(Qt.UserRole)
@@ -317,76 +327,62 @@ class ModTableWidget(QTableWidget):
 class BuilderThread(QThread):
     statusUpdate = Signal(Path)
 
-    def __init__(self, game_kpf_path, patch_dir, data_dir, temp_dir, output_dir, build_params):
+    def __init__(self, game_kpf_path, patch_dir, data_dir, build_dir, output_path, build_params):
         super().__init__()
         self._game_kpf_path = game_kpf_path
         self._patch_dir = patch_dir
         self._data_dir = data_dir
-        self._temp_dir = temp_dir
-        self._output_dir = output_dir
+        self._build_dir = build_dir
+        self._output_path = output_path
         self._build_params = build_params
 
     def run(self):
         self._game_kpf = ZipFile(self._game_kpf_path)
 
-        self._output_dir.mkdir(parents = True, exist_ok = True)
-        self._temp_dir.mkdir(parents = True, exist_ok = True)
+        self._build_dir.mkdir(parents = True, exist_ok = True)
 
-        self._make_mod()
+        self._output_path.parent.mkdir(parents = True, exist_ok = True)
+        self._output_path.unlink(missing_ok = True)
 
-        shutil.rmtree(self._temp_dir)
-
-        self._game_kpf.close()
-
-    def _make_mod(self):
         self._patch_files()
         self._copy_files()
         self._preprocess_files()
         self._apply_scripts()
+        self._pack_kpf()
 
-        output_path = self._output_dir / f"PSEPSX.kpf"
-        output_path.unlink(missing_ok = True)
+        shutil.rmtree(self._build_dir)
 
-        self.statusUpdate.emit(f"Packing {output_path}...")
-        make_archive(output_path, self._temp_dir)
+        self._game_kpf.close()
 
     def _patch_files(self):
         for diff_path in self._patch_dir.glob("*.diff"):
-            self.statusUpdate.emit(f"Applying {diff_path}...")
             self._apply_patch(diff_path)
 
     def _copy_files(self):
         for file_path in filter(Path.is_file, self._data_dir.rglob("*")):
-            self.statusUpdate.emit(f"Copying {file_path}...")
-            rel_path = file_path.relative_to(self._data_dir)
-            result_path = self._temp_dir / rel_path
-            result_path.parent.mkdir(parents = True, exist_ok = True)
-            shutil.copy2(file_path, result_path)
+            self._copy_file(file_path)
 
     def _preprocess_files(self):
-        for text_file_path in self._temp_dir.rglob("*.txt"):
-            self.statusUpdate.emit(f"Preprocessing {text_file_path}...")
+        for text_file_path in self._build_dir.rglob("*.txt"):
             self._preprocess(text_file_path)
 
     def _apply_scripts(self):
-        def kpf_loader(src_path, dst_path):
-            dst_path.parent.mkdir(parents = True, exist_ok = True)
-            extract_file(self._game_kpf, src_path, dst_path)
+        for bp in filter(lambda x: x.enabled and x.script_name != "", self._build_params):
+            self._apply_script(bp.script_name)
 
-        for bp in self._build_params:
-            if not bp.enabled or bp.script_name == "":
-                continue
+    def _pack_kpf(self):
+        self.statusUpdate.emit(f"Packing {self._output_path}...")
 
-            self.statusUpdate.emit(f"Applying script {bp.script_name}...")
-            script = importlib.import_module(f"Scripts.{bp.script_name}")
-            script.apply(kpf_loader, self._temp_dir)
+        make_archive(self._output_path, self._build_dir)
 
     def _apply_patch(self, diff_path):
+        self.statusUpdate.emit(f"Applying {diff_path}...")
+
         patch_set = patch.fromfile(diff_path)
 
         for item in patch_set.items:
             src_path = item.source.decode("utf-8")
-            dst_path = self._temp_dir / Path(item.target.decode("utf-8"))
+            dst_path = self._build_dir / Path(item.target.decode("utf-8"))
             dst_path.parent.mkdir(parents = True, exist_ok = True)
 
             if src_path == "dev/null":
@@ -406,22 +402,38 @@ class BuilderThread(QThread):
 
             elif exists_in_archive(self._game_kpf, src_path):
                 self.statusUpdate.emit(f"Extracting {src_path}...")
+
                 extract_file(self._game_kpf, src_path, dst_path)
 
-        patch_set.apply(root = self._temp_dir)
+        patch_set.apply(root = self._build_dir)
+
+    def _copy_file(self, path):
+        self.statusUpdate.emit(f"Copying {path}...")
+
+        rel_path = path.relative_to(self._data_dir)
+
+        result_path = self._build_dir / rel_path
+        result_path.parent.mkdir(parents = True, exist_ok = True)
+
+        shutil.copy2(path, result_path)
 
     def _preprocess(self, path):
+        self.statusUpdate.emit(f"Preprocessing {path}...")
+
         with open(path, "rt") as file:
             text = file.read()
 
-            for bp in self._build_params:
-                if bp.definition == "":
-                    continue
-
-                text = re.sub(bp.definition, str(1 if bp.enabled else 0), text)
+        for bp in filter(lambda x: x.definition != "", self._build_params):
+            text = re.sub(bp.definition, str(1 if bp.enabled else 0), text)
 
         with open(path, "wt") as file:
             file.write(text)
+
+    def _apply_script(self, script_name):
+        self.statusUpdate.emit(f"Applying script {script_name}...")
+
+        script = importlib.import_module(f"Scripts.{script_name}")
+        script.apply(self._game_kpf.open, self._build_dir)
 
 #===============================================================================
 

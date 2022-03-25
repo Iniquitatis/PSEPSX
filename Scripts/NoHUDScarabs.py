@@ -1,10 +1,11 @@
 from PIL import Image
 
-def apply(kpf_loader, temp_dir):
-    temp_scarab_path = temp_dir / "gfx/scarab.png"
+def apply(kpf_open, build_dir):
+    output_path = build_dir / "gfx/scarab.png"
+    output_path.parent.mkdir(parents = True, exist_ok = True)
 
-    kpf_loader("gfx/scarab.png", temp_scarab_path)
+    with kpf_open("gfx/scarab.png") as scarab_file:
+        scarab = Image.open(scarab_file)
 
-    with Image.open(temp_scarab_path) as scarab:
         clean_image = Image.new(scarab.mode, scarab.size, (0, 0, 0, 0))
-        clean_image.save(temp_scarab_path)
+        clean_image.save(output_path)

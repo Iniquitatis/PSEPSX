@@ -1,13 +1,11 @@
 from PIL import Image
 
-def apply(kpf_loader, temp_dir):
-    temp_head_left_path = temp_dir / "gfx/head_left.png"
-    temp_head_right_path = temp_dir / "gfx/head_right.png"
+def apply(kpf_open, build_dir):
+    output_path = build_dir / "gfx/head_left.png"
+    output_path.parent.mkdir(parents = True, exist_ok = True)
 
-    kpf_loader("gfx/head_right.png", temp_head_right_path)
+    with kpf_open("gfx/head_right.png") as head_right_file:
+        head_right = Image.open(head_right_file)
 
-    with Image.open(temp_head_right_path) as head_right:
         head_left = head_right.transpose(Image.FLIP_LEFT_RIGHT)
-        head_left.save(temp_head_left_path)
-
-    temp_head_right_path.unlink()
+        head_left.save(output_path)
