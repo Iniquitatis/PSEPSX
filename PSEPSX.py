@@ -3,6 +3,7 @@ import json
 import re
 import shutil
 import sys
+import zlib
 from collections import defaultdict
 from configparser import ConfigParser
 from dataclasses import dataclass
@@ -28,6 +29,8 @@ from PySide6.QtWidgets import (
     QLabel,
     QLineEdit,
     QMainWindow,
+    QMessageBox,
+    QProgressBar,
     QPushButton,
     QSizePolicy,
     QTableWidget,
@@ -37,6 +40,12 @@ from PySide6.QtWidgets import (
     QWidget
 )
 from __feature__ import snake_case
+
+#===============================================================================
+
+GAME_KPF_NAME = "PowerslaveEX.kpf"
+GAME_KPF_CRC32 = "BE91B2AF"
+MOD_KPF_NAME = "PSEPSX.kpf"
 
 #===============================================================================
 
@@ -143,45 +152,104 @@ class MainWindow(QMainWindow):
         self.set_central_widget(self._central)
 
         self._progress_label = QLabel("Ready")
-        self.status_bar().add_widget(self._progress_label, 1)
+
+        self._progress_bar = QProgressBar()
+        self._progress_bar.set_alignment(Qt.AlignCenter)
+        self._progress_bar.set_minimum(0)
+        self._progress_bar.set_maximum(2 ** 30)
+        self._progress_bar.hide()
+
+        status_bar = self.status_bar()
+        status_bar.add_widget(self._progress_label, 1)
+        status_bar.add_permanent_widget(self._progress_bar)
 
     def close_event(self, event):
         self._mod_table.save()
         event.accept()
 
-    def _on_open_button_clicked(self):
-        dialog = QFileDialog(self)
-        dialog.set_file_mode(QFileDialog.Directory)
+    def _validate_game_kpf(self):
+        self._progress_label.set_text("Validating game data archive...")
+        self._progress_bar.show()
 
-        if dialog.exec():
-            self._path_editor.set_text(str(Path(dialog.selected_files()[0])))
+        self._validator = FileValidatorThread(self._game_dir_editor.path() / GAME_KPF_NAME, GAME_KPF_CRC32)
+        self._validator.progressed.connect(self._on_validation_progressed)
+        self._validator.succeed.connect(self._on_validation_succeed)
+        self._validator.failed.connect(self._on_validation_failed)
+        self._validator.start()
+
+    def _build_mod(self):
+        self._progress_label.set_text("Building mod...")
+
+        self._builder = BuilderThread(
+            game_kpf_path = self._game_dir_editor.path() / GAME_KPF_NAME,
+            patch_dir = frozen_path("Patches"),
+            data_dir = frozen_path("Data"),
+            build_dir = frozen_path("Build"),
+            output_path = self._output_dir_editor.path() / MOD_KPF_NAME,
+            build_params = self._mod_table.build_params()
+        )
+        self._builder.statusUpdated.connect(self._on_build_status_updated)
+        self._builder.finished.connect(self._on_build_finished)
+        self._builder.start()
+
+    def _show_message_box(self, title, icon, text):
+        msg_box = QMessageBox(self)
+        msg_box.set_icon(icon)
+        msg_box.set_standard_buttons(QMessageBox.Ok)
+        msg_box.set_text(text)
+        msg_box.set_window_title(title)
+        msg_box.exec()
 
     def _on_mod_table_mod_selected(self, mod):
         self._description_box.set_text(mod.long_description)
 
     def _on_build_button_clicked(self):
+        if not (self._game_dir_editor.path() / GAME_KPF_NAME).is_file():
+            self._show_message_box(
+                "Not Found",
+                QMessageBox.Warning,
+                f"{GAME_KPF_NAME} has not been found in the selected directory."
+            )
+
+            return
+
         self._build_button.set_enabled(False)
 
-        self._builder = BuilderThread(
-            game_kpf_path = self._game_dir_editor.path() / "PowerslaveEX.kpf",
-            patch_dir = frozen_path("Patches"),
-            data_dir = frozen_path("Data"),
-            build_dir = frozen_path("Build"),
-            output_path = self._output_dir_editor.path() / "PSEPSX.kpf",
-            build_params = self._mod_table.build_params()
-        )
-        self._builder.statusUpdate.connect(self._on_status_update)
-        self._builder.finished.connect(self._on_build_finished)
-        self._builder.start()
+        self._validate_game_kpf()
 
-    def _on_status_update(self, text):
+    def _on_validation_progressed(self, pos, size):
+        self._progress_bar.set_value(pos)
+        self._progress_bar.set_maximum(size)
+
+    def _on_validation_succeed(self, crc):
+        self._progress_bar.hide()
+
+        self._build_mod()
+
+    def _on_validation_failed(self, crc):
+        self._build_button.set_enabled(True)
+        self._progress_label.set_text("Ready")
+        self._progress_bar.hide()
+
+        self._show_message_box(
+            "Validation Failed",
+            QMessageBox.Critical,
+            f"Game data archive CRC-32 mismatch.<br><br>Calculated: <b>{crc}</b>, expected: <b>{GAME_KPF_CRC32}</b>."
+        )
+
+    def _on_build_status_updated(self, text):
         print(text)
         self._progress_label.set_text(text)
 
     def _on_build_finished(self):
         self._build_button.set_enabled(True)
-
         self._progress_label.set_text("Ready")
+
+        self._show_message_box(
+            "Build Finished",
+            QMessageBox.Information,
+            "Done."
+        )
 
 #===============================================================================
 
@@ -324,8 +392,35 @@ class ModTableWidget(QTableWidget):
 
 #===============================================================================
 
+class FileValidatorThread(QThread):
+    progressed = Signal(int, int)
+    succeed = Signal(str)
+    failed = Signal(str)
+
+    def __init__(self, path, expected_crc):
+        super().__init__()
+        self._path = path
+        self._expected_crc = expected_crc
+
+    def run(self):
+        crc, pos, size = 0, 0, self._path.stat().st_size
+
+        with open(self._path, "rb") as file:
+            for chunk in iter(lambda: file.read(65536), b""):
+                crc = zlib.crc32(chunk, crc)
+                pos += len(chunk)
+
+                self.progressed.emit(pos, size)
+
+        if (crc_str := f"{crc:X}") == self._expected_crc:
+            self.succeed.emit(crc_str)
+        else:
+            self.failed.emit(crc_str)
+
+#===============================================================================
+
 class BuilderThread(QThread):
-    statusUpdate = Signal(Path)
+    statusUpdated = Signal(Path)
 
     def __init__(self, game_kpf_path, patch_dir, data_dir, build_dir, output_path, build_params):
         super().__init__()
@@ -371,12 +466,12 @@ class BuilderThread(QThread):
             self._apply_script(bp.script_name)
 
     def _pack_kpf(self):
-        self.statusUpdate.emit(f"Packing {self._output_path}...")
+        self.statusUpdated.emit(f"Packing {self._output_path}...")
 
         make_archive(self._output_path, self._build_dir)
 
     def _apply_patch(self, diff_path):
-        self.statusUpdate.emit(f"Applying {diff_path}...")
+        self.statusUpdated.emit(f"Applying {diff_path}...")
 
         patch_set = patch.fromfile(diff_path)
 
@@ -386,7 +481,7 @@ class BuilderThread(QThread):
             dst_path.parent.mkdir(parents = True, exist_ok = True)
 
             if src_path == "dev/null":
-                self.statusUpdate.emit(f"Creating {dst_path}...")
+                self.statusUpdated.emit(f"Creating {dst_path}...")
 
                 with open(dst_path, "w") as dst_file:
                     for hunk in item.hunks:
@@ -395,20 +490,20 @@ class BuilderThread(QThread):
                             dst_file.write(f"{line}\n")
 
             elif dst_path == "dev/null":
-                self.statusUpdate.emit(f"Removing {dst_path}...")
+                self.statusUpdated.emit(f"Removing {dst_path}...")
 
                 if dst_path.exists():
                     dst_path.unlink()
 
             elif exists_in_archive(self._game_kpf, src_path):
-                self.statusUpdate.emit(f"Extracting {src_path}...")
+                self.statusUpdated.emit(f"Extracting {src_path}...")
 
                 extract_file(self._game_kpf, src_path, dst_path)
 
         patch_set.apply(root = self._build_dir)
 
     def _copy_file(self, path):
-        self.statusUpdate.emit(f"Copying {path}...")
+        self.statusUpdated.emit(f"Copying {path}...")
 
         rel_path = path.relative_to(self._data_dir)
 
@@ -418,7 +513,7 @@ class BuilderThread(QThread):
         shutil.copy2(path, result_path)
 
     def _preprocess(self, path):
-        self.statusUpdate.emit(f"Preprocessing {path}...")
+        self.statusUpdated.emit(f"Preprocessing {path}...")
 
         with open(path, "rt") as file:
             text = file.read()
@@ -430,7 +525,7 @@ class BuilderThread(QThread):
             file.write(text)
 
     def _apply_script(self, script_name):
-        self.statusUpdate.emit(f"Applying script {script_name}...")
+        self.statusUpdated.emit(f"Applying script {script_name}...")
 
         script = importlib.import_module(f"Scripts.{script_name}")
         script.apply(self._game_kpf.open, self._build_dir)
