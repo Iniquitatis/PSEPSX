@@ -373,13 +373,10 @@ class OptionTreeWidget(QTreeWidget):
             config.write(config_file)
 
     def _options(self):
-        items = (self.top_level_item(i) for i in range(self.top_level_item_count()))
-        children = lambda item: (item.child(i) for i in range(item.child_count()))
-
         return (
             (option_item.check_state(0) == Qt.Checked, option_item.data(0, Qt.UserRole))
-            for category_item in items
-            for option_item in children(category_item)
+            for category_item in (self.top_level_item(i) for i in range(self.top_level_item_count()))
+            for option_item in (category_item.child(i) for i in range(category_item.child_count()))
         )
 
     def _on_item_changed(self, item):
