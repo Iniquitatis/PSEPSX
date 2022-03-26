@@ -59,16 +59,17 @@ def frozen_path(path):
 def find_game_dir():
     import winreg
 
-    for reg_path in ["SOFTWARE\\Valve\\Steam", "SOFTWARE\\Wow6432Node\\Valve\\Steam"]:
-        try:
-            key = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, reg_path)
-            steam_dir = Path(winreg.QueryValueEx(key, "SteamPath")[0])
+    for hkey in (winreg.HKEY_LOCAL_MACHINE, winreg.HKEY_CURRENT_USER):
+        for reg_path in ("SOFTWARE\\Valve\\Steam", "SOFTWARE\\Wow6432Node\\Valve\\Steam"):
+            try:
+                key = winreg.OpenKeyEx(hkey, reg_path)
+                steam_dir = Path(winreg.QueryValueEx(key, "SteamPath")[0])
 
-            if (game_dir := steam_dir / "steamapps/common/PowerSlave Exhumed").is_dir():
-                return game_dir.resolve()
+                if (game_dir := steam_dir / "steamapps/common/PowerSlave Exhumed").is_dir():
+                    return game_dir.resolve()
 
-        except OSError:
-            continue
+            except OSError:
+                continue
 
     return Path()
 
