@@ -33,8 +33,8 @@ from PySide6.QtWidgets import (
     QProgressBar,
     QPushButton,
     QSizePolicy,
-    QTableWidget,
-    QTableWidgetItem,
+    QTreeWidget,
+    QTreeWidgetItem,
     QTextEdit,
     QVBoxLayout,
     QWidget
@@ -129,9 +129,9 @@ class MainWindow(QMainWindow):
         self._game_dir_editor = PathEdit("Game Directory", QFileDialog.Directory, str(find_game_dir()))
         self._output_dir_editor = PathEdit("Output Directory", QFileDialog.Directory, str(find_mods_dir()))
 
-        self._mod_table = ModTableWidget()
-        self._mod_table.modSelected.connect(self._on_mod_table_mod_selected)
-        self._mod_table.load()
+        self._mod_tree = ModTreeWidget()
+        self._mod_tree.modSelected.connect(self._on_mod_tree_mod_selected)
+        self._mod_tree.load()
 
         self._description_box = QTextEdit()
         self._description_box.set_maximum_size(self._description_box.maximum_width(), 120)
@@ -145,7 +145,7 @@ class MainWindow(QMainWindow):
         self._layout.set_contents_margins(10, 10, 10, 10)
         self._layout.add_widget(self._game_dir_editor)
         self._layout.add_widget(self._output_dir_editor)
-        self._layout.add_widget(self._mod_table)
+        self._layout.add_widget(self._mod_tree)
         self._layout.add_widget(self._description_box)
         self._layout.add_widget(self._build_button)
 
@@ -170,7 +170,7 @@ class MainWindow(QMainWindow):
         status_bar.add_permanent_widget(self._version_label)
 
     def close_event(self, event):
-        self._mod_table.save()
+        self._mod_tree.save()
         event.accept()
 
     def _validate_game_kpf(self):
@@ -192,7 +192,7 @@ class MainWindow(QMainWindow):
             data_dir = frozen_path("Data"),
             build_dir = frozen_path("Build"),
             output_path = self._output_dir_editor.path() / MOD_KPF_NAME,
-            build_params = self._mod_table.build_params()
+            build_params = self._mod_tree.build_params()
         )
         self._builder.statusUpdated.connect(self._on_build_status_updated)
         self._builder.finished.connect(self._on_build_finished)
@@ -206,7 +206,7 @@ class MainWindow(QMainWindow):
         msg_box.set_window_title(title)
         msg_box.exec()
 
-    def _on_mod_table_mod_selected(self, mod):
+    def _on_mod_tree_mod_selected(self, mod):
         self._description_box.set_text(mod.long_description)
 
     def _on_build_button_clicked(self):
@@ -297,17 +297,13 @@ class PathEdit(QWidget):
 
 #===============================================================================
 
-class ModTableWidget(QTableWidget):
+class ModTreeWidget(QTreeWidget):
     modSelected = Signal(Mod)
 
     def __init__(self, parent = None):
         super().__init__(parent)
-        self.set_column_count(1)
-        self.set_show_grid(False)
-        self.horizontal_header().hide()
-        self.horizontal_header().set_stretch_last_section(True)
-        self.vertical_header().hide()
-        self.currentCellChanged.connect(self._on_cell_changed)
+        self.set_header_hidden(True)
+        self.currentItemChanged.connect(self._on_item_changed)
 
     def load(self):
         config = self._load_config()
@@ -332,33 +328,27 @@ class ModTableWidget(QTableWidget):
             category_font.set_bold(True)
 
             for category_name, category in categories.items():
-                row = self._append_row()
-
-                item = QTableWidgetItem(category_name)
-                item.set_data(Qt.UserRole, "CATEGORY")
-                item.set_flags(item.flags() & ~(Qt.ItemIsEditable | Qt.ItemIsSelectable))
-                item.set_font(category_font)
-                self.set_item(row, 0, item)
+                category_item = QTreeWidgetItem([category_name])
+                category_item.set_check_state(0, Qt.Checked)
+                category_item.set_data(0, Qt.UserRole, "CATEGORY")
+                category_item.set_flags(category_item.flags() | Qt.ItemIsAutoTristate)
+                category_item.set_font(0, category_font)
+                self.add_top_level_item(category_item)
+                # NOTE: Should be called after appending to a tree
+                category_item.set_expanded(True)
 
                 for mod in category:
-                    row = self._append_row()
-
-                    item = QTableWidgetItem(mod.name)
-                    item.set_check_state(Qt.Checked if config.get(mod.id, True) else Qt.Unchecked)
-                    item.set_data(Qt.UserRole, mod)
-                    item.set_flags(item.flags() & ~(Qt.ItemIsEditable | Qt.ItemIsSelectable))
-                    item.set_tool_tip(mod.short_description)
-                    self.set_item(row, 0, item)
+                    mod_item = QTreeWidgetItem([mod.name])
+                    mod_item.set_check_state(0, Qt.Checked if config.get(mod.id, True) else Qt.Unchecked)
+                    mod_item.set_data(0, Qt.UserRole, mod)
+                    mod_item.set_tool_tip(0, mod.short_description)
+                    category_item.add_child(mod_item)
 
     def save(self):
         self._save_config()
 
     def build_params(self):
         return [BuildParam(enabled, mod.definition, mod.script) for enabled, mod in self._mods()]
-
-    def _append_row(self):
-        self.insert_row(self.row_count())
-        return self.row_count() - 1
 
     def _load_config(self):
         if not Path("Settings.ini").exists():
@@ -384,14 +374,17 @@ class ModTableWidget(QTableWidget):
             config.write(config_file)
 
     def _mods(self):
+        items = (self.top_level_item(i) for i in range(self.top_level_item_count()))
+        children = lambda item: (item.child(i) for i in range(item.child_count()))
+
         return (
-            (item.check_state() == Qt.Checked, item.data(Qt.UserRole))
-            for i in range(self.row_count())
-            if (item := self.item(i, 0)).data(Qt.UserRole) != "CATEGORY"
+            (mod_item.check_state(0) == Qt.Checked, mod_item.data(0, Qt.UserRole))
+            for category_item in items
+            for mod_item in children(category_item)
         )
 
-    def _on_cell_changed(self, row, column):
-        user_data = self.item(row, 0).data(Qt.UserRole)
+    def _on_item_changed(self, item):
+        user_data = item.data(0, Qt.UserRole)
 
         if user_data != "CATEGORY":
             self.modSelected.emit(user_data)
