@@ -330,7 +330,6 @@ class OptionTreeWidget(QTreeWidget):
             for category_name, category in categories.items():
                 category_item = QTreeWidgetItem([category_name])
                 category_item.set_check_state(0, Qt.Checked)
-                category_item.set_data(0, Qt.UserRole, "CATEGORY")
                 category_item.set_flags(category_item.flags() | Qt.ItemIsAutoTristate)
                 category_item.set_font(0, category_font)
                 self.add_top_level_item(category_item)
@@ -384,9 +383,7 @@ class OptionTreeWidget(QTreeWidget):
         )
 
     def _on_item_changed(self, item):
-        user_data = item.data(0, Qt.UserRole)
-
-        if user_data != "CATEGORY":
+        if user_data := item.data(0, Qt.UserRole):
             self.optionSelected.emit(user_data)
 
 #===============================================================================
