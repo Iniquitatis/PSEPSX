@@ -437,22 +437,19 @@ class BuilderThread(QThread):
         self._build_params = build_params
 
     def run(self):
-        self._game_kpf = ZipFile(self._game_kpf_path)
+        with ZipFile(self._game_kpf_path) as self._game_kpf:
+            self._build_dir.mkdir(parents = True, exist_ok = True)
 
-        self._build_dir.mkdir(parents = True, exist_ok = True)
+            self._output_path.parent.mkdir(parents = True, exist_ok = True)
+            self._output_path.unlink(missing_ok = True)
 
-        self._output_path.parent.mkdir(parents = True, exist_ok = True)
-        self._output_path.unlink(missing_ok = True)
+            self._patch_files()
+            self._copy_files()
+            self._preprocess_files()
+            self._apply_scripts()
+            self._pack_kpf()
 
-        self._patch_files()
-        self._copy_files()
-        self._preprocess_files()
-        self._apply_scripts()
-        self._pack_kpf()
-
-        shutil.rmtree(self._build_dir)
-
-        self._game_kpf.close()
+            shutil.rmtree(self._build_dir)
 
     def _patch_files(self):
         for diff_path in self._patch_dir.glob("*.diff"):
@@ -482,11 +479,12 @@ class BuilderThread(QThread):
 
         for item in patch_set.items:
             src_path = item.source.decode("utf-8")
-            dst_path = self._build_dir / Path(item.target.decode("utf-8"))
-            dst_path.parent.mkdir(parents = True, exist_ok = True)
+            dst_path = self._build_dir / item.target.decode("utf-8")
 
             if src_path == "dev/null":
                 self.statusUpdated.emit(f"Creating {dst_path}...")
+
+                dst_path.parent.mkdir(parents = True, exist_ok = True)
 
                 with open(dst_path, "w") as dst_file:
                     for hunk in item.hunks:
@@ -497,11 +495,12 @@ class BuilderThread(QThread):
             elif dst_path == "dev/null":
                 self.statusUpdated.emit(f"Removing {dst_path}...")
 
-                if dst_path.exists():
-                    dst_path.unlink()
+                dst_path.unlink(missing_ok = True)
 
             elif exists_in_archive(self._game_kpf, src_path):
                 self.statusUpdated.emit(f"Extracting {src_path}...")
+
+                dst_path.parent.mkdir(parents = True, exist_ok = True)
 
                 extract_file(self._game_kpf, src_path, dst_path)
 
