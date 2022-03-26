@@ -93,7 +93,7 @@ def extract_file(archive, src_path, dst_path):
 #===============================================================================
 
 @dataclass
-class Mod:
+class Option:
     id: str = ""
     name: str = ""
     category: str = ""
@@ -129,9 +129,9 @@ class MainWindow(QMainWindow):
         self._game_dir_editor = PathEdit("Game Directory", QFileDialog.Directory, str(find_game_dir()))
         self._output_dir_editor = PathEdit("Output Directory", QFileDialog.Directory, str(find_mods_dir()))
 
-        self._mod_tree = ModTreeWidget()
-        self._mod_tree.modSelected.connect(self._on_mod_tree_mod_selected)
-        self._mod_tree.load()
+        self._option_tree = OptionTreeWidget()
+        self._option_tree.optionSelected.connect(self._on_option_tree_option_selected)
+        self._option_tree.load()
 
         self._description_box = QTextEdit()
         self._description_box.set_maximum_size(self._description_box.maximum_width(), 120)
@@ -145,7 +145,7 @@ class MainWindow(QMainWindow):
         self._layout.set_contents_margins(10, 10, 10, 10)
         self._layout.add_widget(self._game_dir_editor)
         self._layout.add_widget(self._output_dir_editor)
-        self._layout.add_widget(self._mod_tree)
+        self._layout.add_widget(self._option_tree)
         self._layout.add_widget(self._description_box)
         self._layout.add_widget(self._build_button)
 
@@ -170,7 +170,7 @@ class MainWindow(QMainWindow):
         status_bar.add_permanent_widget(self._version_label)
 
     def close_event(self, event):
-        self._mod_tree.save()
+        self._option_tree.save()
         event.accept()
 
     def _validate_game_kpf(self):
@@ -192,7 +192,7 @@ class MainWindow(QMainWindow):
             data_dir = frozen_path("Data"),
             build_dir = frozen_path("Build"),
             output_path = self._output_dir_editor.path() / MOD_KPF_NAME,
-            build_params = self._mod_tree.build_params()
+            build_params = self._option_tree.build_params()
         )
         self._builder.statusUpdated.connect(self._on_build_status_updated)
         self._builder.finished.connect(self._on_build_finished)
@@ -206,8 +206,8 @@ class MainWindow(QMainWindow):
         msg_box.set_window_title(title)
         msg_box.exec()
 
-    def _on_mod_tree_mod_selected(self, mod):
-        self._description_box.set_text(mod.long_description)
+    def _on_option_tree_option_selected(self, option):
+        self._description_box.set_text(option.long_description)
 
     def _on_build_button_clicked(self):
         if not (self._game_dir_editor.path() / GAME_KPF_NAME).is_file():
@@ -297,8 +297,8 @@ class PathEdit(QWidget):
 
 #===============================================================================
 
-class ModTreeWidget(QTreeWidget):
-    modSelected = Signal(Mod)
+class OptionTreeWidget(QTreeWidget):
+    optionSelected = Signal(Option)
 
     def __init__(self, parent = None):
         super().__init__(parent)
@@ -308,21 +308,21 @@ class ModTreeWidget(QTreeWidget):
     def load(self):
         config = self._load_config()
 
-        with open(frozen_path("Resources/Mods.json"), "r") as json_file:
+        with open(frozen_path("Resources/Options.json"), "r") as json_file:
             categories = defaultdict(list)
 
-            for mod_data in json.load(json_file):
-                description = mod_data.pop("description", "")
+            for option_data in json.load(json_file):
+                description = option_data.pop("description", "")
 
                 if isinstance(description, list):
-                    mod_data["short_description"] = description[0].removesuffix("<br>")
-                    mod_data["long_description"] = "".join(description)
+                    option_data["short_description"] = description[0].removesuffix("<br>")
+                    option_data["long_description"] = "".join(description)
                 else:
-                    mod_data["short_description"] = description
-                    mod_data["long_description"] = description
+                    option_data["short_description"] = description
+                    option_data["long_description"] = description
 
-                mod = Mod(**mod_data)
-                categories[mod.category].append(mod)
+                option = Option(**option_data)
+                categories[option.category].append(option)
 
             category_font = QFont()
             category_font.set_bold(True)
@@ -337,18 +337,18 @@ class ModTreeWidget(QTreeWidget):
                 # NOTE: Should be called after appending to a tree
                 category_item.set_expanded(True)
 
-                for mod in category:
-                    mod_item = QTreeWidgetItem([mod.name])
-                    mod_item.set_check_state(0, Qt.Checked if config.get(mod.id, True) else Qt.Unchecked)
-                    mod_item.set_data(0, Qt.UserRole, mod)
-                    mod_item.set_tool_tip(0, mod.short_description)
-                    category_item.add_child(mod_item)
+                for option in category:
+                    option_item = QTreeWidgetItem([option.name])
+                    option_item.set_check_state(0, Qt.Checked if config.get(option.id, True) else Qt.Unchecked)
+                    option_item.set_data(0, Qt.UserRole, option)
+                    option_item.set_tool_tip(0, option.short_description)
+                    category_item.add_child(option_item)
 
     def save(self):
         self._save_config()
 
     def build_params(self):
-        return [BuildParam(enabled, mod.definition, mod.script) for enabled, mod in self._mods()]
+        return [BuildParam(enabled, option.definition, option.script) for enabled, option in self._options()]
 
     def _load_config(self):
         if not Path("Settings.ini").exists():
@@ -358,36 +358,36 @@ class ModTreeWidget(QTreeWidget):
             config = ConfigParser()
             config.read_file(config_file)
 
-            if not config.has_section("mods"):
+            if not config.has_section("options"):
                 return dict()
 
-            return {key: config.getboolean("mods", key) for key in config.options("mods")}
+            return {key: config.getboolean("options", key) for key in config.options("options")}
 
     def _save_config(self):
         with open("Settings.ini", "w") as config_file:
             config = ConfigParser()
-            config.add_section("mods")
+            config.add_section("options")
 
-            for enabled, mod in self._mods():
-                config.set("mods", mod.id, str(enabled).lower())
+            for enabled, option in self._options():
+                config.set("options", option.id, str(enabled).lower())
 
             config.write(config_file)
 
-    def _mods(self):
+    def _options(self):
         items = (self.top_level_item(i) for i in range(self.top_level_item_count()))
         children = lambda item: (item.child(i) for i in range(item.child_count()))
 
         return (
-            (mod_item.check_state(0) == Qt.Checked, mod_item.data(0, Qt.UserRole))
+            (option_item.check_state(0) == Qt.Checked, option_item.data(0, Qt.UserRole))
             for category_item in items
-            for mod_item in children(category_item)
+            for option_item in children(category_item)
         )
 
     def _on_item_changed(self, item):
         user_data = item.data(0, Qt.UserRole)
 
         if user_data != "CATEGORY":
-            self.modSelected.emit(user_data)
+            self.optionSelected.emit(user_data)
 
 #===============================================================================
 
