@@ -43,6 +43,7 @@ from __feature__ import snake_case
 
 #===============================================================================
 
+APP_VERSION = (1, 1, 0)
 GAME_KPF_NAME = "PowerslaveEX.kpf"
 GAME_KPF_CRC32 = "BE91B2AF"
 MOD_KPF_NAME = "PSEPSX.kpf"
@@ -159,9 +160,13 @@ class MainWindow(QMainWindow):
         self._progress_bar.set_maximum(2 ** 30)
         self._progress_bar.hide()
 
+        self._version_label = QLabel("v" + ".".join(str(x) for x in APP_VERSION))
+
         status_bar = self.status_bar()
+        status_bar.set_style_sheet("QStatusBar::item { border: none; }")
         status_bar.add_widget(self._progress_label, 1)
         status_bar.add_permanent_widget(self._progress_bar)
+        status_bar.add_permanent_widget(self._version_label)
 
     def close_event(self, event):
         self._mod_table.save()
