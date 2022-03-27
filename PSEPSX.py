@@ -509,7 +509,7 @@ class BuilderThread(QThread):
         with open(path, "rt") as file:
             text = file.read()
 
-        for bp in filter(lambda x: x.definition != "", self._build_params):
+        for bp in filter(lambda x: x.definition, self._build_params):
             text = re.sub(bp.definition, str(1 if bp.enabled else 0), text)
 
         with open(path, "wt") as file:
