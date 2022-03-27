@@ -107,7 +107,7 @@ class Option:
 class BuildParam:
     enabled: bool = False
     definition: str = ""
-    script_name: str = ""
+    script_file_name: str = ""
 
 #===============================================================================
 
@@ -191,6 +191,7 @@ class MainWindow(QMainWindow):
             game_kpf_path = self._game_dir_editor.path() / GAME_KPF_NAME,
             patch_dir = frozen_path("Patches"),
             data_dir = frozen_path("Data"),
+            script_dir = frozen_path("Scripts"),
             output_path = self._output_dir_editor.path() / MOD_KPF_NAME,
             build_params = self._option_tree.build_params()
         )
@@ -415,11 +416,12 @@ class FileValidatorThread(QThread):
 class BuilderThread(QThread):
     statusUpdated = Signal(Path)
 
-    def __init__(self, game_kpf_path, patch_dir, data_dir, output_path, build_params):
+    def __init__(self, game_kpf_path, patch_dir, data_dir, script_dir, output_path, build_params):
         super().__init__()
         self._game_kpf_path = game_kpf_path
         self._patch_dir = patch_dir
         self._data_dir = data_dir
+        self._script_dir = script_dir
         self._output_path = output_path
         self._build_params = build_params
 
@@ -449,8 +451,8 @@ class BuilderThread(QThread):
             self._preprocess(text_file_path)
 
     def _apply_scripts(self):
-        for bp in filter(lambda x: x.enabled and x.script_name != "", self._build_params):
-            self._apply_script(bp.script_name)
+        for bp in filter(lambda x: x.enabled and x.script_file_name, self._build_params):
+            self._apply_script(self._script_dir / bp.script_file_name)
 
     def _pack_kpf(self):
         self.statusUpdated.emit(f"Packing {self._output_path}...")
@@ -513,10 +515,13 @@ class BuilderThread(QThread):
         with open(path, "wt") as file:
             file.write(text)
 
-    def _apply_script(self, script_name):
-        self.statusUpdated.emit(f"Applying script {script_name}...")
+    def _apply_script(self, script_path):
+        self.statusUpdated.emit(f"Applying script {script_path}...")
 
-        script = importlib.import_module(f"Scripts.{script_name}")
+        spec = importlib.util.spec_from_file_location(script_path.stem, script_path)
+        script = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(script)
+
         script.apply(self._game_kpf.open, self._build_dir)
 
 #===============================================================================
