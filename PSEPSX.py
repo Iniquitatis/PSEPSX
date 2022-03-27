@@ -8,6 +8,7 @@ from collections import defaultdict
 from configparser import ConfigParser
 from dataclasses import dataclass
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from zipfile import ZipFile
 
 import patch
@@ -190,7 +191,6 @@ class MainWindow(QMainWindow):
             game_kpf_path = self._game_dir_editor.path() / GAME_KPF_NAME,
             patch_dir = frozen_path("Patches"),
             data_dir = frozen_path("Data"),
-            build_dir = frozen_path("Build"),
             output_path = self._output_dir_editor.path() / MOD_KPF_NAME,
             build_params = self._option_tree.build_params()
         )
@@ -415,18 +415,17 @@ class FileValidatorThread(QThread):
 class BuilderThread(QThread):
     statusUpdated = Signal(Path)
 
-    def __init__(self, game_kpf_path, patch_dir, data_dir, build_dir, output_path, build_params):
+    def __init__(self, game_kpf_path, patch_dir, data_dir, output_path, build_params):
         super().__init__()
         self._game_kpf_path = game_kpf_path
         self._patch_dir = patch_dir
         self._data_dir = data_dir
-        self._build_dir = build_dir
         self._output_path = output_path
         self._build_params = build_params
 
     def run(self):
-        with ZipFile(self._game_kpf_path) as self._game_kpf:
-            self._build_dir.mkdir(parents = True, exist_ok = True)
+        with ZipFile(self._game_kpf_path) as self._game_kpf, TemporaryDirectory() as build_dir:
+            self._build_dir = Path(build_dir)
 
             self._output_path.parent.mkdir(parents = True, exist_ok = True)
             self._output_path.unlink(missing_ok = True)
@@ -436,8 +435,6 @@ class BuilderThread(QThread):
             self._preprocess_files()
             self._apply_scripts()
             self._pack_kpf()
-
-            shutil.rmtree(self._build_dir)
 
     def _patch_files(self):
         for diff_path in self._patch_dir.glob("*.diff"):
