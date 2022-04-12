@@ -3,6 +3,7 @@ import json
 import re
 import shutil
 import sys
+import traceback
 import zlib
 from collections import defaultdict
 from configparser import ConfigParser
@@ -527,5 +528,15 @@ class BuilderThread(QThread):
 #===============================================================================
 
 if __name__ == "__main__":
+    def exc_hook(*args):
+        message = "".join(traceback.format_exception(*args))
+
+        with open("traceback.txt", "w") as tb_file:
+            tb_file.write(message)
+
+        sys.exit(message)
+
+    sys.excepthook = exc_hook
+
     app = Application(sys.argv)
     sys.exit(app.exec())
