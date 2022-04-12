@@ -200,13 +200,14 @@ class MainWindow(QMainWindow):
         self._builder.finished.connect(self._on_build_finished)
         self._builder.start()
 
-    def _show_message_box(self, title, icon, text):
+    def _show_message_box(self, *, title, icon, text, details = "", buttons = QMessageBox.Ok):
         msg_box = QMessageBox(self)
+        msg_box.set_detailed_text(details)
         msg_box.set_icon(icon)
-        msg_box.set_standard_buttons(QMessageBox.Ok)
+        msg_box.set_standard_buttons(buttons)
         msg_box.set_text(text)
         msg_box.set_window_title(title)
-        msg_box.exec()
+        return msg_box.exec()
 
     def _on_option_tree_option_selected(self, option):
         self._description_box.set_text(option.long_description)
@@ -214,9 +215,9 @@ class MainWindow(QMainWindow):
     def _on_build_button_clicked(self):
         if not (self._game_dir_editor.path() / GAME_KPF_NAME).is_file():
             self._show_message_box(
-                "Not Found",
-                QMessageBox.Warning,
-                f"{GAME_KPF_NAME} has not been found in the selected directory."
+                title = "Not Found",
+                icon = QMessageBox.Warning,
+                text = f"{GAME_KPF_NAME} has not been found in the selected directory."
             )
 
             return
@@ -239,11 +240,16 @@ class MainWindow(QMainWindow):
         self._progress_label.set_text("Ready")
         self._progress_bar.hide()
 
-        self._show_message_box(
-            "Validation Failed",
-            QMessageBox.Critical,
-            f"Game data archive CRC-32 mismatch.<br><br>Calculated: <b>{crc}</b>, expected: <b>{GAME_KPF_CRC32}</b>."
+        result = self._show_message_box(
+            title = "Validation Failed",
+            icon = QMessageBox.Critical,
+            text = f"Game data archive CRC-32 mismatch.<br>Do you want to continue?",
+            details = f"Calculated: {crc}\nExpected: {GAME_KPF_CRC32}",
+            buttons = QMessageBox.Yes | QMessageBox.No
         )
+
+        if result == QMessageBox.Yes:
+            self._build_mod()
 
     def _on_build_status_updated(self, text):
         print(text)
@@ -254,9 +260,9 @@ class MainWindow(QMainWindow):
         self._progress_label.set_text("Ready")
 
         self._show_message_box(
-            "Build Finished",
-            QMessageBox.Information,
-            "Done."
+            title = "Build Finished",
+            icon = QMessageBox.Information,
+            text = "Done."
         )
 
 #===============================================================================
