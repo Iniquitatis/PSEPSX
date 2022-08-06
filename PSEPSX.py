@@ -47,7 +47,7 @@ from __feature__ import snake_case
 
 APP_VERSION = (1, 1, 0)
 GAME_KPF_NAME = "PowerslaveEX.kpf"
-GAME_KPF_CRC32 = "BE91B2AF"
+GAME_KPF_CRC32 = "F93FFF7D"
 MOD_KPF_NAME = "PSEPSX.kpf"
 
 #===============================================================================
